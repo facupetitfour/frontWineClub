@@ -4,7 +4,11 @@ import ProtectedRoute from "./component/ProtectedRoute";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
 import InicioSesion from "./pages/LogIn";
-import Products from "./component/Products";
+import Users from "./pages/Users";
+import Products from "./pages/Products";
+import Coupons from "./pages/Coupons";
+import Avaiable from "./pages/Avaiable";
+
 import SideBar from "./component/SideBar";
 
 function App() {
@@ -20,7 +24,10 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route element={<SideBar />}>
             <Route path="/" element={<Home />} />
+            <Route path="/users" element={<Users />} />
             <Route path="/products" element={<Products />} />
+            <Route path="/coupons" element={<Coupons/>} />
+            <Route path="/avaiable" element={<Avaiable/>} />
           </Route>
         </Route>
       </Routes>

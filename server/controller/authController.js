@@ -60,6 +60,13 @@ class AuthController {
           throw Error("falta nombre")
         }
       }
+
+      if(!rol){
+        console.log( "no existe rol",rol)
+        rol == "cliente"
+        console.log(rol)
+      }
+
       // Crear un usuario
       const newUser = new User({
         username,
@@ -83,6 +90,7 @@ class AuthController {
 
 
     } catch (error) {
+      console.log(error)
       res.status(500).json({
         message: "Error al registrar el usuario",
         error: error.message,
