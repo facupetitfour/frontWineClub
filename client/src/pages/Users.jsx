@@ -17,19 +17,25 @@ const Users = () => {
   };
 
   const navigate = useNavigate();
+
   const [data, setData] = useState([]);
+  const [clientData, setClientData] = useState([]);
+  const [bodegaData, setBodegaData] = useState([]);
+
   const modelSchemaUsers = {
     _id: { type: "string", header: "ID" },
     name: { type: "string", header: "Nombre" },
     subname: { type: "string", header: "Apellido" },
     email: { type: "string", header: "E-mail" },
-    points: {
-      type: "number",
-      header: "Puntos",
-    },
+    points: { type: "number", header: "Puntos" },
     emailVerify: { type: "boolean", header: "Mail verificado" },
     lastSesion: { type: "date", header: "Ultima sesion" },
-
+  };
+  const modelSchemaBodega = {
+    _id: { type: "string", header: "ID" },
+    email: { type: "string", header: "E-mail" },
+    emailVerify: { type: "boolean", header: "Mail verificado" },
+    lastSesion: { type: "date", header: "Ultima sesion" },
   };
 
   useEffect(() => {
@@ -38,7 +44,10 @@ const Users = () => {
         const response = await axios.get(serverhost + "users", {
           withCredentials: true,
         });
+        console.log(response.data);
         setData(response.data);
+        setBodegaData(response.data.filter((data) => data.rol === "bodega"));
+        setClientData(response.data.filter((data) => data.rol === "cliente"));
       } catch (error) {
         console.error("Error al obtener data de usuarios", error);
         navigate("/login");
@@ -48,29 +57,28 @@ const Users = () => {
   }, [navigate]);
   return (
     <>
-      <Box sx={{ width: "100%", flexDirection: "column" }}>
+      <Box sx={{ bgcolor: "#D9E2DA", width: "fit-content", borderTopLeftRadius:"5px", borderTopRightRadius:"5px"}}>
         <Tabs
           value={value}
           onChange={handleChange}
-          aria-label="wrapped label tabs example"
         >
-          <Tab value="cliente" label="Clientes" wrapped />
-          <Tab value="bodega" label="Bodegas" />
+          <Tab value="cliente" label="Clientes" sx={{"&.Mui-selected": { bgcolor: "#B5CDB9"}}}/>
+          <Tab value="bodega" label="Bodegas" sx={{"&.Mui-selected": { bgcolor: "#B5CDB9",}}}/>
         </Tabs>
-        {data && data.length > 0 && modelSchemaUsers ? (
-          <>
-            {value === "cliente" ? (
-              <DynamicTable bodyData={data} model={modelSchemaUsers} />
-            ) : null
-            }
-            {value === "bodega" ? (
-              <DynamicTable bodyData={data} model={modelSchemaUsers} />
-            ) : null}
-          </>
-        ) : (
-          <HeaderDynamicTable model={modelSchemaUsers} />
-        )}
       </Box>
+
+      {data && data.length > 0 && modelSchemaUsers ? (
+        <>
+          {value === "cliente" ? (
+            <DynamicTable bodyData={clientData} model={modelSchemaUsers} />
+          ) : null}
+          {value === "bodega" ? (
+            <DynamicTable bodyData={bodegaData} model={modelSchemaBodega} />
+          ) : null}
+        </>
+      ) : (
+        <HeaderDynamicTable model={modelSchemaUsers} />
+      )}
     </>
   );
 };

@@ -29,7 +29,7 @@ const productsSchema = new Schema(
     }, 
     available: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     approved: {
       type: Boolean,

@@ -137,6 +137,7 @@ const SideBar = () => {
         component="main"
         sx={{
           display: "flex",
+          flexDirection:"column",
           flexGrow: 1,
           p: 3,
           width: { sm: `calc(100% - ${drawerWidth}px)` },

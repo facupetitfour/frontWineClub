@@ -19,6 +19,7 @@ const poblarDB = async () => {
   const usersCount = await User.countDocuments()
   const productsCount = await Product.countDocuments();
   const bodegaUserCount = await Product.countDocuments();
+  const bodegaPruebaid = ''
 
   if (usersCount === 0){
     const newUser = new User({
@@ -37,11 +38,14 @@ const poblarDB = async () => {
     });
     const savedBodegaUser = await newBodegaUser.save();
     console.log(savedBodegaUser)
+    bodegaPruebaid == savedBodegaUser._id
     const newClienteUser = new User({
       username: "cliente",
       email: "cliente@gmail.com",
       rol: "cliente",
       password: await User.encryptPassword("cliente1234"),
+      name: "nombreCliente",
+      subname: "apellidoCliente"
     });
     const savedClienteUser = await newClienteUser.save();
     console.log(savedClienteUser)
@@ -49,24 +53,37 @@ const poblarDB = async () => {
     console.log("Users already exist");
   }
   if (productsCount === 0) {
+    const bodegaPruebaid = await User.findOne({username:"bodega"})
     const defaultProducts = [
       {
         name: "prueba1",
         description: "descripcion de un primer producto",
-        price: "100",
+        points_required: 1500,
+        stock: 100,
         img: "https://rockcontent.com/es/wp-content/uploads/sites/3/2019/02/o-que-e-produto-no-mix-de-marketing-1024x538.png.webp",
+        bodega_id: bodegaPruebaid._id,
+        available: true,
+        approved: true
       },
       {
         name: "prueba2",
         description: "descripcion de un segundo producto",
-        price: "300",
+        points_required: 5400,
+        stock: 100,
         img: "https://rockcontent.com/es/wp-content/uploads/sites/3/2019/02/o-que-e-produto-no-mix-de-marketing-1024x538.png.webp",
+        bodega_id: bodegaPruebaid._id,
+        available: true,
+        approved: true
       },
       {
         name: "prueba3",
         description: "descripcion de un tercer producto",
-        price: "600",
+        points_required: 500,
+        stock: 100,
         img: "https://rockcontent.com/es/wp-content/uploads/sites/3/2019/02/o-que-e-produto-no-mix-de-marketing-1024x538.png.webp",
+        bodega_id: bodegaPruebaid._id,
+        available: true,
+        approved: true
       },
     ];
 

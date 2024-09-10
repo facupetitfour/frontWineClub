@@ -43,7 +43,7 @@ const userSchema = new Schema(
     },
     lastSesion:{
       type: Date,
-      required: true,
+      required: false,
     }
   },
   {

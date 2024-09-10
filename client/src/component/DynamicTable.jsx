@@ -86,29 +86,28 @@ const DynamicTable = (props) => {
     <>
       {/* <FilterTable onSearch={handleSearch} /> */}
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: '100%' }}>
-        <TableHead>
-            <TableRow sx={{ backgroundColor: 'gray.200' }}>
+        <Table sx={{ minWidth: '100%',bgcolor:"" }}>
+        <TableHead sx={{bgcolor:"#B5CDB9"}}>
+            <TableRow>
               {/* Mapea las cabeceras desde el modelo */}
               {visibleFields.map((field) => (
                 <TableCell align="center" key={field}>
                   {props.model[field].header}
                 </TableCell>
               ))}
-              <TableCell>Actions</TableCell>
+              <TableCell align="center">Actions</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
+          <TableBody sx={{bgcolor:"#D9E2DA"}}>
             {sortedData.map((body, index) => (
-              <TableRow key={index} hover>
+              <TableRow key={index} hover >
                 {console.log("FLAAAAG",body)}
                 {visibleFields.map((field) => (
                   <TableCell key={field} align="center">
-                    {console.log()}
                     {field === "imagen" ? (
                       <Avatar
                       />
-                    ) : field.type === "date" ? (
+                    ) : props.model[field].type === "date" ? (
                       formatDate(body[field])
                     ) : typeof body[field] === "boolean" ? (
                       body[field] ? "Sí" : "No"
