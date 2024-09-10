@@ -18,6 +18,8 @@ export const connectdb = async () => {
 const poblarDB = async () => {
   const usersCount = await User.countDocuments()
   const productsCount = await Product.countDocuments();
+  const bodegaUserCount = await Product.countDocuments();
+
   if (usersCount === 0){
     const newUser = new User({
       username: "admin",
@@ -27,6 +29,22 @@ const poblarDB = async () => {
     });
     const savedUser = await newUser.save();
     console.log(savedUser)
+    const newBodegaUser = new User({
+      username: "bodega",
+      email: "bodega@gmail.com",
+      rol: "bodega",
+      password: await User.encryptPassword("bodega1234"),
+    });
+    const savedBodegaUser = await newBodegaUser.save();
+    console.log(savedBodegaUser)
+    const newClienteUser = new User({
+      username: "cliente",
+      email: "cliente@gmail.com",
+      rol: "cliente",
+      password: await User.encryptPassword("cliente1234"),
+    });
+    const savedClienteUser = await newClienteUser.save();
+    console.log(savedClienteUser)
   }else{
     console.log("Users already exist");
   }

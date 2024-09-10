@@ -69,18 +69,18 @@ const Register = () => {
                   <Input
                     {...register("username", {
                       required: true,
-                      maxLength: 20,
-                      minLength: 8,
+                      maxLength: 15,
+                      minLength: 6,
                     })}
                   />
                   {errors.username?.type === "required" && (
                     <p>El campo es requerido</p>
                   )}
                   {errors.username?.type === "maxLength" && (
-                    <p>El nombre tiene que tener maximo 20 caracteres</p>
+                    <p>El nombre tiene que tener maximo 15 caracteres</p>
                   )}
                   {errors.username?.type === "minLength" && (
-                    <p>El nombre tiene que tener minimo ocho caracteres</p>
+                    <p>El nombre tiene que tener minimo seis caracteres</p>
                   )}
                 </FormGroup>
                 <FormGroup>
