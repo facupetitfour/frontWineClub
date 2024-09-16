@@ -19,6 +19,10 @@ const Products = () => {
     avaiable: { type: "boolean", header: "disponible" },
   };
 
+
+  
+
+
   useEffect(() => {
     const getData = async () => {
       try {
