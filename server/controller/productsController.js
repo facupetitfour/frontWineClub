@@ -29,15 +29,15 @@ class ProductsController {
   // Crear un nuevo producto
   async handleCreateItem(req, res) {
     try {
-      const { name, description, price, img, points_required, stock, available, approved} = req.body;
+      const { name, description, img, points_required, stock, available, approved, bodega_id} = req.body;
 
-      // Verificar si el producto o el correo ya existen
-      const existingProducts = await Products.findOne({name:name});
-      if (existingProducts) {
-        return res.status(400).json({ message: "El producto ya existen." });
-      }
+      // Verificar si el producto
+      // const existingProducts = await Products.findOne({name:name});
+      // if (existingProducts) {
+      //   return res.status(400).json({ message: "El producto ya existen." });
+      // }
 
-      const newProducts = new Products({name, description, price, img, points_required, stock, available, approved});
+      const newProducts = new Products({name, description, img, points_required, stock, available, approved, bodega_id});
 
       // Guardar el nuevo producto en la base de datos
       const savedProducts = await newProducts.save();
@@ -66,7 +66,7 @@ class ProductsController {
   async handleUpdateItem(req, res) {
     try {
       const { id } = req.params;
-      const { name, description, price, img, points_required, stock, available, approved} = req.body;
+      const { name, description, img, points_required, stock, available, approved, bodega_id} = req.body;
 
       // Buscar y actualizar el producto
       const updatedProducts = await Products.findById(id);
@@ -77,12 +77,12 @@ class ProductsController {
       // Actualizar los campos
       if (name) updatedProducts.name = name;
       if (description) updatedProducts.description = description;
-      if (price) updatedProducts.price = price;
       if (img) updatedProducts.img = img;
       if (points_required) updatedProducts.points_required = points_required;
       if (stock) updatedProducts.stock = stock;
       if (available) updatedProducts.available = available;
       if (approved) updatedProducts.approved = approved;
+      if (bodega_id) updatedProducts.bodega_id = bodega_id;
 
 
       // Guardar los cambios
