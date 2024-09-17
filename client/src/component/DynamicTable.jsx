@@ -43,6 +43,8 @@ const DynamicTable = (props) => {
   const [sortBy, setSortBy] = useState();
   const [sortOrder, setSortOrder] = useState("asc");
 
+  const [imagenVer,setImagenVer] = useState('')
+
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -92,7 +94,8 @@ const DynamicTable = (props) => {
   };
 
   const handleDeleteClick = (data) => {
-    props.deleteFunction(data);
+    console.log(data._id);
+    props.deleteFunction(data._id);
     setWarningModal(!warningModal);
   };
 
@@ -159,36 +162,7 @@ const DynamicTable = (props) => {
                       "-"
                     ) : props.model[field].type === "img" ? (
                       <>
-                        <Button onClick={handleOpen}>Ver</Button>
-                        <Modal open={open} onClose={handleClose}>
-                          <Box sx={style}>
-                            <Typography
-                              id="modal-modal-title"
-                              variant="h6"
-                              component="h2"
-                            >
-                              Item Imagenes
-                            </Typography>
-                            <Box
-                              sx={{
-                                display: "flex",
-                                alignContent: "center",
-                                justifyContent: "center",
-                              }}
-                            >
-                              <Typography
-                                id="modal-modal-description"
-                                sx={{ mt: 2 }}
-                              >
-                                <ImageList cols={1}>
-                                  <ImageListItem>
-                                    <img src={body[field]} alt="imagen" />
-                                  </ImageListItem>
-                                </ImageList>
-                              </Typography>
-                            </Box>
-                          </Box>
-                        </Modal>
+                        <Button onClick={()=>{setImagenVer(body[field]), handleOpen()}}>Ver</Button>
                       </>
                     ) : (
                       JSON.stringify(body[field])
@@ -220,6 +194,29 @@ const DynamicTable = (props) => {
         cancelWarningModal={handleWarningModal}
         confirmDelete={() => handleDeleteClick(itemToDelete)}
       />
+
+      <Modal open={open} onClose={handleClose}>
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Item Imagenes
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              alignContent: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              <ImageList cols={1}>
+                <ImageListItem>
+                  <img src={imagenVer} alt="imagen" />
+                </ImageListItem>
+              </ImageList>
+            </Typography>
+          </Box>
+        </Box>
+      </Modal>
     </>
   );
 };

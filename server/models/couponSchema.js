@@ -1,3 +1,5 @@
+import { Schema, model } from "mongoose";
+
 const couponSchema = new Schema(
   {
     name: {
@@ -36,4 +38,4 @@ const couponSchema = new Schema(
   }
 );
 
-const Coupon = mongoose.model("Coupon", couponSchema);
+export default model("Coupons", couponSchema);

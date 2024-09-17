@@ -20,7 +20,8 @@ const userSchema = new Schema(
       type: String, 
       enum: ['cliente', 'bodega', 'administrador'], 
       default: "cliente",
-      required: true },
+      required: true 
+    },
     name: { // Solo para clientes
       type: String,
       required: false,

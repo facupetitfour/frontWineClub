@@ -98,7 +98,7 @@ class AuthController {
 
       // Se crea el codigo de verificacion y se envia el mail.
 
-      sendVerificationEmail(email)
+      // sendVerificationEmail(email)
       
 
       // Se actualiza la ultima sesion del usuario

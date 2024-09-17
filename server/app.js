@@ -9,6 +9,7 @@ import authenticateRouter from "./routes/login.js";
 import { connectdb } from "./mongoDB/dbMongoose.js";
 import dotenv from "dotenv";
 import productsRouter from "./routes/products.js";
+import couponsRouter from './routes/coupons.js'
 dotenv.config();
 
 const app = express();
@@ -36,6 +37,7 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/authenticate", authenticateRouter);
 app.use("/products", productsRouter);
+app.use("/coupons", couponsRouter);
 
 // Manejo de errores 404
 app.use((req, res, next) => {

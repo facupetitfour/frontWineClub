@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import ProductsController from '../controller/productsController.js'
+import CouponsController from '../controller/couponsController.js'
 import RoutesAuth from '../middleware/routesAuth.js';
 
 const router = Router();
-const controller = new ProductsController()
+const controller = new CouponsController()
 const middleware = new RoutesAuth()
 
 // router.get('/', middleware.handleValidateToken, controller.handleGetAllItems);
