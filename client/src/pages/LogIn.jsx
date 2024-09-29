@@ -24,7 +24,6 @@ const InicioSesion = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    console.log(data);
     await axios
       .post(serverhost + "authenticate/logIn", data, {
         withCredentials: true,

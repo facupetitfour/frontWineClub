@@ -10,7 +10,7 @@ import Coupons from "./pages/Coupons";
 import Avaiable from "./pages/Avaiable";
 import SideBar from "./component/SideBar";
 import ProtectedRouteBodega from "./component/ProtectedRouteBodegas";
-import Points from "./component/Points";
+import Points from "./pages/Points";
 
 function App() {
   return (
