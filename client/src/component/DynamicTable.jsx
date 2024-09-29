@@ -108,12 +108,12 @@ const DynamicTable = (props) => {
     setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
   };
 
-  const handleToggleImage = (index) => {
-    setShowImage((prevShowImage) => ({
-      ...prevShowImage,
-      [index]: !prevShowImage[index],
-    }));
-  };
+  // const handleToggleImage = (index) => {
+  //   setShowImage((prevShowImage) => ({
+  //     ...prevShowImage,
+  //     [index]: !prevShowImage[index],
+  //   }));
+  // };
 
   const formatDate = (date) => {
     const dateObj = new Date(date);

@@ -1,15 +1,11 @@
 import { useForm } from "react-hook-form";
 import {
-  FormGroup,
-  Input,
-  FormLabel,
   Button,
-  CardContent,
   CardActions,
-  Card,
-  CardHeader,
   Box,
   Alert,
+  Grid,
+  TextField,
 } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -46,7 +42,14 @@ const InicioSesion = () => {
   return (
     <>
       {messageError && (
-        <Box sx={{ position: "relative", width: "100%", display: "flex", justifyContent: "center" }}>
+        <Box
+          sx={{
+            position: "relative",
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
           <Alert
             variant="filled"
             severity="error"
@@ -55,7 +58,6 @@ const InicioSesion = () => {
             }}
             sx={{
               position: "absolute",
-              top: 20,
               zIndex: 10,
               maxWidth: "90%",
               width: "auto",
@@ -65,61 +67,86 @@ const InicioSesion = () => {
           </Alert>
         </Box>
       )}
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-          position: "relative",
-        }}
-      >
-        <Box sx={{ maxWidth: "80%", width: "500px" }}>
-          <Card
+      <Grid container height={"100vh"}>
+        <Grid md={8} sx={{ display: { xs: "none", sm:"none",md:"block"} }}>
+          <Box
+            component="img"
+            src="./public/img/imglogin.png"
+            alt="Imagen login"
             sx={{
-              bgcolor: "rgb(240, 255, 255)",
-              boxShadow: "0px 0px 100px rgba(0, 40, 90, 60)",
+              display: "block",
+              filter: "brightness(0.5)",
+              width: "100%",
+              height: "100vh",
+              objectFit: "cover",
+              objectPosition: "0% 80%",
+              zIndex: 1,
             }}
-          >
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <CardHeader title="Inicio de Sesión" />
-              <CardContent
-                sx={{
-                  display: "flex",
-                  flexWrap: "50px",
-                  flexDirection: "column",
-                  "& > *": { mb: 3 },
-                }}
-              >
-                <FormGroup>
-                  <FormLabel>Username</FormLabel>
-                  <Input {...register("username", { required: true })} />
-                  {errors.username && <span>Este campo es requerido</span>}
-                </FormGroup>
-                <FormGroup>
-                  <FormLabel>Password</FormLabel>
-                  <Input
-                    type="password"
-                    {...register("password", { required: true })}
-                  />
-                  {errors.password && <span>Este campo es requerido</span>}
-                </FormGroup>
-              </CardContent>
-              <CardActions
-                sx={{ display: "flex", flexDirection: "row", justifyContent:"space-between"}}
-              >
-                <Button size="medium" onClick={()=>{navigate("/register")}}>
-                  Registrarse
-                </Button>
-
-                <Button type="submit" size="medium">
-                  Iniciar
-                </Button>
-              </CardActions>
-            </form>
-          </Card>
-        </Box>
-      </Box>
+          />
+        </Grid>
+        <Grid
+          md={4}
+          xs={12}
+          bgcolor={"white"}
+          alignContent={"center"}
+          height={"100vh"}
+          boxShadow={"0 2px 50px rgba(0, 0, 0, 1)"}
+          zIndex={2}
+        >
+          <form className={{ width: "100%" }} onSubmit={handleSubmit(onSubmit)}>
+            <Grid
+              container
+              justifyContent={"center"}
+              width={"100%"}
+              padding={5}
+              rowSpacing={4}
+            >
+              <h1> Inicio de Sesion</h1>
+              <Grid item md={12} xs={12} sm={12}>
+                <TextField
+                  fullWidth
+                  label="Username"
+                  {...register("username", { required: true })}
+                  error={!!errors.name}
+                  helperText={errors.username && "El username es requerido"}
+                />
+              </Grid>
+              <Grid item md={12} xs={12} sm={12}>
+                <TextField
+                  type="password"
+                  fullWidth
+                  label="Password"
+                  {...register("password", { required: true })}
+                  error={!!errors.password}
+                  helperText={errors.password && "El password es requerido"}
+                />
+              </Grid>
+              <Grid item md={12} xs={12} sm={12}>
+                <CardActions
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    width: "100%",
+                  }}
+                >
+                  <Button
+                    size="medium"
+                    onClick={() => {
+                      navigate("/register");
+                    }}
+                  >
+                    Registrarse
+                  </Button>
+                  <Button type="submit" size="medium" variant="contained">
+                    Iniciar
+                  </Button>
+                </CardActions>
+              </Grid>
+            </Grid>
+          </form>
+        </Grid>
+      </Grid>
     </>
   );
 };
