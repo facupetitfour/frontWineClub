@@ -29,11 +29,11 @@ class UserController {
   }
 
 
-  // Obtener un usuario por ID
+  // Obtener un usuario por username
   async handleGetItembyUsername(req, res) {
     try {
       const { username } = req.body;
-      const user = await User.findOne({username:username})
+      const user = await User.findOne({username:username, rol:"cliente"})
       if (!user) {
         return res.status(404).json({ message: "Usuario no encontrado" });
       }
