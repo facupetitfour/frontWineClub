@@ -39,7 +39,7 @@ const MenuAccount = () => {
       .post(serverhost + "authenticate/logOut", {}, { withCredentials: true })
       .then((response) => {
         console.log("RESPONSE LOG OUT: ", response);
-        navigate("/login");
+        navigate("/");
       })
       .catch((error) => {
         console.error("ERROR AL LOGOUT", error);

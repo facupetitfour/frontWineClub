@@ -30,7 +30,7 @@ const InicioSesion = () => {
       })
       .then((response) => {
         console.log("RESPONSE DATA: ", response);
-        navigate("/");
+        navigate("/home");
       })
       .catch((error) => {
         console.log("RESPONSE ERRR: ", error.response.data.message);
@@ -67,7 +67,7 @@ const InicioSesion = () => {
         </Box>
       )}
       <Grid container height={"100vh"}>
-        <Grid md={8} sx={{ display: { xs: "none", sm:"none",md:"block"} }}>
+        <Grid item md={8} sx={{ display: { xs: "none", sm:"none",md:"block"} }}>
           <Box
             component="img"
             src="./public/img/imglogin.png"
@@ -84,6 +84,7 @@ const InicioSesion = () => {
           />
         </Grid>
         <Grid
+          item
           md={4}
           xs={12}
           bgcolor={"white"}

@@ -29,7 +29,7 @@ const SideBar = () => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
   const listDrawerItem = {
-    home: {link: "/", text: "Home",icon: <HomeIcon/>  },
+    home: {link: "/home", text: "Home",icon: <HomeIcon/>  },
     users: {link: "/users", text: "Usuarios",icon: <UserIcon/>},
     products: {link: "/products", text: "Productos",icon: <ProductsIcon/>},
     coupons: {link: "/coupons", text: "Cupones",icon: <CuponesIcon/>},

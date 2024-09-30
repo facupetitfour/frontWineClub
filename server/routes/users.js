@@ -14,6 +14,8 @@ const middleware = new RoutesAuth()
 
 router.get('/', controller.handleGetAllItems);
 router.get('/', controller.handleGetItem);
+router.post('/search', controller.handleGetItembyUsername);
+router.post('/cargaPuntos', controller.handleUpdatatePointsItem);
 router.post('/', controller.handleCreateItem);
 router.put('/', controller.handleUpdateItem);
 router.delete('/', controller.handleDeleteItem);

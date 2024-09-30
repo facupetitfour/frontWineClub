@@ -9,6 +9,7 @@ const NavBarBodegas = () => {
     <>
       <AppBar
         position="fixed"
+        sx={{zIndex:1}}
       >
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
           <Typography variant="h6" noWrap component="div">

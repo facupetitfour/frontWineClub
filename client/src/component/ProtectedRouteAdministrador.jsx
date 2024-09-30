@@ -10,7 +10,9 @@ const ProtectedRouteAdministrador = () => {
     const decodeToken = jwtDecode(token)
     return decodeToken.rol === "administrador" && token 
     ?  <Outlet /> : decodeToken.rol === "bodega" ? <Navigate to= "/points"/> 
-    : <Navigate to="/login" />;}
+    : <Navigate to="/" />;
+  }
+
 };
 
 export default ProtectedRouteAdministrador;

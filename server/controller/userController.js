@@ -28,6 +28,22 @@ class UserController {
     }
   }
 
+
+  // Obtener un usuario por ID
+  async handleGetItembyUsername(req, res) {
+    try {
+      const { username } = req.body;
+      const user = await User.findOne({username:username})
+      if (!user) {
+        return res.status(404).json({ message: "Usuario no encontrado" });
+      }
+      res.status(200).json(user);
+    } catch (error) {
+      console.log(error)
+      res.status(500).json({ message: "Error al obtener el usuario", error: error.message });
+    }
+  }
+
   // Crear un nuevo usuario
   async handleCreateItem(req, res) {
     try {
@@ -106,6 +122,31 @@ class UserController {
       res.status(500).json({ message: "Error al actualizar el usuario", error: error.message });
     }
   }
+  // Actualizar cargar puntos sumar
+  async handleUpdatatePointsItem(req, res) {
+    try {
+      const { username, points} = req.body;
+      let sumPoints = Number(points)
+      // Buscar y actualizar el usuario
+      const updatedUser = await User.findOne({username:username});
+      if (!updatedUser) {
+        return res.status(404).json({ message: "Usuario no encontrado" });
+      }
+
+      // Actualizar los campos
+      if (username) updatedUser.username = username;
+      if (sumPoints) updatedUser.points = (updatedUser.points + sumPoints);
+
+      // Guardar los cambios
+      await updatedUser.save();
+
+      res.status(200).json({ message: "Usuario actualizado exitosamente", user: updatedUser });
+    } catch (error) {
+      console.log(error)
+      res.status(500).json({ message: "Error al actualizar el usuario", error: error.message });
+    }
+  }
 }
+
 
 export default UserController;

@@ -18,13 +18,13 @@ function App() {
       <Routes>
 
         {/* Rutas separadas unas con sidebar y protegidas, otras no. */} 
-        <Route path="/login" element={<InicioSesion />} />
+        <Route path="/" element={<InicioSesion />} />
         <Route path="/register" element={<Register />} />
 
         Rutas protegidas y sidebar  administrador
         <Route element={<ProtectedRouteAdministrador />}>
           <Route element={<SideBar />}>
-            <Route path="/" element={<Home />} />
+            <Route path="/home" element={<Home />} />
             <Route path="/users" element={<Users />} />
             <Route path="/products" element={<Products />} />
             <Route path="/coupons" element={<Coupons/>} />
