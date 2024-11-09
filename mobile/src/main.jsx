@@ -9,10 +9,10 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 // Definir un tema personalizado
 const theme = createTheme({
   palette: {
-    primary: { main: '#B5CDB9' },
-    secondary: { main: '#9c0027' },
+    primary: { main: '#4E1F5A' },
+    secondary: { main: '#B5CDB9' },
     background: { default: '#ffffff' },
-    accent: { main: '#B5CDB9' },
+    accent: { main: '#4E1F5A' },
   },
   typography: {
     fontFamily: 'Roboto, Arial, sans-serif',

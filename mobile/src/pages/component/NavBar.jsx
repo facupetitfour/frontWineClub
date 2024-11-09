@@ -17,7 +17,7 @@ const NavBar = () => {
         }}
       >
         <Toolbar>
-          <Typography variant="h5" color={"grey"}>
+          <Typography variant="h5" color={"white"}>
             WINE CLUB
           </Typography>
         </Toolbar>
