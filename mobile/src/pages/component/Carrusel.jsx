@@ -1,9 +1,8 @@
-import React from 'react';
-import { Box, Hidden, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { useState } from 'react';
 
 // Si no tienes un componente Carousel ya configurado, puedes usar este con lógica básica
-const Carousel = () => {
+const Carousel = ({imagenesBodega}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   // Imágenes y texto opcionales
@@ -34,7 +33,7 @@ const Carousel = () => {
   };
 
   return (
-    <Box sx={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden', padding:1}}>
+    <Box sx={{ position: 'relative', width: '100%', height: 300, overflow: 'hidden', padding:1}}>
       {/* Renderiza el elemento actual del carrusel */}
       <Box
         sx={{
@@ -43,7 +42,7 @@ const Carousel = () => {
           alignItems: 'flex-start',
           padding: 0,
           height: 270,
-          backgroundImage: `url(${items[currentIndex].img})`,
+          backgroundImage: `url(${ imagenesBodega ? imagenesBodega[currentIndex] : items[currentIndex].img}) `,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           borderRadius: '15px',

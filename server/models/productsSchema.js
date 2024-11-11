@@ -10,7 +10,7 @@ const productsSchema = new Schema(
       type: String,
       unique: true,
     },
-    points_required: {
+    points: {
       type: String,
       required: true,
     },

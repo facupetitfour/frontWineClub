@@ -1,10 +1,15 @@
-import React from "react";
 import Carrusel from "./component/Carrusel";
 import { Box } from "@mui/material";
-import FloatingNavBar from "./component/FloatingNavBar";
-import BodegasAsociadas from "./component/BodegasAsociadas";
+import ItemsViews from "./component/ItemsViews";
+import StoreIcon from '@mui/icons-material/Store';
+import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumberOutlined";
+import { useLocation } from 'react-router-dom';
 
-const Bodegas = () => {
+const Bodega = () => {
+
+  const location = useLocation();
+  const { nombre, img } = location.state || {};
+  console.log(nombre,img)
   return (
     <>
       <Box
@@ -12,17 +17,17 @@ const Bodegas = () => {
           display: "flex",
           flexDirection: "column",
           gap: 1,
-          width:"100%",
+          width: "100%",
           justifyContent: "center", // Alinea en el eje horizontal
           alignItems: "center", // Alinea en el eje vertical
         }}
       >
-        <Carrusel />
-        <FloatingNavBar />
-        <BodegasAsociadas />
+        <Carrusel/>
+        <ItemsViews nombre={"Productos"} icon = {<StoreIcon/>}/>
+        <ItemsViews nombre={"Cupones"} icon = {<ConfirmationNumberIcon/>}/>
       </Box>
     </>
   );
 };
 
-export default Bodegas;
+export default Bodega;

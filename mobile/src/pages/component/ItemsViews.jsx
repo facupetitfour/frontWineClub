@@ -1,0 +1,99 @@
+import { Box, Typography, Grid, Card, CardMedia, CardContent } from '@mui/material';
+
+// Array de bodegas con su imagen y nombre
+const bodegas = [
+  { nombre: 'Vino tinto', imagen: '/bodega.webp' },
+  { nombre: 'Vino Blanco', imagen: '/bodega.webp' },
+  { nombre: 'Vino Rosado', imagen: '/bodega.webp' },
+  { nombre: 'Vino tinto', imagen: '/bodega.webp' },
+  { nombre: 'Vino Blanco', imagen: '/bodega.webp' },
+  { nombre: 'Vino Rosado', imagen: '/bodega.webp' },
+];
+
+const ItemsViews = ({ nombre, icon, imagen}) => {
+  return (
+    <Box sx={{ padding: 2, position: 'relative', maxWidth: "100%"}}>
+      {/* Título con ícono y "Ver más" */}
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          borderBottom: '2px solid #D90036',
+          paddingBottom: 1,
+          marginBottom: 2,
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          {icon}
+          <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#000' }}>
+            {nombre ? nombre : 'item name'}
+          </Typography>
+        </Box>
+        <button
+          // onClick={() => {
+          //   navigate("/allbodegas", {
+          //     state: {
+          //       data: data,
+          //     },
+          //   });
+          // }}
+          style={{
+            background: "none",
+            border: "none",
+            padding: 0,
+          }}
+        >
+          <Typography
+            sx={{
+              fontStyle: "italic",
+              color: "#000",
+              fontSize: "16px",
+            }}
+          >
+            Ver más
+          </Typography>
+        </button>
+      </Box>
+
+      {/* Grid para mostrar las tarjetas en un estilo carrusel */}
+      <Grid container spacing={2} sx={{ overflowX: 'auto', flexWrap: 'nowrap' }}>
+        {bodegas.map((item, index) => (
+          <Grid item key={index} sx={{ minWidth: '40%' }}>
+            {/* Card de la item */}
+            <Card sx={{ borderRadius: 2, overflow: 'hidden', position: 'relative', boxShadow: 1 }}>
+              {/* Imagen con gradiente */}
+              <CardMedia
+                component="img"
+                height="150"
+                image={item.imagen}
+                alt={item.nombre}
+                sx={{
+                  position: 'relative',
+                  '&:after': {
+                    content: '""',
+                    position: 'absolute',
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                    background:
+                      'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 100%)',
+                  },
+                }}
+              />
+              {/* Nombre de la item */}
+              <CardContent sx={{ textAlign: 'center', padding: '8px 0' }}>
+                <Typography variant="body1" sx={{ fontWeight: 'bold', fontSize: '14px', color: '#000' }}>
+                  {item.nombre}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+    </Box>
+  );
+};
+
+export default ItemsViews;

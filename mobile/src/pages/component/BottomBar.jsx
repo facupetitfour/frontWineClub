@@ -13,40 +13,52 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/Inbox';
-import MailIcon from '@mui/icons-material/Mail';
-import { Box, Drawer, List, Divider } from "@mui/material";
+import { Box, Drawer, List, Divider, Avatar } from "@mui/material";
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import StorefrontIcon from '@mui/icons-material/Storefront';
+import SupportAgentIcon from '@mui/icons-material/SupportAgent';
+import WineBarIcon from '@mui/icons-material/WineBar';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 const BottomBar = () => {
-  const [selectedTab, setSelectedTab] = useState("home"); // Estado inicial
+  const [selectedTab, setSelectedTab] = useState("home"); 
   const [stateSideMenu, setStateSideMenu] = useState(false);
   const navigate = useNavigate();
 
   const handleTabClick = (tab, route) => {
-    setSelectedTab(tab); // Actualiza el estado del tab seleccionado
-    navigate(route); // Navega a la ruta correspondiente
+    setSelectedTab(tab);
+    navigate(route);
   };
 
   const toggleDrawer = (state) => {
     setStateSideMenu(state);
-
   };
 
   const optionsDrawer = [
-    { title: "Producto", route: "/products", icon: null},
-    { title: "Cupones", route: "/coupons" , icon: null },
-    { title: "Favoritos", route: "/favorite", icon: null },
-    { title: "Mis cupones", route: "/mycoupons", icon: null },
-    { title: "Bodegas", route: "/bodegas", icon: null },
-    { title: "Soporte", route: "/suport", icon: null },
+    { title: "Productos", route: "/allproducts", icon: <StorefrontIcon /> },
+    { title: "Cupones", route: "/allcoupons", icon: <LocalOfferIcon /> },
+    { title: "Favoritos", route: "/favorite", icon: <FavoriteBorderIcon /> },
+    { title: "Mis cupones", route: "/mycoupons", icon: <LocalOfferIcon /> },
+    { title: "Bodegas", route: "/allbodegas", icon: <WineBarIcon /> },
+    { title: "Soporte", route: "/support", icon: <SupportAgentIcon /> },
   ];
 
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation" onClick={() => toggleDrawer(false)}>
-      <List>
+      {/* Encabezado del Sidebar */}
+      <Box sx={{ backgroundColor: "#4A154B", color: "#FFF", padding: 2, textAlign: "center" }}>
+        <Avatar sx={{ margin: "0 auto", backgroundColor: "#FFFFFF", color: "#4A154B" }}>
+          <WineBarIcon />
+        </Avatar>
+        <Typography variant="h6">Facundo Petitfour</Typography>
+      </Box>
+
+      <Divider />
+
+      <List sx={{bottom:0}}>
         {optionsDrawer.map((option, index) => (
-          <ListItem key={index}>
-            <ListItemButton onClick={()=>{navigate(option.route)}}>
+          <ListItem key={index} disablePadding>
+            <ListItemButton onClick={() => navigate(option.route)}>
               <ListItemIcon>
                 {option.icon}
               </ListItemIcon>
@@ -55,7 +67,18 @@ const BottomBar = () => {
           </ListItem>
         ))}
       </List>
+
       <Divider />
+
+      {/* Botón de Cerrar Sesión */}
+      <ListItem disablePadding>
+        <ListItemButton onClick={() => navigate('/logout')}>
+          <ListItemIcon>
+            <ExitToAppIcon color="error" />
+          </ListItemIcon>
+          <ListItemText primary="Cerrar Sesión" />
+        </ListItemButton>
+      </ListItem>
     </Box>
   );
 
@@ -78,7 +101,6 @@ const BottomBar = () => {
       >
         <Toolbar sx={{ height: "100%" }}>
           <Grid container justifyContent="space-between" alignItems="center" sx={{ width: '100%', padding: 2 }}>
-            {/* Tab 1: Menú */}
             <Grid>
               <ButtonBase
                 sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
@@ -99,7 +121,6 @@ const BottomBar = () => {
               </ButtonBase>
             </Grid>
 
-            {/* Tab 2: Home */}
             <Grid>
               <ButtonBase
                 sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
@@ -120,11 +141,10 @@ const BottomBar = () => {
               </ButtonBase>
             </Grid>
 
-            {/* Tab 3: Mis Cupones */}
             <Grid>
               <ButtonBase
                 sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-                onClick={() => handleTabClick('coupons', '/cupones')}
+                onClick={() => handleTabClick('coupons', '/mycoupons')}
               >
                 <LocalOfferIcon sx={{ color: selectedTab === 'coupons' ? "#D90036" : "#404040" }} />
                 <Typography
@@ -141,7 +161,6 @@ const BottomBar = () => {
               </ButtonBase>
             </Grid>
 
-            {/* Tab 4: Perfil */}
             <Grid>
               <ButtonBase
                 sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
