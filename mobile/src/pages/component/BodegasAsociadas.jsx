@@ -11,9 +11,9 @@ import { useNavigate } from "react-router-dom";
 
 const BodegasAsociadas = ({ data }) => {
   const navigate = useNavigate();
-
+  console.log(data)
   return (
-    <Box sx={{ padding: 2 }}>
+    <Box sx={{ padding: 2, minWidth:"100%"}}>
       {/* Título */}
       <Box
         sx={{
@@ -66,8 +66,7 @@ const BodegasAsociadas = ({ data }) => {
             onClick={() => {
               navigate("/bodega", {
                 state: {
-                  nombre: bodega.nombre,
-                  imagen: bodega.imagen,
+                  data:bodega,
                 },
               });
             }}
@@ -78,8 +77,8 @@ const BodegasAsociadas = ({ data }) => {
               <CardMedia
                 component="img"
                 height="140"
-                image={bodega.imagen}
-                alt={bodega.nombre}
+                image={bodega.img || '/bodega1.avif'}
+                alt={bodega.name}
               />
               {/* Nombre de la bodega */}
               <CardContent>
@@ -89,9 +88,10 @@ const BodegasAsociadas = ({ data }) => {
                     fontWeight: "bold",
                     textAlign: "center",
                     fontSize: "14px",
+                    overflow: true
                   }}
                 >
-                  {bodega.nombre}
+                  {bodega.profile.name}
                 </Typography>
               </CardContent>
             </Card>

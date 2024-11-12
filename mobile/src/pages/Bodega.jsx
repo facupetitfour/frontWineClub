@@ -8,8 +8,8 @@ import { useLocation } from 'react-router-dom';
 const Bodega = () => {
 
   const location = useLocation();
-  const { nombre, img } = location.state || {};
-  console.log(nombre,img)
+  const {data} = location.state || {};
+  console.log(data)
   return (
     <>
       <Box
@@ -23,8 +23,8 @@ const Bodega = () => {
         }}
       >
         <Carrusel/>
-        <ItemsViews nombre={"Productos"} icon = {<StoreIcon/>}/>
-        <ItemsViews nombre={"Cupones"} icon = {<ConfirmationNumberIcon/>}/>
+        <ItemsViews nombre={"Productos"} icon = {<StoreIcon/>} data = {data.products}/>
+        <ItemsViews nombre={"Cupones"} icon = {<ConfirmationNumberIcon/>} data = {data.coupons}/>
       </Box>
     </>
   );

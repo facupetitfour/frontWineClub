@@ -8,12 +8,14 @@ import AllBodegas from "./pages/AllBodegas";
 import AllItemsViews_Products_Coupons from "./pages/AllItemsViews_Products_Coupons";
 import ItemRender from "./pages/ItemRender";
 import MisCupones from "./pages/misCupones";
+import Register from "./pages/Register";
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<InicioSesion />} />
+        <Route path="/register" element={<Register />} />
         <Route element={<PlantillaMobile />}>
           <Route path="/home" element={<Home />} />
           <Route path="/bodega" element={<Bodega />} />

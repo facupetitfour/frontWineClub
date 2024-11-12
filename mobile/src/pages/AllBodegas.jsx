@@ -27,7 +27,7 @@ function AllBodegas() {
 
   return (
     <>
-      <Box sx={{ padding: 2, minHeight: "100vh" }}>
+      <Box sx={{ padding: 2, minHeight: "100vh", minWidth:"100%" }}>
         <Box
           sx={{
             flexDirection: "column",
@@ -67,8 +67,7 @@ function AllBodegas() {
                   onClick={() => {
                     navigate("/bodega", {
                       state: {
-                        nombre: bodega.nombre,
-                        imagen: bodega.imagen,
+                        data: bodega
                       },
                     });
                   }}
@@ -79,10 +78,10 @@ function AllBodegas() {
                     <CardMedia
                       component="img"
                       height="140"
-                      image={bodega.imagen}
-                      alt={bodega.nombre}
+                      image={bodega.profile.img || 'bodega1.avif'}
+                      alt={bodega.profile.name}
                     />
-                    {/* Nombre de la bodega */}
+                    {/* Name de la bodega */}
                     <CardContent>
                       <Typography
                         variant="body1"
@@ -92,7 +91,7 @@ function AllBodegas() {
                           fontSize: "14px",
                         }}
                       >
-                        {bodega.nombre}
+                        {bodega.profile.name}
                       </Typography>
                     </CardContent>
                   </Card>
