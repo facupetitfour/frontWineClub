@@ -1,10 +1,9 @@
 import { Navigate, Outlet } from 'react-router-dom';
-import Cookies from 'js-cookie';
 import {jwtDecode} from 'jwt-decode'
 
 const ProtectedRouteAdministrador = () => {
 
-  const token = Cookies.get('token');
+  const token = localStorage.getItem('access_token');
   if (token) {
     console.log(token)
     const decodeToken = jwtDecode(token)

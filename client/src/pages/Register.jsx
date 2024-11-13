@@ -25,9 +25,7 @@ const Register = () => {
   const onSubmit = (data) => {
     console.log("ONSUBMIT DATA: ", data);
     axios
-      .post(serverhost + "authenticate/register", data, {
-        withCredentials: true,
-      })
+      .post(serverhost + "users", data)
       .then((response) => {
         console.log("RESPONSE DATA: ", response);
         navigate("/");

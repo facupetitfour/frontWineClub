@@ -24,33 +24,35 @@ const Users = () => {
 
   const modelSchemaUsers = {
     _id: { type: "string", header: "ID" },
-    name: { type: "string", header: "Nombre" },
-    subname: { type: "string", header: "Apellido" },
     email: { type: "string", header: "E-mail" },
-    points: { type: "number", header: "Puntos" },
-    emailVerify: { type: "boolean", header: "Mail verificado" },
-    lastSesion: { type: "date", header: "Ultima sesion" },
+    username: { type: "string", header: "Username" },
+    profile: {type:"string", header: "Profile"},
+    date_register: { type: "date", header: "Fecha de Registro" },
   };
   const modelSchemaBodega = {
     _id: { type: "string", header: "ID" },
     email: { type: "string", header: "E-mail" },
-    emailVerify: { type: "boolean", header: "Mail verificado" },
-    lastSesion: { type: "date", header: "Ultima sesion" },
+    username: { type: "string", header: "Username" },
+    profile: {type:"string", header: "Profile"},
+    date_register: { type: "date", header: "Fecha de Registro" },
   };
 
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await axios.get(serverhost + "users", {
-          withCredentials: true,
+        const token = localStorage.getItem('access_token')
+        const response = await axios.get(serverhost + "users",{
+          headers:{
+            Authorization:`Bearer ${token}`
+          }
         });
         console.log(response.data);
         setData(response.data);
-        setBodegaData(response.data.filter((data) => data.rol === "bodega"));
-        setClientData(response.data.filter((data) => data.rol === "cliente"));
+        setBodegaData(response.data.filter((data) => data.roles === "bodega"));
+        setClientData(response.data.filter((data) => data.roles === "cliente"));
       } catch (error) {
         console.error("Error al obtener data de usuarios", error);
-        navigate("/login");
+        navigate("/");
       }
     };
     getData();

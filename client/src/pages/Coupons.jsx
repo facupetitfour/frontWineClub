@@ -86,7 +86,7 @@ const Coupons = () => {
   const createItem = (data) => {
     console.log(data);
     axios
-      .post(serverhost + "coupons", data, { withCredentials: true })
+      .post(serverhost + "coupons", data)
       .then((response) => {
         console.log("Cupon creado con éxito: ", response.data);
         handleClose();
@@ -98,7 +98,7 @@ const Coupons = () => {
   };
   const updateItem = (id, data) => {
     axios
-      .put(serverhost + `coupons/${id}`, data, { withCredentials: true })
+      .put(serverhost + `coupons/${id}`, data)
       .then((response) => {
         console.log("Cupon actualizado con éxito: ", response.data);
       })
@@ -111,7 +111,7 @@ const Coupons = () => {
   };
   const deleteItem = (id) => {
     axios
-      .delete(serverhost + `coupons/${id}`, { withCredentials: true })
+      .delete(serverhost + `coupons/${id}`)
       .then((response) => {
         console.log("Cupon eliminado con éxito: ", response.data);
         actualizarComponente();
@@ -134,7 +134,7 @@ const Coupons = () => {
         setCouponsData(response.data);
       } catch (error) {
         console.error("Error al obtener data de usuarios", error);
-        navigate("/login");
+        navigate("/");
       }
     };
     getData();

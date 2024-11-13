@@ -25,9 +25,7 @@ const InicioSesion = () => {
 
   const onSubmit = async (data) => {
     await axios
-      .post(serverhost + "authenticate/logIn", data, {
-        withCredentials: true,
-      })
+      .post(serverhost + "authenticate/logIn", data)
       .then((response) => {
         console.log("RESPONSE DATA: ", response);
         navigate("/home");

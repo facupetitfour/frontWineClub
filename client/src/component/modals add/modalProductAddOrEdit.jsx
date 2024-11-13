@@ -14,10 +14,17 @@ import {
 } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { Grid } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AddIcon from "@mui/icons-material/Add";
 
-const ModalProductAdd = ({ state, createItem }) => {
+const ModalProductAddOrEdit = ({
+  state,
+  createItem,
+  updateItem,
+  product,
+  dataUsers,
+  dataCategories,
+}) => {
   const [open, setOpen] = useState(state);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -26,15 +33,45 @@ const ModalProductAdd = ({ state, createItem }) => {
     register,
     handleSubmit,
     formState: { errors },
+    setValue, // Para cargar valores iniciales en el formulario
   } = useForm();
 
+  useEffect(() => {
+    if (product) {
+      // Cargar datos de producto en el formulario si se proporciona un producto
+      setValue("name", product.name);
+      setValue("description", product.description);
+      setValue("points_required", product.points_required);
+      setValue("stock", product.stock);
+      setValue("available", product.available);
+      setValue("categoria_id", product.categoria_id);
+      setValue("user_id", product.user_id);
+    }
+  }, [product, setValue, state]);
+
   const onSubmit = (data) => {
-    createItem(data);
+    const selectedCategory = dataCategories.find(
+      (category) => category._id === data.categoria_id
+    );
+    const selectedUser = dataUsers.find((user) => user._id === data.user_id);
+
+    const productData = {
+      ...data,
+      categoria_name: selectedCategory ? selectedCategory.name : "",
+      user_id: selectedUser ? selectedUser._id : "",
+    };
+
+    if (product) {
+      updateItem({ ...product, ...productData }); // Si existe un producto, actualizarlo
+    } else {
+      createItem(productData); // Si no existe, crearlo
+    }
+
     handleClose();
   };
+
   return (
     <>
-      {/* Botón flotante */}
       <Fab
         color="primary"
         aria-label="add"
@@ -44,7 +81,6 @@ const ModalProductAdd = ({ state, createItem }) => {
         <AddIcon />
       </Fab>
 
-      {/* Modal */}
       <Modal
         open={open}
         onClose={handleClose}
@@ -67,13 +103,8 @@ const ModalProductAdd = ({ state, createItem }) => {
           }}
         >
           <form onSubmit={handleSubmit(onSubmit)}>
-            <h1>Agregar Producto</h1>
-            <Grid
-              container
-              sx={{ width: "100%", height: "100%", padding: 2 }}
-              rowSpacing={3}
-              columnSpacing={{ xs: 1, sm: 1, md: 1 }}
-            >
+            <h1>{product ? "Editar Producto" : "Agregar Producto"}</h1>
+            <Grid container sx={{ width: "100%", padding: 2 }} rowSpacing={3}>
               <Grid item md={6}>
                 <TextField
                   fullWidth
@@ -89,18 +120,7 @@ const ModalProductAdd = ({ state, createItem }) => {
                   label="Descripción"
                   {...register("description", { required: true })}
                   error={!!errors.description}
-                  helperText={
-                    errors.description && "La descripción es requerida"
-                  }
-                />
-              </Grid>
-              <Grid item md={12}>
-                <TextField
-                  fullWidth
-                  label="Imagen URL"
-                  {...register("img", { required: true })}
-                  error={!!errors.img}
-                  helperText={errors.img && "La imagen es requerida"}
+                  helperText={errors.description && "La descripción es requerida"}
                 />
               </Grid>
               <Grid item md={6}>
@@ -110,9 +130,7 @@ const ModalProductAdd = ({ state, createItem }) => {
                   type="number"
                   {...register("points_required", { required: true })}
                   error={!!errors.points_required}
-                  helperText={
-                    errors.points_required && "Este campo es requerido"
-                  }
+                  helperText={errors.points_required && "Este campo es requerido"}
                 />
               </Grid>
               <Grid item md={6}>
@@ -131,8 +149,8 @@ const ModalProductAdd = ({ state, createItem }) => {
                   <Select
                     labelId="available-label"
                     label="Disponible"
-                    defaultValue={true}
                     {...register("available", { required: true })}
+                    defaultValue={product ? product.available : true}
                   >
                     <MenuItem value={true}>Sí</MenuItem>
                     <MenuItem value={false}>No</MenuItem>
@@ -141,37 +159,47 @@ const ModalProductAdd = ({ state, createItem }) => {
               </Grid>
               <Grid item md={6}>
                 <FormControl fullWidth>
-                  <InputLabel id="approved-label">Aprobado</InputLabel>
+                  <InputLabel id="category-label">Categoría</InputLabel>
                   <Select
-                    labelId="approved-label"
-                    label="Aprobado"
-                    defaultValue={true}
-                    {...register("approved", { required: true })}
+                    labelId="category-label"
+                    label="Categoría"
+                    {...register("categoria_id", { required: true })}
+                    defaultValue={product ? product.categoria_id : ""}
                   >
-                    <MenuItem value={true}>Sí</MenuItem>
-                    <MenuItem value={false}>No</MenuItem>
+                    {dataCategories ? (
+                      dataCategories.map((category) => (
+                        <MenuItem key={category._id} value={category._id}>
+                          {category.name}
+                        </MenuItem>
+                      ))
+                    ) : (
+                      <MenuItem disabled value="">
+                        No se encontraron categorías
+                      </MenuItem>
+                    )}
                   </Select>
                 </FormControl>
               </Grid>
               <Grid item md={12}>
                 <FormControl fullWidth>
-                  <InputLabel id="bodega-label">Bodega</InputLabel>
+                  <InputLabel id="user-label">Bodega</InputLabel>
                   <Select
-                    labelId="bodega-label"
+                    labelId="user-label"
                     label="Bodega"
-                    {...register("bodega_id", { required: true })}
-                    defaultValue=""
+                    {...register("user_id", { required: true })}
+                    defaultValue={product ? product.user_id : ""}
                   >
-                    <MenuItem value="66e0b51eb876bff21898ae2b">
-                      Bodega 1
-                    </MenuItem>
-                    <MenuItem value="2" disabled>
-                      Bodega 2
-                    </MenuItem>
-                    <MenuItem value="3" disabled>
-                      Bodega 3
-                    </MenuItem>
-                    {/* Añadir más opciones según sea necesario */}
+                    {dataUsers ? (
+                      dataUsers.map((user) => (
+                        <MenuItem key={user._id} value={user._id}>
+                          {user.username}
+                        </MenuItem>
+                      ))
+                    ) : (
+                      <MenuItem disabled value="">
+                        No se encontraron bodegas
+                      </MenuItem>
+                    )}
                   </Select>
                 </FormControl>
               </Grid>
@@ -180,7 +208,7 @@ const ModalProductAdd = ({ state, createItem }) => {
             <CardActions sx={{ justifyContent: "flex-end" }}>
               <Button onClick={handleClose}>Cancelar</Button>
               <Button type="submit" variant="contained" color="primary">
-                Crear Producto
+                {product ? "Editar Producto" : "Crear Producto"}
               </Button>
             </CardActions>
           </form>
@@ -190,4 +218,4 @@ const ModalProductAdd = ({ state, createItem }) => {
   );
 };
 
-export default ModalProductAdd;
+export default ModalProductAddOrEdit;

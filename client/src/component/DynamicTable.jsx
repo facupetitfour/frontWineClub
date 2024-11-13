@@ -1,7 +1,7 @@
 /* eslint-disable no-prototype-builtins */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -16,11 +16,9 @@ import {
   Box,
   Modal,
   Typography,
-  ImageList,
-  ImageListItem,
+  Pagination, // Importar componente de paginación de MUI
 } from "@mui/material";
 import WarningModal from "./WarningModal";
-import FilterTable from "./FilterTable";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 
@@ -35,6 +33,27 @@ const style = {
   p: 4,
 };
 
+// Nuevo componente para formatear el perfil
+const ProfileDetails = ({ profile }) => {
+  return (
+    <Box sx={{ whiteSpace: "pre-wrap", textAlign: "left", fontSize: "0.875rem" }}>
+      <Typography variant="subtitle2">Name: {profile.name} {profile.surname}</Typography>
+      <Typography variant="body2">Points: {profile.points}</Typography>
+      <Typography variant="body2">Address: {profile.address.city}, {profile.address.country}</Typography>
+      <Typography variant="body2" gutterBottom>Postal Code: {profile.address.postal_code}</Typography>
+      <Typography variant="body2" gutterBottom>Description: {profile.description}</Typography>
+      <Typography variant="body2">Points History:</Typography>
+      {profile.points_history.map((entry, index) => (
+        <Box key={index} sx={{ ml: 2 }}>
+          <Typography variant="body2" color="textSecondary">
+            {index + 1}. {entry.action} - Points: {entry.points} - Date: {new Date(entry.date).toLocaleDateString()}
+          </Typography>
+        </Box>
+      ))}
+    </Box>
+  );
+};
+
 const DynamicTable = (props) => {
   const [warningModal, setWarningModal] = useState(false);
   const [itemToDelete, setItemToDelete] = useState();
@@ -42,31 +61,11 @@ const DynamicTable = (props) => {
   const [bodyFilterData, setBodyFilterData] = useState([]);
   const [sortBy, setSortBy] = useState();
   const [sortOrder, setSortOrder] = useState("asc");
-
-  const [imagenVer,setImagenVer] = useState('')
-
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
 
-  const sortedData = [...bodyFilterData].sort((a, b) => {
-    const valueA = a[sortBy];
-    const valueB = b[sortBy];
-
-    if (typeof valueA === "number" && typeof valueB === "number") {
-      return sortOrder === "asc" ? valueA - valueB : valueB - valueA;
-    } else if (typeof valueA === "string" && typeof valueB === "string") {
-      return sortOrder === "asc"
-        ? valueA.localeCompare(valueB)
-        : valueB.localeCompare(valueA);
-    } else if (typeof valueA === "boolean" && typeof valueB === "boolean") {
-      return sortOrder === "asc"
-        ? (valueA ? 1 : 0) - (valueB ? 1 : 0)
-        : (valueB ? 1 : 0) - (valueA ? 1 : 0);
-    } else {
-      return 0;
-    }
-  });
+  // Estados para paginación
+  const [currentPage, setCurrentPage] = useState(1);
+  const rowsPerPage = 5; // Número de filas por página
 
   useEffect(() => {
     if (props.bodyData) {
@@ -81,39 +80,13 @@ const DynamicTable = (props) => {
         );
       });
       setBodyFilterData(searchFilterData);
+      setCurrentPage(1); // Reiniciar a la primera página tras filtrar
     }
   }, [search, props.bodyData]);
 
-  const handleSearch = (searchText) => {
-    setSearch(searchText);
+  const handleChangePage = (event, newPage) => {
+    setCurrentPage(newPage);
   };
-
-  const handleWarningModal = (data) => {
-    setWarningModal(!warningModal);
-    setItemToDelete(data);
-  };
-
-  const handleDeleteClick = (data) => {
-    console.log(data._id);
-    props.deleteFunction(data._id);
-    setWarningModal(!warningModal);
-  };
-
-  const handleUpdateClick = (item) => {
-    props.updateItemFunction(item, true);
-  };
-
-  const handleSort = (field) => {
-    setSortBy(field);
-    setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
-  };
-
-  // const handleToggleImage = (index) => {
-  //   setShowImage((prevShowImage) => ({
-  //     ...prevShowImage,
-  //     [index]: !prevShowImage[index],
-  //   }));
-  // };
 
   const formatDate = (date) => {
     const dateObj = new Date(date);
@@ -123,18 +96,23 @@ const DynamicTable = (props) => {
     return `${day}/${month}/${year}`;
   };
 
-  const visibleFields = Object.keys(props.model).filter((field) =>
-    props.bodyData[0].hasOwnProperty(field)
-  );
+  const visibleFields = props.bodyData && props.bodyData.length > 0
+    ? Object.keys(props.model).filter((field) =>
+        props.bodyData[0] && props.bodyData[0].hasOwnProperty(field)
+      )
+    : []; // Si props.bodyData está vacío o es undefined, devolvemos un arreglo vacío
+
+  // Calcular los elementos de la página actual
+  const indexOfLastRow = currentPage * rowsPerPage;
+  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  const currentRows = bodyFilterData.slice(indexOfFirstRow, indexOfLastRow);
 
   return (
     <>
-      {/* <FilterTable onSearch={handleSearch} /> */}
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: "100%", bgcolor: "" }}>
           <TableHead sx={{ bgcolor: "#B5CDB9" }}>
             <TableRow>
-              {/* Mapea las cabeceras desde el modelo */}
               {visibleFields.map((field) => (
                 <TableCell align="center" key={field}>
                   {props.model[field].header}
@@ -144,26 +122,18 @@ const DynamicTable = (props) => {
             </TableRow>
           </TableHead>
           <TableBody sx={{ bgcolor: "#D9E2DA" }}>
-            {sortedData.map((body, index) => (
+            {currentRows.map((body, index) => (
               <TableRow key={index} hover>
                 {visibleFields.map((field) => (
                   <TableCell key={field} align="center">
-                    {field === "imagen" ? (
-                      <Avatar />
+                    {field === "profile" ? (
+                      <ProfileDetails profile={body[field]} />
                     ) : props.model[field].type === "date" ? (
                       formatDate(body[field])
                     ) : typeof body[field] === "boolean" ? (
-                      body[field] ? (
-                        "Sí"
-                      ) : (
-                        "No"
-                      )
+                      body[field] ? "Sí" : "No"
                     ) : body[field] === null ? (
                       "-"
-                    ) : props.model[field].type === "img" ? (
-                      <>
-                        <Button onClick={()=>{setImagenVer(body[field]), handleOpen()}}>Ver</Button>
-                      </>
                     ) : (
                       JSON.stringify(body[field])
                     )}
@@ -171,13 +141,16 @@ const DynamicTable = (props) => {
                 ))}
                 <TableCell align="center">
                   <IconButton
-                    onClick={() => handleUpdateClick(body)}
+                    onClick={() => props.updateItemFunction(body)}
                     color="primary"
                   >
                     <EditIcon />
                   </IconButton>
                   <IconButton
-                    onClick={() => handleWarningModal(body)}
+                    onClick={() => {
+                      setWarningModal(true);
+                      setItemToDelete(body);
+                    }}
                     color="error"
                   >
                     <DeleteIcon />
@@ -189,34 +162,23 @@ const DynamicTable = (props) => {
         </Table>
       </TableContainer>
 
-      <WarningModal
-        warning={warningModal}
-        cancelWarningModal={handleWarningModal}
-        confirmDelete={() => handleDeleteClick(itemToDelete)}
+      {/* Controles de Paginación */}
+      <Pagination
+        count={Math.ceil(bodyFilterData.length / rowsPerPage)}
+        page={currentPage}
+        onChange={handleChangePage}
+        color="primary"
+        sx={{ mt: 2, display: "flex", justifyContent: "center" }}
       />
 
-      <Modal open={open} onClose={handleClose}>
-        <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Item Imagenes
-          </Typography>
-          <Box
-            sx={{
-              display: "flex",
-              alignContent: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              <ImageList cols={1}>
-                <ImageListItem>
-                  <img src={imagenVer} alt="imagen" />
-                </ImageListItem>
-              </ImageList>
-            </Typography>
-          </Box>
-        </Box>
-      </Modal>
+      <WarningModal
+        warning={warningModal}
+        cancelWarningModal={() => setWarningModal(false)}
+        confirmDelete={() => {
+          props.deleteFunction(itemToDelete._id);
+          setWarningModal(false);
+        }}
+      />
     </>
   );
 };

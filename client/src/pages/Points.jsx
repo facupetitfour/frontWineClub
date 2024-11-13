@@ -41,9 +41,7 @@ const Points = () => {
   const onSubmitSearch = async (data) => {
     console.log(data);
     await axios
-      .post(serverhost + "users/search", data, {
-        withCredentials: true,
-      })
+      .post(serverhost + "users/search", data)
       .then((response) => {
         setDataUserFind(response.data);
         console.log(response.data);
@@ -58,9 +56,7 @@ const Points = () => {
     data.username = dataUserFind.username
     console.log("onSubmitPoints", data);
     await axios
-    .post(serverhost + "users/cargaPuntos", data, {
-      withCredentials: true,
-    })
+    .post(serverhost + "users/cargaPuntos", data)
     .then((response) => {
       console.log(response.data);
       setDataUserFind(response.data.user);
