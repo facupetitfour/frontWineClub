@@ -1,11 +1,9 @@
 import { Box, Typography } from '@mui/material';
 import { useState } from 'react';
 
-// Si no tienes un componente Carousel ya configurado, puedes usar este con lógica básica
-const Carousel = ({imagenesBodega}) => {
+const Carousel = ({ imagenesBodega, nombreBodega }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Imágenes y texto opcionales
   const items = [
     {
       img: `/vinocarrusel.webp`,
@@ -21,7 +19,6 @@ const Carousel = ({imagenesBodega}) => {
     },
   ];
 
-  // Cambia el índice para el carrusel
   const handleNext = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % items.length);
   };
@@ -33,46 +30,45 @@ const Carousel = ({imagenesBodega}) => {
   };
 
   return (
-    <Box sx={{ position: 'relative', width: '100%', height: 300, overflow: 'hidden', padding:1}}>
+    <Box sx={{ position: 'relative', width: '100%', height: 300, overflow: 'hidden', padding: 1 }}>
       {/* Renderiza el elemento actual del carrusel */}
       <Box
         sx={{
           display: 'flex',
           flexDirection: 'row',
-          alignItems: 'flex-start',
+          alignItems: 'flex-end',
           padding: 0,
           height: 270,
-          backgroundImage: `url(${ imagenesBodega ? imagenesBodega[currentIndex] : items[currentIndex].img}) `,
+          backgroundImage: `url(${imagenesBodega ? imagenesBodega[currentIndex] : items[currentIndex].img})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           borderRadius: '15px',
           transition: 'background-image 0.5s ease-in-out',
         }}
       >
-        {/* Texto opcional */}
+        {/* Texto ajustado */}
         <Typography
           variant="h6"
           sx={{
-            position: 'absolute',
-            // visibility: items[currentIndex].text ? 'visible' : 'hidden',
-            visibility: "hidden",
-            color: '#ffff',
-            left: '10px',
-            bottom: '10px',
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            padding: '4px 8px',
-            borderRadius: '8px',
+            color: '#ffffff',
+            left: 0,
+            bottom: 0,
+            background: 'linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.01))',
+            padding: '10px 15px',
+            borderRadius: '0px 0px 15px 15px',
+            width: '100%',
+            textAlign: 'left',
           }}
         >
-          {items[currentIndex].text}
+          {nombreBodega}
         </Typography>
       </Box>
 
       {/* Botones de navegación */}
-      <Box sx={{ position: 'absolute', top: '50%', left: '10px', cursor: 'pointer' }} onClick={handlePrev}>
+      <Box sx={{ position: 'absolute', top: '50%', left: '10px', cursor: 'pointer', color: 'white'}} onClick={handlePrev}>
         &#10094;
       </Box>
-      <Box sx={{ position: 'absolute', top: '50%', right: '10px', cursor: 'pointer' }} onClick={handleNext}>
+      <Box sx={{ position: 'absolute', top: '50%', right: '10px', cursor: 'pointer', color: 'white' }} onClick={handleNext}>
         &#10095;
       </Box>
     </Box>

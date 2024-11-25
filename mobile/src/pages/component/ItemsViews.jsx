@@ -1,18 +1,10 @@
 import { Box, Typography, Grid, Card, CardMedia, CardContent } from '@mui/material';
 
 // Array de bodegas con su imagen y nombre
-const bodegas = [
-  { nombre: 'Vino tinto', imagen: '/bodega.webp' },
-  { nombre: 'Vino Blanco', imagen: '/bodega.webp' },
-  { nombre: 'Vino Rosado', imagen: '/bodega.webp' },
-  { nombre: 'Vino tinto', imagen: '/bodega.webp' },
-  { nombre: 'Vino Blanco', imagen: '/bodega.webp' },
-  { nombre: 'Vino Rosado', imagen: '/bodega.webp' },
-];
 
-const ItemsViews = ({ nombre, icon, imagen}) => {
+const ItemsViews = ({ nombre, icon, data}) => {
   return (
-    <Box sx={{ padding: 2, position: 'relative', maxWidth: "100%"}}>
+    <Box sx={{ padding: 0, position: 'relative', width: "calc(100% - 20px)"}}>
       {/* Título con ícono y "Ver más" */}
       <Box
         sx={{
@@ -57,17 +49,17 @@ const ItemsViews = ({ nombre, icon, imagen}) => {
       </Box>
 
       {/* Grid para mostrar las tarjetas en un estilo carrusel */}
-      <Grid container spacing={2} sx={{ overflowX: 'auto', flexWrap: 'nowrap' }}>
-        {bodegas.map((item, index) => (
-          <Grid item key={index} sx={{ minWidth: '40%' }}>
+      <Grid container spacing={2} sx={{ overflowX: 'auto', flexWrap: 'nowrap'}}>
+        {data.map((item, index) => (
+          <Grid item key={index} sx={{ minWidth: '40%', paddingBottom:0.7}}>
             {/* Card de la item */}
-            <Card sx={{ borderRadius: 2, overflow: 'hidden', position: 'relative', boxShadow: 1 }}>
+            <Card sx={{ borderRadius: 2, overflow: 'hidden', position: 'relative', boxShadow: 4, minHeight: '100%'}}>
               {/* Imagen con gradiente */}
               <CardMedia
                 component="img"
                 height="150"
-                image={item.imagen}
-                alt={item.nombre}
+                image={item.img || '/bodega.webp'}
+                alt={item.name}
                 sx={{
                   position: 'relative',
                   '&:after': {
@@ -85,7 +77,7 @@ const ItemsViews = ({ nombre, icon, imagen}) => {
               {/* Nombre de la item */}
               <CardContent sx={{ textAlign: 'center', padding: '8px 0' }}>
                 <Typography variant="body1" sx={{ fontWeight: 'bold', fontSize: '14px', color: '#000' }}>
-                  {item.nombre}
+                  {item.name}
                 </Typography>
               </CardContent>
             </Card>

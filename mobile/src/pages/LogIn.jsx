@@ -27,7 +27,7 @@ const InicioSesion = () => {
     await axios
       .post(serverhost + "authenticate/logIn", data)
       .then((response) => {
-        console.log("RESPONSE DATA: ", response);
+        localStorage.setItem('access_token',response.data.userdata.access_token)
         navigate("/home");
       })
       .catch((error) => {

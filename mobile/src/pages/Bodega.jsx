@@ -22,7 +22,7 @@ const Bodega = () => {
           alignItems: "center", // Alinea en el eje vertical
         }}
       >
-        <Carrusel/>
+        <Carrusel nombreBodega={data.profile.name + ' ' + data.profile.surname}/>
         <ItemsViews nombre={"Productos"} icon = {<StoreIcon/>} data = {data.products}/>
         <ItemsViews nombre={"Cupones"} icon = {<ConfirmationNumberIcon/>} data = {data.coupons}/>
       </Box>

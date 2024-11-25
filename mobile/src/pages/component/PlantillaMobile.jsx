@@ -12,7 +12,7 @@ const PlantillaMobile = () => {
           display: "flex",
           justifyContent: "center",  // Alinea en el eje horizontal
           alignItems: "center",       // Alinea en el eje vertical
-          minHeight: "calc(100vh)",
+          // minHeight: "calc(100vh)",
           minWidth: "100vw",
           marginTop: "20%",
           marginBottom: "20%"

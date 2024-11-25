@@ -48,7 +48,6 @@ const Home = () => {
         sx={{
           display: "flex",
           flexDirection: "column",
-          gap: 1,
           width: "100%",
           justifyContent: "center",
           alignItems: "center",
