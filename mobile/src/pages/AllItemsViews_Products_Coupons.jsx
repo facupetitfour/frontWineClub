@@ -8,114 +8,119 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const BACK_URL = import.meta.env.VITE_BACK_URL;
 
-
-function AllItemsViews_Products_Coupons({nameRendering, urlRender}) {
+function AllItemsViews_Products_Coupons({ nameRendering, urlRender }) {
   const navigate = useNavigate();
-
-  const [data,setData] = useState([])
+  const location = useLocation();
+  const { data: locationData, nameRender } = location.state || {};
+  const [fetchedData, setFetchedData] = useState([]);
+  const [nameToRender, setNameToRender] = useState(nameRendering);
 
   useEffect(() => {
-    const getData = async () => {
-      if (BACK_URL) {
+    if (nameRender) {
+      setNameToRender(nameRender);
+    }
+  }, [nameRender]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const token = localStorage.getItem("access_token");
+      if (BACK_URL && urlRender) {
         try {
-          await axios.get(`${BACK_URL}${urlRender}`).then((response) => {
-            console.log(response.data)
-            setData(response.data)  
+          const response = await axios.get(`${BACK_URL}${urlRender}`, {
+            headers: { Authorization: `Bearer ${token}` },
           });
+          console.log("Fetched data:", response.data);
+          setFetchedData(response.data);
         } catch (error) {
-          console.log(error.message)
+          console.error("Error fetching data:", error.message);
         }
-      }else{
-        console.log(`NO HAY URL: ${BACK_URL}`)
+      } else {
+        console.log("Missing URL or BACK_URL:", BACK_URL);
       }
-      
     };
-    getData()
-  },[urlRender]);
+
+    // Solo ejecuta fetchData si no hay datos de location
+    if (!locationData) {
+      fetchData();
+    }
+  }, [urlRender, locationData]);
+
+  // Determina qué datos renderizar
+  const itemsToRender = locationData || fetchedData;
 
   return (
-    <>
-      <Box sx={{ padding:2, minHeight: "100vh" }}>
+    <Box sx={{ padding: 2, minHeight: "100vh", minWidth: "100%" }}>
+      <Box
+        sx={{
+          flexDirection: "column",
+          gap: 1,
+          minWidth: "100%",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <Box
           sx={{
-            flexDirection: "column",
-            gap: 1,
-            width: "100%",
-            justifyContent: "center", // Alinea en el eje horizontal
-            alignItems: "center", // Alinea en el eje vertical
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            borderBottom: "2px solid #D90036",
+            paddingBottom: 1,
+            marginBottom: 2,
           }}
         >
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              borderBottom: "2px solid #D90036",
-              paddingBottom: 1,
-              marginBottom: 2,
-            }}
-          >
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <Typography
-                variant="h6"
-                sx={{ fontWeight: "bold", color: "#000" }}
-              >
-                {nameRendering}
-              </Typography>
-            </Box>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Typography
+              variant="h6"
+              sx={{ fontWeight: "bold", color: "#000" }}
+            >
+              {nameToRender}
+            </Typography>
           </Box>
-          {/* Grid para mostrar las tarjetas */}
-          <Grid container spacing={2}>
-            {data ? (
-              data.map((item, index) => (
-                <Grid
-                  item
-                  xs={6}
-                  key={index}
-                  onClick={() => {
-                    navigate(`/${urlRender}`, {
-                      state: {
-                        data: item,
-                      },
-                    });
-                  }}
-                >
-                  {/* Card de la item */}
-                  <Card sx={{ borderRadius: 2, overflow: "hidden" }}>
-                    {/* Imagen */}
-                    <CardMedia
-                      component="img"
-                      height="140"
-                      image={item.img}
-                      alt={item.name}
-                    />
-                    {/* Nombre de la item */}
-                    <CardContent>
-                      <Typography
-                        variant="body1"
-                        sx={{
-                          fontWeight: "bold",
-                          textAlign: "center",
-                          fontSize: "14px",
-                        }}
-                      >
-                        {item.name}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              ))
-            ) : (
-              <Grid item xs={6}></Grid>
-            )}
-          </Grid>
         </Box>
+        <Grid container spacing={2}>
+          {itemsToRender && itemsToRender.length > 0 ? (
+            itemsToRender.map((item, index) => (
+              <Grid
+                item
+                xs={6}
+                key={index}
+                onClick={() => {
+                  navigate(`/itemrender`, { state: { data: item } });
+                }}
+              >
+                <Card sx={{ borderRadius: 2, overflow: "hidden", minHeight: "100%" }}>
+                  <CardMedia
+                    component="img"
+                    height="140"
+                    image={item.img || "imagenBaseItems.webp"}
+                    alt={item.name || "Sin nombre"}
+                  />
+                  <CardContent>
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        fontWeight: "bold",
+                        textAlign: "center",
+                        fontSize: "14px",
+                      }}
+                    >
+                      {item.name}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))
+          ) : (
+            <Typography>No hay datos para mostrar</Typography>
+          )}
+        </Grid>
       </Box>
-    </>
+    </Box>
   );
 }
 

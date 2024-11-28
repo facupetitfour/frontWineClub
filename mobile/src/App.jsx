@@ -21,7 +21,7 @@ function App() {
           <Route path="/bodega" element={<Bodega />} />
           <Route path="/allbodegas" element={<AllBodegas />} />
           <Route path="/allproducts" element={<AllItemsViews_Products_Coupons nameRendering={'Productos'} urlRender={'products'}/>} />
-          <Route path="/allcoupons" element={<AllItemsViews_Products_Coupons nameRendering={'Cupones'}/>} />
+          <Route path="/allcoupons" element={<AllItemsViews_Products_Coupons nameRendering={'Cupones'} urlRender={'coupon'}/>} />
           <Route path="/itemrendermodel" element={<ItemRender/>}/>
           <Route path="/itemrender" element={<ItemRender/>}/>
           <Route path="/mycoupons" element={<MisCupones/>}/>

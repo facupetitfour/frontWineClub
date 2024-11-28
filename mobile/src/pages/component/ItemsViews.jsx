@@ -1,8 +1,10 @@
 import { Box, Typography, Grid, Card, CardMedia, CardContent } from '@mui/material';
+import { useNavigate } from "react-router-dom";
 
-// Array de bodegas con su imagen y nombre
+// Array de imagenBaseItemss con su imagen y nombre
 
 const ItemsViews = ({ nombre, icon, data}) => {
+  const navigate = useNavigate();
   return (
     <Box sx={{ padding: 0, position: 'relative', width: "calc(100% - 20px)"}}>
       {/* Título con ícono y "Ver más" */}
@@ -23,13 +25,14 @@ const ItemsViews = ({ nombre, icon, data}) => {
           </Typography>
         </Box>
         <button
-          // onClick={() => {
-          //   navigate("/allbodegas", {
-          //     state: {
-          //       data: data,
-          //     },
-          //   });
-          // }}
+          onClick={() => {
+            navigate("/allproducts", {
+              state: {
+                nameRender: nombre,
+                data: data,
+              },
+            });
+          }}
           style={{
             background: "none",
             border: "none",
@@ -58,7 +61,7 @@ const ItemsViews = ({ nombre, icon, data}) => {
               <CardMedia
                 component="img"
                 height="150"
-                image={item.img || '/bodega.webp'}
+                image={item.img || '/imagenBaseItems.webp'}
                 alt={item.name}
                 sx={{
                   position: 'relative',

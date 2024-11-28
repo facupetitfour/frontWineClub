@@ -2,10 +2,11 @@ import { Card, CardContent, CardMedia, Typography, Box } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 import LocalMallIcon from "@mui/icons-material/LocalMall";
 import { useLocation } from "react-router-dom";
+import Carousel from "./component/Carrusel";
 
 const ItemRender = () => {
   const location = useLocation();
-  const item = location.state?.item || {
+  const item = location.state?.data || {
     name: "Vino Tinto Reserva",
     description: "Vino tinto de reserva con notas de roble y frutos rojos",
     points: "500",
@@ -35,6 +36,8 @@ const ItemRender = () => {
     ],
   };
 
+  console.log(item)
+
   return (
     <>
       {item ? (
@@ -57,11 +60,13 @@ const ItemRender = () => {
             >
               {/* Image Section */}
               <CardMedia
-                component="img"
+                // component="img"
                 height="200"
-                image={item.img}
-                alt={item.name}
-              />
+                // image={item.img || '/imagenBaseItems.webp'} 
+                // alt={item.name}
+              >
+                <Carousel imagenesBodega={item.img}/>
+              </CardMedia>
 
               {/* Title, Description and Points Section */}
               <CardContent>
@@ -76,7 +81,7 @@ const ItemRender = () => {
                   <Box display="flex" alignItems="center">
                     <LocalMallIcon sx={{ mr: 0.5 }} />
                     <Typography variant="h6" component="div">
-                      {item.points}
+                      {item.points_required}
                     </Typography>
                   </Box>
                 </Box>
