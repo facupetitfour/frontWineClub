@@ -9,6 +9,7 @@ import AllItemsViews_Products_Coupons from "./pages/AllItemsViews_Products_Coupo
 import ItemRender from "./pages/ItemRender";
 import MisCupones from "./pages/misCupones";
 import Register from "./pages/Register";
+import Perfil from "./pages/Perfil";
 
 function App() {
   return (
@@ -25,6 +26,8 @@ function App() {
           <Route path="/itemrendermodel" element={<ItemRender/>}/>
           <Route path="/itemrender" element={<ItemRender/>}/>
           <Route path="/mycoupons" element={<MisCupones/>}/>
+          <Route path="/perfil" element={<Perfil/>}/>
+
         </Route>
       </Routes>
     </Router>

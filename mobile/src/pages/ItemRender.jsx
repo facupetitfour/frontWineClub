@@ -1,4 +1,4 @@
-import { Card, CardContent, CardMedia, Typography, Box } from "@mui/material";
+import { Card, CardContent, CardMedia, Typography, Box, List, ListItem } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 import LocalMallIcon from "@mui/icons-material/LocalMall";
 import { useLocation } from "react-router-dom";
@@ -43,14 +43,13 @@ const ItemRender = () => {
       {item ? (
         <Box
           sx={{
-            height: "100vh",
-            width: "100%",
+            minHeight: "100vh",
+            minWidth: "100%",
             justifyContent: "center",
             alignItems: "center",
             padding: 2,
           }}
         >
-          <Box sx={{ display: "flex", gap: 5, flexDirection: "column" }}>
             <Card
               sx={{
                 minWidth: "100%",
@@ -60,10 +59,7 @@ const ItemRender = () => {
             >
               {/* Image Section */}
               <CardMedia
-                // component="img"
-                height="200"
-                // image={item.img || '/imagenBaseItems.webp'} 
-                // alt={item.name}
+                  height="200"
               >
                 <Carousel imagenesBodega={item.img}/>
               </CardMedia>
@@ -92,25 +88,17 @@ const ItemRender = () => {
               </CardContent>
             </Card>
 
-            <Card
-              sx={{
-                minWidth: "100%",
-                borderRadius: 2,
-                boxShadow: 3,
-                margin: "auto",
-                paddingBottom: 0.5,
-
-              }}
+            <Box
+              sx={{ backgroundColor: '#fff', borderRadius: 3, boxShadow: 2, padding: 2 }}
             >
+              <List disablePadding>
               {/* Reviews Section */}
               {item.opinions?.map((opinion, index) => (
-                <CardContent
+                <ListItem
                   key={index}
                   sx={{
-                    borderBottom: "1px dashed transparent",
-                    borderImage:
-                      "repeating-linear-gradient(to right, #D90036, #D90036 5px, transparent 5px, transparent 10px) 100",
-                    width: "100%",
+                    borderBottom: index !== item.opinions.length - 1 ? '1px dashed #db2c6f' : 'none',
+                    padding: '12px 0',
                   }}
                 >
                   <Box>
@@ -134,11 +122,11 @@ const ItemRender = () => {
                       {opinion.opinion}
                     </Typography>
                   </Box>
-                </CardContent>
+                </ListItem>
               ))}
-            </Card>
+              </List>
+            </Box>
           </Box>
-        </Box>
       ) : (
         <Box
           sx={{
