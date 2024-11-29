@@ -1,4 +1,12 @@
-import { Card, CardContent, CardMedia, Typography, Box, List, ListItem } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+  Box,
+  List,
+  ListItem,
+} from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 import LocalMallIcon from "@mui/icons-material/LocalMall";
 import { useLocation } from "react-router-dom";
@@ -36,7 +44,7 @@ const ItemRender = () => {
     ],
   };
 
-  console.log(item)
+  console.log(item);
 
   return (
     <>
@@ -50,83 +58,90 @@ const ItemRender = () => {
             padding: 2,
           }}
         >
-            <Card
-              sx={{
-                minWidth: "100%",
-                borderRadius: 2,
-                boxShadow: 3,
-              }}
-            >
-              {/* Image Section */}
-              <CardMedia
-                  height="200"
+          <Card sx={{ marginBottom: 3, borderRadius: 3, boxShadow: 3 }}>
+            {/* Image Section */}
+            <CardMedia height="200">
+              <Carousel imagenesBodega={item.img} />
+            </CardMedia>
+
+            {/* Title, Description and Points Section */}
+            <CardContent>
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
               >
-                <Carousel imagenesBodega={item.img}/>
-              </CardMedia>
-
-              {/* Title, Description and Points Section */}
-              <CardContent>
-                <Box
-                  display="flex"
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
-                  <Typography variant="h6" component="div" noWrap>
-                    {item.name}
-                  </Typography>
-                  <Box display="flex" alignItems="center">
-                    <LocalMallIcon sx={{ mr: 0.5 }} />
-                    <Typography variant="h6" component="div">
-                      {item.points_required}
-                    </Typography>
-                  </Box>
-                </Box>
-
-                <Typography variant="body2" color="text.secondary">
-                  {item.description}
+                <Typography variant="h6" component="div" noWrap>
+                  {item.name}
                 </Typography>
-              </CardContent>
-            </Card>
+                <Box display="flex" alignItems="center">
+                  <LocalMallIcon sx={{ mr: 0.5 }} />
+                  <Typography variant="h6" component="div">
+                    {item.points_required}
+                  </Typography>
+                </Box>
+              </Box>
 
-            <Box
-              sx={{ backgroundColor: '#fff', borderRadius: 3, boxShadow: 2, padding: 2 }}
-            >
-              <List disablePadding>
+              <Typography variant="body2" color="text.secondary">
+                {item.description}
+              </Typography>
+            </CardContent>
+          </Card>
+
+          <Box
+            sx={{
+              backgroundColor: "#fff",
+              borderRadius: 3,
+              boxShadow: 2,
+              padding: 2,
+            }}
+          >
+            <List disablePadding>
               {/* Reviews Section */}
               {item.opinions?.map((opinion, index) => (
                 <ListItem
                   key={index}
                   sx={{
-                    borderBottom: index !== item.opinions.length - 1 ? '1px dashed #db2c6f' : 'none',
-                    padding: '12px 0',
+                    borderBottom:
+                      index !== item.opinions.length - 1
+                        ? "1px dashed #db2c6f"
+                        : "none",
+                    padding: "12px 0",
+                    flexDirection: "column",
                   }}
                 >
-                  <Box>
-                    <Typography
-                      variant="subtitle2"
-                      color="text.primary"
-                      fontWeight="bold"
+                  <Box sx={{minWidth:"100%"}}>
+                    <Box
+                      sx={{ display: "flex", justifyContent: "space-between"}}
                     >
-                      {opinion.name}
-                    </Typography>
-                    <Box display="flex" alignItems="center">
-                      {[...Array(opinion.valorate)].map((_, index) => (
-                        <StarIcon
-                          key={index}
-                          fontSize="small"
-                          sx={{ color: "#FFD700" }}
-                        />
-                      ))}
+                      <Typography
+                        variant="subtitle2"
+                        color="text.primary"
+                        fontWeight="bold"
+                      >
+                        {opinion.username}
+                      </Typography>
+                      <Box display="flex" alignItems="center">
+                        {[...Array(opinion.valorate)].map((_, index) => (
+                          <StarIcon
+                            key={index}
+                            fontSize="small"
+                            sx={{ color: "#FFD700" }}
+                          />
+                        ))}
+                      </Box>
                     </Box>
-                    <Typography variant="body2" color="text.secondary">
-                      {opinion.opinion}
-                    </Typography>
+                    <Box>
+                      <Typography variant="body2" color="text.secondary">
+                        {opinion.description}
+                      </Typography>
+                    </Box>
                   </Box>
                 </ListItem>
               ))}
-              </List>
-            </Box>
+            </List>
           </Box>
+        </Box>
       ) : (
         <Box
           sx={{

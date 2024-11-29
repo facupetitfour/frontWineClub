@@ -11,7 +11,6 @@ import { useNavigate } from "react-router-dom";
 
 const BodegasAsociadas = ({ data }) => {
   const navigate = useNavigate();
-  console.log(data)
   return (
     <Box sx={{ padding: 2, minWidth:"100%"}}>
       {/* Título */}

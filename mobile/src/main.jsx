@@ -10,7 +10,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 const theme = createTheme({
   palette: {
     primary: { main: '#4E1F5A' },
-    secondary: { main: '#B5CDB9' },
+    secondary: { main: '#D90036' },
     background: { default: '#ffffff' },
     accent: { main: '#4E1F5A' },
   },
