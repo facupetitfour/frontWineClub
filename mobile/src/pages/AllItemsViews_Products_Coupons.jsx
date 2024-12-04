@@ -5,6 +5,7 @@ import {
   Card,
   CardMedia,
   CardContent,
+  CardActions,
 } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -33,7 +34,7 @@ function AllItemsViews_Products_Coupons({ nameRendering, urlRender }) {
           const response = await axios.get(`${BACK_URL}${urlRender}`, {
             headers: { Authorization: `Bearer ${token}` },
           });
-          console.log("Fetched data:", response.data);
+          // console.log("Fetched data:", response.data);
           setFetchedData(response.data);
         } catch (error) {
           console.error("Error fetching data:", error.message);
@@ -46,7 +47,7 @@ function AllItemsViews_Products_Coupons({ nameRendering, urlRender }) {
     // Solo ejecuta fetchData si no hay datos de location
     if (!locationData) {
       fetchData();
-      setNameToRender(nameRendering)
+      setNameToRender(nameRendering);
     }
   }, [urlRender, locationData, nameRendering]);
 
@@ -75,10 +76,7 @@ function AllItemsViews_Products_Coupons({ nameRendering, urlRender }) {
           }}
         >
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <Typography
-              variant="h6"
-              sx={{ fontWeight: "bold", color: "#000" }}
-            >
+            <Typography variant="h6" sx={{ fontWeight: "bold", color: "#000" }}>
               {nameToRender}
             </Typography>
           </Box>
@@ -94,14 +92,23 @@ function AllItemsViews_Products_Coupons({ nameRendering, urlRender }) {
                   navigate(`/itemrender`, { state: { data: item } });
                 }}
               >
-                <Card sx={{ borderRadius: 2, overflow: "hidden", minHeight: "100%" }}>
+                <Card
+                  sx={{
+                    borderRadius: 2,
+                    overflow: "hidden",
+                    minHeight: "100%",
+                    boxShadow: 2
+                  }}
+                >
                   <CardMedia
                     component="img"
-                    height="140"
+                    // sx={{height:"140"}}
                     image={item.img || "imagenBaseItems.webp"}
                     alt={item.name || "Sin nombre"}
                   />
-                  <CardContent>
+                  <CardContent
+                    sx={{textAlign: 'center', padding: '8px 0',minHeight:"50px", maxHeight:"50px"}}
+                  >
                     <Typography
                       variant="body1"
                       sx={{
@@ -113,6 +120,18 @@ function AllItemsViews_Products_Coupons({ nameRendering, urlRender }) {
                       {item.name}
                     </Typography>
                   </CardContent>
+                  <CardActions sx={{minHeight:"20px",minWidth:"100%", justifyContent:"flex-end"}}>
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        fontWeight: "bold",
+                        textAlign: "center",
+                        fontSize: "18px",
+                      }}
+                    >
+                      {item.points_required}
+                    </Typography>
+                  </CardActions>
                 </Card>
               </Grid>
             ))
