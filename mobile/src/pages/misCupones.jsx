@@ -63,8 +63,6 @@ const MisCupones = () => {
     },
   ];
 
-  console.log(data);
-
   // useEffect(() => {
   //   const getData = async () => {
   //     if (BACK_URL) {
@@ -86,7 +84,6 @@ const MisCupones = () => {
     <>
       <Box
         sx={{
-          height: "100vh",
           width: "100%",
           justifyContent: "center",
           alignItems: "center",

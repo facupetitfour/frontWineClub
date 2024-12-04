@@ -10,6 +10,8 @@ import ItemRender from "./pages/ItemRender";
 import MisCupones from "./pages/misCupones";
 import Register from "./pages/Register";
 import Perfil from "./pages/Perfil";
+import NotFound from "./pages/NotFound";
+import PerfilRegister from "./pages/PerfilRegister";
 
 function App() {
   return (
@@ -17,6 +19,7 @@ function App() {
       <Routes>
         <Route path="/" element={<InicioSesion />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/registerPerfil" element={<PerfilRegister/>}/>
         <Route element={<PlantillaMobile />}>
           <Route path="/home" element={<Home />} />
           <Route path="/bodega" element={<Bodega />} />
@@ -27,7 +30,7 @@ function App() {
           <Route path="/itemrender" element={<ItemRender/>}/>
           <Route path="/mycoupons" element={<MisCupones/>}/>
           <Route path="/perfil" element={<Perfil/>}/>
-
+          <Route path="*" element={<NotFound/>}/>
         </Route>
       </Routes>
     </Router>

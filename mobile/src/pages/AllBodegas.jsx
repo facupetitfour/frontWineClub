@@ -6,25 +6,42 @@ import {
   CardMedia,
   CardContent,
 } from "@mui/material";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+const BACK_URL = import.meta.env.VITE_BACK_URL;
 
 function AllBodegas() {
   const navigate = useNavigate();
   const location = useLocation()
-  let {data} = location.state || {}
-  
-  if (!data) {
-    data =   [
-      { nombre: "Bodega Trivento", imagen: "/bodega.webp" },
-      { nombre: "Bodega Los Toneles", imagen: "/bodega.webp" },
-      { nombre: "Bodega Trivento", imagen: "/bodega.webp" },
-      { nombre: "Bodega Trivento", imagen: "/bodega.webp" },
-      { nombre: "Bodega Trivento", imagen: "/bodega.webp" },
-      { nombre: "Bodega Roberto B.", imagen: "/bodega.webp" },
-    ];
-  }
+  const { data: locationData } = location.state || {};
+  const [fetchedData, setFetchedData] = useState([]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const token = localStorage.getItem("access_token");
+      if (BACK_URL) {
+        try {
+          const response = await axios.get(`${BACK_URL}users/usersBodega`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          console.log("Fetched data:", response.data);
+          setFetchedData(response.data);
+        } catch (error) {
+          console.error("Error fetching data:", error.message);
+        }
+      } else {
+        console.log("Missing URL or BACK_URL:", BACK_URL);
+      }
+    };
 
+    // Solo ejecuta fetchData si no hay datos de location
+    if (!locationData) {
+      fetchData();
+    }
+  }, [locationData]);
+  // Determina qué datos renderizar
+  const itemsToRender = locationData || fetchedData;
   return (
     <>
       <Box sx={{ padding: 2, minHeight: "100vh", minWidth:"100%" }}>
@@ -58,8 +75,8 @@ function AllBodegas() {
           </Box>
           {/* Grid para mostrar las tarjetas */}
           <Grid container spacing={2}>
-            {data ? (
-              data.map((bodega, index) => (
+            {itemsToRender ? (
+              itemsToRender.map((bodega, index) => (
                 <Grid
                   item
                   xs={6}

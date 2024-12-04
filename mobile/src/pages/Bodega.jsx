@@ -9,7 +9,6 @@ const Bodega = () => {
 
   const location = useLocation();
   const {data} = location.state || {};
-  console.log(data)
   return (
     <>
       <Box

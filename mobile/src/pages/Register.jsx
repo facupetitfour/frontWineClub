@@ -1,136 +1,167 @@
 import { useForm } from "react-hook-form";
 import {
-  FormGroup,
-  Input,
-  FormLabel,
   Button,
-  CardContent,
   CardActions,
-  Card,
-  CardHeader,
   Box,
+  Alert,
+  Grid,
+  TextField,
 } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const serverhost = "http://localhost:3000/";
 
 const Register = () => {
+  const [messageError, setMessageError] = useState();
+
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => {
-    console.log("ONSUBMIT DATA: ", data);
-    axios
-      .post(serverhost + "users", data)
-      .then((response) => {
-        console.log("RESPONSE DATA: ", response);
-        navigate("/");
-      })
-      .catch((error) => {
-        console.log("RESPONSE ERRR: ", error.response.data.message);
-      });
+
+  const onSubmit = async (data) => {
+    try {
+      const response = await axios.post(serverhost + "users", data);
+      console.log("RESPONSE DATA: ", response);
+      navigate("/");
+    } catch (error) {
+      console.error("RESPONSE ERROR: ", error.response?.data?.message);
+      setMessageError(error.response?.data?.message || "Error inesperado");
+    }
   };
+
   return (
     <>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-          position: "relative",
-        }}
-      >
-        <Box sx={{ maxWidth: "80%", width: "500px" }}>
-          <Card
+      {messageError && (
+        <Box
+          sx={{
+            position: "relative",
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <Alert
+            variant="filled"
+            severity="error"
+            onClose={() => setMessageError(null)}
             sx={{
-              bgcolor: "rgb(240, 255, 255)",
-              boxShadow: "0px 0px 100px rgba(0, 40, 90, 60)",
+              position: "absolute",
+              zIndex: 10,
+              maxWidth: "90%",
+              width: "auto",
             }}
           >
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <CardHeader title="Registrase" />
-              <CardContent
-                sx={{
-                  display: "flex",
-                  flexWrap: "50px",
-                  flexDirection: "column",
-                  "& > *": { mb: 3 },
-                }}
-              >
-                <FormGroup>
-                  <FormLabel>Username</FormLabel>
-                  <Input
-                    {...register("username", {
-                      required: true,
-                      maxLength: 15,
-                      minLength: 6,
-                    })}
-                  />
-                  {errors.username?.type === "required" && (
-                    <p>El campo es requerido</p>
-                  )}
-                  {errors.username?.type === "maxLength" && (
-                    <p>El nombre tiene que tener maximo 15 caracteres</p>
-                  )}
-                  {errors.username?.type === "minLength" && (
-                    <p>El nombre tiene que tener minimo seis caracteres</p>
-                  )}
-                </FormGroup>
-                <FormGroup>
-                  <FormLabel>Email</FormLabel>
-                  <Input
-                    {...register("email", {
-                      required: true,
-                      pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/i,
-                    })}
-                  />
-                  {errors.email?.type === "required" && (
-                    <span>Este campo es requerido</span>
-                  )}
-                  {errors.email?.type === "pattern" && (
-                    <span>Debe ser un email</span>
-                  )}
-                </FormGroup>
-                <FormGroup>
-                  <FormLabel>Password</FormLabel>
-                  <Input
-                    type="password"
-                    {...register("password", {
-                      required: true,
-                      minLength: 8,
-                      pattern:
-                        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-                    })}
-                  />
-                  {errors.password?.type === "required" && (
-                    <span>Este campo es requerido</span>
-                  )}
-                  {errors.password?.type === "minLength" && (
-                    <span>Debe tener al menos 8 caracteres</span>
-                  )}
-                  {errors.password?.type === "pattern" && (
-                    <span>
-                      Debe contener al menos una letra mayúscula, un número y un carácter especial
-                    </span>
-                  )}
-                </FormGroup>
-              </CardContent>
-              <CardActions
-                sx={{ display: "flex", flexDirection: "row-reverse" }}
-              >
-                <Button type="submit" size="medium">
-                  Registrarse
-                </Button>
-              </CardActions>
-            </form>
-          </Card>
+            {messageError}
+          </Alert>
         </Box>
-      </Box>
+      )}
+
+      <Grid container sx={{ minHeight: "100vh" }}>
+        <Grid
+          item
+          xs={12}
+          bgcolor={"white"}
+          zIndex={2}
+          marginTop={"10%"}
+        >
+          <Grid item xs={12} sx={{ display: "flex", justifyContent: "center" }}>
+            <img style={{height:250}} src="/logotipo.png" />
+          </Grid>
+          <form className={{ width: "100%" }} onSubmit={handleSubmit(onSubmit)}>
+            <Grid
+              container
+              justifyContent={"center"}
+              width={"100%"}
+              padding={5}
+              rowSpacing={4}
+            >
+              <Grid item xs={12}>
+                <h1>Registro</h1>
+
+                <TextField
+                  fullWidth
+                  label="Username"
+                  {...register("username", {
+                    required: "El username es requerido",
+                    maxLength: {
+                      value: 15,
+                      message: "Máximo 15 caracteres",
+                    },
+                    minLength: {
+                      value: 6,
+                      message: "Mínimo 6 caracteres",
+                    },
+                  })}
+                  error={!!errors.username}
+                  helperText={errors.username?.message}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label="Email"
+                  {...register("email", {
+                    required: "El email es requerido",
+                    pattern: {
+                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/i,
+                      message: "Debe ser un email válido",
+                    },
+                  })}
+                  error={!!errors.email}
+                  helperText={errors.email?.message}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  type="password"
+                  fullWidth
+                  label="Password"
+                  {...register("password", {
+                    required: "El password es requerido",
+                    minLength: {
+                      value: 8,
+                      message: "Mínimo 8 caracteres",
+                    },
+                    pattern: {
+                      value:
+                        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                      message:
+                        "Debe incluir mayúscula, número y carácter especial",
+                    },
+                  })}
+                  error={!!errors.password}
+                  helperText={errors.password?.message}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <CardActions
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    width: "100%",
+                  }}
+                >
+                  <Button
+                    size="medium"
+                    onClick={() => navigate("/")}
+                  >
+                    Volver
+                  </Button>
+                  <Button type="submit" size="medium" variant="contained">
+                    Registrarse
+                  </Button>
+                </CardActions>
+              </Grid>
+            </Grid>
+          </form>
+        </Grid>
+      </Grid>
     </>
   );
 };

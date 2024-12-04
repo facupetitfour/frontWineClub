@@ -5,23 +5,23 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import ButtonBase from "@mui/material/ButtonBase";
-import MenuIcon from '@mui/icons-material/MenuOutlined';
-import HomeIcon from '@mui/icons-material/HomeOutlined';
-import LocalOfferIcon from '@mui/icons-material/LocalOfferOutlined';
-import PersonIcon from '@mui/icons-material/Person2Outlined';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
+import MenuIcon from "@mui/icons-material/MenuOutlined";
+import HomeIcon from "@mui/icons-material/HomeOutlined";
+import LocalOfferIcon from "@mui/icons-material/LocalOfferOutlined";
+import PersonIcon from "@mui/icons-material/Person2Outlined";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
 import { Box, Drawer, List, Divider, Avatar } from "@mui/material";
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import StorefrontIcon from '@mui/icons-material/Storefront';
-import SupportAgentIcon from '@mui/icons-material/SupportAgent';
-import WineBarIcon from '@mui/icons-material/WineBar';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import StorefrontIcon from "@mui/icons-material/Storefront";
+import SupportAgentIcon from "@mui/icons-material/SupportAgent";
+import WineBarIcon from "@mui/icons-material/WineBar";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 
 const BottomBar = () => {
-  const [selectedTab, setSelectedTab] = useState("home"); 
+  const [selectedTab, setSelectedTab] = useState("home");
   const [stateSideMenu, setStateSideMenu] = useState(false);
   const navigate = useNavigate();
 
@@ -34,6 +34,13 @@ const BottomBar = () => {
     setStateSideMenu(state);
   };
 
+  const logout = () => {
+    // Eliminar el token del localStorage
+    localStorage.removeItem("access_token");
+
+    // Redirigir al usuario a la página de inicio de sesión
+    navigate("/");
+  };
   const optionsDrawer = [
     { title: "Productos", route: "/allproducts", icon: <StorefrontIcon /> },
     { title: "Cupones", route: "/allcoupons", icon: <LocalOfferIcon /> },
@@ -44,10 +51,27 @@ const BottomBar = () => {
   ];
 
   const DrawerList = (
-    <Box sx={{ width: 250 }} role="presentation" onClick={() => toggleDrawer(false)}>
+    <Box
+      sx={{ width: 250 }}
+      role="presentation"
+      onClick={() => toggleDrawer(false)}
+    >
       {/* Encabezado del Sidebar */}
-      <Box sx={{ backgroundColor: "#4A154B", color: "#FFF", padding: 2, textAlign: "center" }}>
-        <Avatar sx={{ margin: "0 auto", backgroundColor: "#FFFFFF", color: "#4A154B" }}>
+      <Box
+        sx={{
+          backgroundColor: "#4A154B",
+          color: "#FFF",
+          padding: 2,
+          textAlign: "center",
+        }}
+      >
+        <Avatar
+          sx={{
+            margin: "0 auto",
+            backgroundColor: "#FFFFFF",
+            color: "#4A154B",
+          }}
+        >
           <WineBarIcon />
         </Avatar>
         <Typography variant="h6">Facundo Petitfour</Typography>
@@ -55,13 +79,11 @@ const BottomBar = () => {
 
       <Divider />
 
-      <List sx={{bottom:0}}>
+      <List sx={{ bottom: 0 }}>
         {optionsDrawer.map((option, index) => (
           <ListItem key={index} disablePadding>
             <ListItemButton onClick={() => navigate(option.route)}>
-              <ListItemIcon>
-                {option.icon}
-              </ListItemIcon>
+              <ListItemIcon>{option.icon}</ListItemIcon>
               <ListItemText primary={option.title} />
             </ListItemButton>
           </ListItem>
@@ -72,7 +94,7 @@ const BottomBar = () => {
 
       {/* Botón de Cerrar Sesión */}
       <ListItem disablePadding>
-        <ListItemButton onClick={() => navigate('/logout')}>
+        <ListItemButton onClick={() => (logout())}>
           <ListItemIcon>
             <ExitToAppIcon color="error" />
           </ListItemIcon>
@@ -96,23 +118,34 @@ const BottomBar = () => {
           backgroundColor: "#FFFFFF",
           height: "8%",
           width: "100%",
-          boxShadow: "0px -1px 5px rgba(0, 0, 0, 0.1)"
+          boxShadow: "0px -1px 5px rgba(0, 0, 0, 0.1)",
         }}
       >
         <Toolbar sx={{ height: "100%" }}>
-          <Grid container justifyContent="space-between" alignItems="center" sx={{ width: '100%', padding: 2 }}>
+          <Grid
+            container
+            justifyContent="space-between"
+            alignItems="center"
+            sx={{ width: "100%", padding: 2 }}
+          >
             <Grid>
               <ButtonBase
-                sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
                 onClick={() => toggleDrawer(true)}
               >
-                <MenuIcon sx={{ color: selectedTab === 'menu' ? "#D90036" : "#404040" }} />
+                <MenuIcon
+                  sx={{ color: selectedTab === "menu" ? "#D90036" : "#404040" }}
+                />
                 <Typography
                   variant="body2"
                   sx={{
                     fontWeight: 200,
                     fontSize: 12,
-                    color: selectedTab === 'menu' ? "#D90036" : "#404040",
+                    color: selectedTab === "menu" ? "#D90036" : "#404040",
                     textAlign: "center",
                   }}
                 >
@@ -123,16 +156,22 @@ const BottomBar = () => {
 
             <Grid>
               <ButtonBase
-                sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-                onClick={() => handleTabClick('home', '/home')}
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+                onClick={() => handleTabClick("home", "/home")}
               >
-                <HomeIcon sx={{ color: selectedTab === 'home' ? "#D90036" : "#404040" }} />
+                <HomeIcon
+                  sx={{ color: selectedTab === "home" ? "#D90036" : "#404040" }}
+                />
                 <Typography
                   variant="body2"
                   sx={{
                     fontWeight: 200,
                     fontSize: 12,
-                    color: selectedTab === 'home' ? "#D90036" : "#404040",
+                    color: selectedTab === "home" ? "#D90036" : "#404040",
                     textAlign: "center",
                   }}
                 >
@@ -143,16 +182,24 @@ const BottomBar = () => {
 
             <Grid>
               <ButtonBase
-                sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-                onClick={() => handleTabClick('coupons', '/mycoupons')}
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+                onClick={() => handleTabClick("coupons", "/mycoupons")}
               >
-                <LocalOfferIcon sx={{ color: selectedTab === 'coupons' ? "#D90036" : "#404040" }} />
+                <LocalOfferIcon
+                  sx={{
+                    color: selectedTab === "coupons" ? "#D90036" : "#404040",
+                  }}
+                />
                 <Typography
                   variant="body2"
                   sx={{
                     fontWeight: 200,
                     fontSize: 12,
-                    color: selectedTab === 'coupons' ? "#D90036" : "#404040",
+                    color: selectedTab === "coupons" ? "#D90036" : "#404040",
                     textAlign: "center",
                   }}
                 >
@@ -163,16 +210,24 @@ const BottomBar = () => {
 
             <Grid>
               <ButtonBase
-                sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-                onClick={() => handleTabClick('profile', '/perfil')}
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+                onClick={() => handleTabClick("profile", "/perfil")}
               >
-                <PersonIcon sx={{ color: selectedTab === 'profile' ? "#D90036" : "#404040" }} />
+                <PersonIcon
+                  sx={{
+                    color: selectedTab === "profile" ? "#D90036" : "#404040",
+                  }}
+                />
                 <Typography
                   variant="body2"
                   sx={{
                     fontWeight: 200,
                     fontSize: 12,
-                    color: selectedTab === 'profile' ? "#D90036" : "#404040",
+                    color: selectedTab === "profile" ? "#D90036" : "#404040",
                     textAlign: "center",
                   }}
                 >

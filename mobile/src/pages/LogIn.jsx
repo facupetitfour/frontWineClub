@@ -27,7 +27,10 @@ const InicioSesion = () => {
     await axios
       .post(serverhost + "authenticate/logIn", data)
       .then((response) => {
-        localStorage.setItem('access_token',response.data.userdata.access_token)
+        localStorage.setItem(
+          "access_token",
+          response.data.userdata.access_token
+        );
         navigate("/home");
       })
       .catch((error) => {
@@ -65,15 +68,18 @@ const InicioSesion = () => {
         </Box>
       )}
 
-      <Grid container sx={{minHeight: "100vh"}}>
+      <Grid container sx={{ minHeight: "100vh" }}>
         <Grid
           item
           xs={12}
           bgcolor={"white"}
-          alignContent={"center"}
-          boxShadow={"0 2px 50px rgba(0, 0, 0, 1)"}
+          // boxShadow={"0 2px 50px rgba(0, 0, 0, 1)"}
           zIndex={2}
+          marginTop={"10%"}
         >
+          <Grid item xs={12} sx={{ display: "flex", justifyContent: "center"}}>
+            <img style={{height:250}} src="/logotipo.png" />
+          </Grid>
           <form className={{ width: "100%" }} onSubmit={handleSubmit(onSubmit)}>
             <Grid
               container
@@ -83,7 +89,7 @@ const InicioSesion = () => {
               rowSpacing={4}
             >
               <Grid item xs={12}>
-              <h1> Inicio de Sesion</h1>
+                <h1> Inicio de Sesion</h1>
 
                 <TextField
                   fullWidth

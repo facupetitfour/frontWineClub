@@ -46,8 +46,9 @@ function AllItemsViews_Products_Coupons({ nameRendering, urlRender }) {
     // Solo ejecuta fetchData si no hay datos de location
     if (!locationData) {
       fetchData();
+      setNameToRender(nameRendering)
     }
-  }, [urlRender, locationData]);
+  }, [urlRender, locationData, nameRendering]);
 
   // Determina qué datos renderizar
   const itemsToRender = locationData || fetchedData;

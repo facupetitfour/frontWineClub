@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 const BACK_URL = import.meta.env.VITE_BACK_URL;
 import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 const Perfil = () => {
   const [perfil, setPerfil] = useState([
@@ -41,11 +42,11 @@ const Perfil = () => {
       points: 1500,
     },
   ]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("access_token");
     const { sub } = jwtDecode(token);
-    console.log(sub);
     const getData = async () => {
       if (BACK_URL) {
         try {
@@ -56,8 +57,10 @@ const Perfil = () => {
               },
             })
             .then((response) => {
+              if (!response.data) {
+                navigate('/registerPerfil')
+              }
               setPerfil(response.data);
-              console.log(response.data);
             });
         } catch (error) {
           console.log(error.message);
@@ -67,10 +70,10 @@ const Perfil = () => {
       }
     };
     getData();
-  }, []);
+  }, [navigate]);
 
   return (
-    <Box sx={{ padding: 2, minHeight: "100vh", minWidth: "100%" }}>
+    <Box sx={{ padding: 2, minWidth: "100%" }}>
       {/* Tarjeta superior */}
       <Card sx={{ marginBottom: 3, borderRadius: 3, boxShadow: 3 }}>
         <CardContent>

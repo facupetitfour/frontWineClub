@@ -6,6 +6,8 @@ import {
   Box,
   List,
   ListItem,
+  Button,
+  CardActions,
 } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 import LocalMallIcon from "@mui/icons-material/LocalMall";
@@ -14,6 +16,11 @@ import Carousel from "./component/Carrusel";
 
 const ItemRender = () => {
   const location = useLocation();
+
+  const canjearFunction = (item) =>{
+    console.log("canjeado: ", item)
+  }
+
   const item = location.state?.data || {
     name: "Vino Tinto Reserva",
     description: "Vino tinto de reserva con notas de roble y frutos rojos",
@@ -43,8 +50,6 @@ const ItemRender = () => {
       },
     ],
   };
-
-  console.log(item);
 
   return (
     <>
@@ -86,6 +91,11 @@ const ItemRender = () => {
                 {item.description}
               </Typography>
             </CardContent>
+            <CardActions>
+              <Button size="large" fullWidth onClick={() => canjearFunction(item)} variant="contained">
+                Canjear
+              </Button>
+            </CardActions>
           </Card>
 
           <Box
@@ -110,9 +120,9 @@ const ItemRender = () => {
                     flexDirection: "column",
                   }}
                 >
-                  <Box sx={{minWidth:"100%"}}>
+                  <Box sx={{ minWidth: "100%" }}>
                     <Box
-                      sx={{ display: "flex", justifyContent: "space-between"}}
+                      sx={{ display: "flex", justifyContent: "space-between" }}
                     >
                       <Typography
                         variant="subtitle2"
