@@ -23,10 +23,10 @@ WineClub es una aplicación diseñada para fortalecer la relación entre las bod
 - **Despliegue**: En local para desarrollo
 
 ## Variables de entorno:
-### Server BackEnd .env:
+### mobile y cliente .env:
 - **MONGO_URI**= "mongodb://127.0.0.1:27017/WineClub"
 - **secretKey**= "escribir una clave"
-
+- **VITE_BACK_URL** =http://localhost:3000/
 ## Inicializar proyecto
 
 - cd nombre carpeta
