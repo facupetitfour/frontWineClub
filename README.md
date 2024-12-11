@@ -18,7 +18,6 @@ WineClub es una aplicación diseñada para fortalecer la relación entre las bod
 
 ## Tecnologías Utilizadas
 
-- **Backend**: Node.js, Express.js, Mongoose
 - **Frontend**: Vite, React.js
 - **Base de datos**: MongoDB
 - **Despliegue**: En local para desarrollo
@@ -27,3 +26,10 @@ WineClub es una aplicación diseñada para fortalecer la relación entre las bod
 ### Server BackEnd .env:
 - **MONGO_URI**= "mongodb://127.0.0.1:27017/WineClub"
 - **secretKey**= "escribir una clave"
+
+## Inicializar proyecto
+
+- cd nombre carpeta
+- npm install (ya sea en la carpeta cliente o mobile ambas contienen distintos front)
+- crear archivo .env y configurar en raiz del proyecto
+- npm run dev
