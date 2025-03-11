@@ -15,7 +15,7 @@ const PlantillaMobile = () => {
           // minHeight: "calc(100vh)",
           minWidth: "100vw",
           marginTop: "20%",
-          marginBottom: "20%"
+          marginBottom: "20%",
         }}
       >
         <Outlet/>

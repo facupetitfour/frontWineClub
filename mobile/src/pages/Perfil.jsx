@@ -20,28 +20,8 @@ import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 
 const Perfil = () => {
-  const [perfil, setPerfil] = useState([
-    {
-      name: "Nombre del Producto/ Cupón",
-      redeemedDate: "13/13/1333",
-      points: 150000,
-    },
-    {
-      name: "Nombre del Producto/ Cupón",
-      redeemedDate: "13/13/1333",
-      points: 10000,
-    },
-    {
-      name: "Nombre del Producto/ Cupón",
-      redeemedDate: "13/13/1333",
-      points: 1500,
-    },
-    {
-      name: "Nombre del Producto/ Cupón",
-      redeemedDate: "13/13/1333",
-      points: 1500,
-    },
-  ]);
+
+  const [perfil, setPerfil] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -58,7 +38,7 @@ const Perfil = () => {
             })
             .then((response) => {
               if (!response.data) {
-                navigate('/registerPerfil')
+                navigate("/registerPerfil");
               }
               setPerfil(response.data);
             });
@@ -73,7 +53,9 @@ const Perfil = () => {
   }, [navigate]);
 
   return (
-    <Box sx={{ padding: 2, minWidth: "100%" }}>
+    <>
+    {perfil?.profile? (
+      <Box sx={{ padding: 2, minWidth: "100%" }}>
       {/* Tarjeta superior */}
       <Card sx={{ marginBottom: 3, borderRadius: 3, boxShadow: 3 }}>
         <CardContent>
@@ -86,7 +68,7 @@ const Perfil = () => {
             </Typography>
           </Box>
           <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: 1 }}>
-            {`${perfil.name} ${perfil.surname}`}
+            {`${perfil.profile.name} ${perfil.profile.surname}`}
           </Typography>
           <Divider sx={{ borderColor: "#D90036", borderWidth: 1 }} />
           <Box
@@ -99,14 +81,15 @@ const Perfil = () => {
           >
             <CelebrationIcon sx={{ fontSize: 40, color: "#D90036" }} />
             <Typography variant="h3" sx={{ fontWeight: "bold", color: "#000" }}>
-              {perfil.points}
+              {perfil.profile.points}
             </Typography>
           </Box>
         </CardContent>
       </Card>
 
       {/* Lista de cupones */}
-      {perfil.points_history && perfil.points_history.length > 0 ? (
+      {perfil.profile.points_history &&
+      perfil.profile.points_history.length > 0 ? (
         <Box
           sx={{
             backgroundColor: "#fff",
@@ -116,7 +99,7 @@ const Perfil = () => {
           }}
         >
           <List disablePadding>
-            {perfil.points_history.map((coupon, index) => (
+            {perfil.profile.points_history.map((coupon, index) => (
               <ListItem
                 key={index}
                 sx={{
@@ -129,7 +112,11 @@ const Perfil = () => {
               >
                 <ListItemAvatar>
                   <Avatar
-                    sx={{ backgroundColor: "#D90036", width: 40, height: 40 }}
+                    sx={{
+                      backgroundColor: "#D90036",
+                      width: 40,
+                      height: 40,
+                    }}
                   >
                     <PercentIcon sx={{ color: "#fff" }} />
                   </Avatar>
@@ -170,6 +157,8 @@ const Perfil = () => {
         </Box>
       ) : null}
     </Box>
+    ):(null)}
+    </>
   );
 };
 

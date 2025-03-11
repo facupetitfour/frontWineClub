@@ -9,7 +9,7 @@ const NavBar = () => {
         component={"nav"}
         position="fixed"
         sx={{
-          zIndex: 1,
+          zIndex: 101,
           top: 0,
           bottom: "auto",
           minHeight: "8%",

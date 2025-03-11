@@ -3,6 +3,7 @@ import {
   CardContent,
   CardMedia,
   Typography,
+  Alert,
   Box,
   List,
   ListItem,
@@ -13,42 +14,69 @@ import StarIcon from "@mui/icons-material/Star";
 import LocalMallIcon from "@mui/icons-material/LocalMall";
 import { useLocation } from "react-router-dom";
 import Carousel from "./component/Carrusel";
+import axios from "axios";
+const BACK_URL = import.meta.env.VITE_BACK_URL;
+import { jwtDecode } from "jwt-decode";
+import { useState } from "react";
 
 const ItemRender = () => {
   const location = useLocation();
+  const item = location.state?.data || {};
+  const [messageError, setMssageError] = useState();
 
-  const canjearFunction = (item) =>{
-    console.log("canjeado: ", item)
-  }
+  const getData = async (item) => {
+    const token = localStorage.getItem("access_token");
+    const { sub } = jwtDecode(token);
+    if (BACK_URL) {
+      try {
+        if (item.type === "coupon") {
+          await axios
+            .post(
+              `${BACK_URL}users/claimCoupon`,
+              {
+                id: sub,
+                coupon: item,
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            )
+            .then((response) => {
+              console.log(response.data);
+            });
+        }
+        if(item.type === "product"){
+          await axios
+            .post(
+              `${BACK_URL}users/claimProduct`,
+              {
+                id: sub,
+                coupon: item,
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            )
+            .then((response) => {
+              console.log(response.data);
+            });
+        }
+      } catch (error) {
+        console.log(error.response.data);
+        setMssageError(error.response.data.message);
+      }
+    } else {
+      console.log(`NO HAY URL: ${BACK_URL}`);
+    }
+  };
 
-  const item = location.state?.data || {
-    name: "Vino Tinto Reserva",
-    description: "Vino tinto de reserva con notas de roble y frutos rojos",
-    points: "500",
-    img: "/vinocarrusel.webp",
-    stock: 150,
-    bodega_id: "64a10e2b5e4a4e1a8f7c1234",
-    available: true,
-    approved: true,
-    createdAt: "2024-11-11T10:00:00.000Z",
-    updatedAt: "2024-11-11T10:00:00.000Z",
-    opinions: [
-      {
-        name: "Facundo Petitfour",
-        valorate: 5,
-        opinion: "Este producto es excelente",
-      },
-      {
-        name: "Pepe hongito",
-        valorate: 2,
-        opinion: "Este producto es excelente",
-      },
-      {
-        name: "El Amargado",
-        valorate: 1,
-        opinion: "Este producto es excelente",
-      },
-    ],
+  const canjearFunction = (item) => {
+    console.log("canjeado: ", item);
+    getData(item);
   };
 
   return (
@@ -63,6 +91,32 @@ const ItemRender = () => {
             padding: 2,
           }}
         >
+          {messageError && (
+            <Box
+              sx={{
+                position: "relative",
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <Alert
+                variant="filled"
+                severity="error"
+                onClose={() => {
+                  setMssageError(null);
+                }}
+                sx={{
+                  position: "absolute",
+                  zIndex: 10,
+                  maxWidth: "90%",
+                  width: "auto",
+                }}
+              >
+                {messageError}
+              </Alert>
+            </Box>
+          )}
           <Card sx={{ marginBottom: 3, borderRadius: 3, boxShadow: 3 }}>
             {/* Image Section */}
             <CardMedia height="200">
@@ -92,7 +146,12 @@ const ItemRender = () => {
               </Typography>
             </CardContent>
             <CardActions>
-              <Button size="large" fullWidth onClick={() => canjearFunction(item)} variant="contained">
+              <Button
+                size="large"
+                fullWidth
+                onClick={() => canjearFunction(item)}
+                variant="contained"
+              >
                 Canjear
               </Button>
             </CardActions>
