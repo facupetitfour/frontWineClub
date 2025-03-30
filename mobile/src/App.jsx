@@ -12,6 +12,7 @@ import Register from "./pages/Register";
 import Perfil from "./pages/Perfil";
 import NotFound from "./pages/NotFound";
 import PerfilRegister from "./pages/PerfilRegister";
+import ClaimView from "./pages/claimView";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path="/allcoupons" element={<AllItemsViews_Products_Coupons nameRendering={'Cupones'} urlRender={'coupon'}/>} />
           <Route path="/itemrendermodel" element={<ItemRender/>}/>
           <Route path="/itemrender" element={<ItemRender/>}/>
+          <Route path="/claimrender" element={<ClaimView/>}/>
           <Route path="/mycoupons" element={<MisCupones/>}/>
           <Route path="/perfil" element={<Perfil/>}/>
           <Route path="*" element={<NotFound/>}/>

@@ -54,7 +54,7 @@ const ProfileDetails = ({ profile }) => {
   );
 };
 
-const DynamicTable = (props) => {
+const DynamicTable = (props) => { // prop a pasar en dinamic table; bodyData={data a renderizar} model={schema de data} deleteFunction={funcion} updateItemFunction={funcion}
   const [warningModal, setWarningModal] = useState(false);
   const [itemToDelete, setItemToDelete] = useState();
   const [search, setSearch] = useState("");

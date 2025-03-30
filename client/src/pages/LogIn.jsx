@@ -28,6 +28,10 @@ const InicioSesion = () => {
       .post(serverhost + "authenticate/logIn", data)
       .then((response) => {
         console.log("RESPONSE DATA: ", response);
+        localStorage.setItem(
+          "access_token",
+          response.data.userdata.access_token
+        );
         navigate("/home");
       })
       .catch((error) => {
@@ -69,7 +73,7 @@ const InicioSesion = () => {
           <Box
             component="img"
             src="./public/img/imglogin.png"
-            alt="Imagen login"
+            alt="Imagenlogin"
             sx={{
               display: "block",
               filter: "brightness(0.5)",

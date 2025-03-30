@@ -66,7 +66,11 @@ const ItemsViews = ({ nombre, icon, data }) => {
         sx={{ overflowX: "auto", flexWrap: "nowrap" }}
       >
         {data.map((item, index) => (
-          <Grid item key={index} sx={{ minWidth: "40%", paddingBottom: 0.7 }}>
+          <Grid item key={index} sx={{ minWidth: "40%", paddingBottom: 0.7 }}
+          onClick={() => {
+            navigate(`/itemrender`, { state: { data: item } });
+          }}
+          >
             {/* Card de la item */}
             <Card
               sx={{

@@ -37,10 +37,11 @@ const Perfil = () => {
               },
             })
             .then((response) => {
-              if (!response.data) {
+              if (!response.data.profile) {
                 navigate("/registerPerfil");
               }
               setPerfil(response.data);
+              console.log(response.data)
             });
         } catch (error) {
           console.log(error.message);
@@ -135,7 +136,7 @@ const Perfil = () => {
                       variant="body2"
                       sx={{ color: "#888", fontSize: 12 }}
                     >
-                      Canjeado el: {coupon.redeemedDate}
+                      Canjeado el: {coupon.date}
                     </Typography>
                   }
                   sx={{ marginRight: 2 }}

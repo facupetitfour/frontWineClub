@@ -53,7 +53,7 @@ const ItemRender = () => {
               `${BACK_URL}users/claimProduct`,
               {
                 id: sub,
-                coupon: item,
+                product: item,
               },
               {
                 headers: {

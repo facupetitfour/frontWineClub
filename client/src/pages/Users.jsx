@@ -52,7 +52,7 @@ const Users = () => {
         setClientData(response.data.filter((data) => data.roles === "cliente"));
       } catch (error) {
         console.error("Error al obtener data de usuarios", error);
-        navigate("/");
+        // navigate("/");
       }
     };
     getData();

@@ -22,7 +22,7 @@ function App() {
         <Route path="/register" element={<Register />} />
 
         Rutas protegidas y sidebar  administrador
-        {/* <Route element={<ProtectedRouteAdministrador />}> */}
+        <Route element={<ProtectedRouteAdministrador />}>
           <Route element={<SideBar />}>
             <Route path="/home" element={<Home />} />
             <Route path="/users" element={<Users />} />
@@ -30,7 +30,7 @@ function App() {
             <Route path="/coupons" element={<Coupons/>} />
             <Route path="/avaiable" element={<Avaiable/>} />
           </Route>
-        {/* </Route> */}
+        </Route>
 
         {/* Rutas protegidas Bodega*/}
         <Route element={<ProtectedRouteBodega/>}>
