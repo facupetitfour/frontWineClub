@@ -17,17 +17,19 @@ import { Grid } from "@mui/material";
 import { useState, useEffect } from "react";
 import AddIcon from "@mui/icons-material/Add";
 
-const ModalProductAddOrEdit = ({
+const ModalCouponAddOrEdit = ({
   state,
+  setState,
   createItem,
   updateItem,
-  product,
+  coupon,
+  currentItem,
   dataUsers,
   dataCategories,
 }) => {
   const [open, setOpen] = useState(state);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleOpen = () => setState(true);
+  const handleClose = () => setState(false);
 
   const {
     register,
@@ -37,17 +39,21 @@ const ModalProductAddOrEdit = ({
   } = useForm();
 
   useEffect(() => {
-    if (product) {
-      // Cargar datos de producto en el formulario si se proporciona un producto
-      setValue("name", product.name);
-      setValue("description", product.description);
-      setValue("points_required", product.points_required);
-      setValue("stock", product.stock);
-      setValue("available", product.available);
-      setValue("categoria_id", product.categoria_id);
-      setValue("user_id", product.user_id);
+    if (currentItem) {
+      // Cargar datos de cupon en el formulario si se proporciona un cupon
+      setValue("name", currentItem.name);
+      setValue("description", currentItem.description);
+      setValue("points_required", currentItem.points_required);
+      setValue("stock", currentItem.stock);
+      setValue("available", currentItem.available);
+      setValue("categoria_id", currentItem.categoria_id);
+      setValue("user_id", currentItem.user_id);
     }
-  }, [product, setValue, state]);
+  }, [currentItem, setValue]);
+
+  useEffect(() => {
+    setOpen(state);
+  }, [state]);
 
   const onSubmit = (data) => {
     const selectedCategory = dataCategories.find(
@@ -61,8 +67,8 @@ const ModalProductAddOrEdit = ({
       user_id: selectedUser ? selectedUser._id : "",
     };
 
-    if (product) {
-      updateItem({ ...product, ...productData }); // Si existe un producto, actualizarlo
+    if (coupon) {
+      updateItem({ ...coupon, ...productData }); // Si existe un cupon, actualizarlo
     } else {
       createItem(productData); // Si no existe, crearlo
     }
@@ -83,7 +89,6 @@ const ModalProductAddOrEdit = ({
 
       <Modal
         open={open}
-        onClose={handleClose}
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
       >
@@ -103,7 +108,7 @@ const ModalProductAddOrEdit = ({
           }}
         >
           <form onSubmit={handleSubmit(onSubmit)}>
-            <h1>{product ? "Editar Producto" : "Agregar Producto"}</h1>
+            <h1>{coupon ? "Editar Cupon" : "Agregar Cupon"}</h1>
             <Grid container sx={{ width: "100%", padding: 2 }} rowSpacing={3}>
               <Grid item md={6} sm={12}>
                 <TextField
@@ -153,8 +158,8 @@ const ModalProductAddOrEdit = ({
                   <Select
                     labelId="available-label"
                     label="Disponible"
-                    defaultValue={product ? product.available : true}
-                    inputRef={register("available", { required: true })}
+                    {...register("available", { required: true })}
+                    defaultValue={currentItem ? currentItem.available : true}
                   >
                     <MenuItem value={true}>Sí</MenuItem>
                     <MenuItem value={false}>No</MenuItem>
@@ -168,7 +173,7 @@ const ModalProductAddOrEdit = ({
                     labelId="category-label"
                     label="Categoría"
                     {...register("categoria_id", { required: true })}
-                    defaultValue={product ? product.categoria_id : ""}
+                    defaultValue={currentItem ? currentItem.categoria_id : ""}
                   >
                     {dataCategories ? (
                       dataCategories.map((category) => (
@@ -191,7 +196,7 @@ const ModalProductAddOrEdit = ({
                     labelId="user-label"
                     label="Bodega"
                     {...register("user_id", { required: true })}
-                    defaultValue={product ? product.user_id : ""}
+                    defaultValue={currentItem ? currentItem.user_id : ""}
                   >
                     {dataUsers ? (
                       dataUsers.map((user) => (
@@ -212,7 +217,7 @@ const ModalProductAddOrEdit = ({
             <CardActions sx={{ justifyContent: "flex-end" }}>
               <Button onClick={handleClose}>Cancelar</Button>
               <Button type="submit" variant="contained" color="primary">
-                {product ? "Editar Producto" : "Crear Producto"}
+                {currentItem ? "Editar Cupon" : "Crear Cupon"}
               </Button>
             </CardActions>
           </form>
@@ -222,4 +227,4 @@ const ModalProductAddOrEdit = ({
   );
 };
 
-export default ModalProductAddOrEdit;
+export default ModalCouponAddOrEdit;

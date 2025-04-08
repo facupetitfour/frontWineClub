@@ -88,6 +88,11 @@ const DynamicTable = (props) => { // prop a pasar en dinamic table; bodyData={da
     setCurrentPage(newPage);
   };
 
+  const handleEdit = (data)=>{
+    // console.log(data)
+    props.updateItemFunction(data._id, data)
+  }
+
   const formatDate = (date) => {
     const dateObj = new Date(date);
     const day = dateObj.getUTCDate();
@@ -141,7 +146,7 @@ const DynamicTable = (props) => { // prop a pasar en dinamic table; bodyData={da
                 ))}
                 <TableCell align="center">
                   <IconButton
-                    onClick={() => props.updateItemFunction(body)}
+                    onClick={() => handleEdit(body)}
                     color="primary"
                   >
                     <EditIcon />
