@@ -12,7 +12,7 @@ import {
   Select,
   CardActions,
 } from "@mui/material";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { Grid } from "@mui/material";
 import { useState, useEffect } from "react";
 import AddIcon from "@mui/icons-material/Add";
@@ -22,7 +22,6 @@ const ModalCouponAddOrEdit = ({
   setState,
   createItem,
   updateItem,
-  coupon,
   currentItem,
   dataUsers,
   dataCategories,
@@ -34,13 +33,13 @@ const ModalCouponAddOrEdit = ({
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
-    setValue, // Para cargar valores iniciales en el formulario
+    setValue,
   } = useForm();
 
   useEffect(() => {
     if (currentItem) {
-      // Cargar datos de cupon en el formulario si se proporciona un cupon
       setValue("name", currentItem.name);
       setValue("description", currentItem.description);
       setValue("points_required", currentItem.points_required);
@@ -67,10 +66,11 @@ const ModalCouponAddOrEdit = ({
       user_id: selectedUser ? selectedUser._id : "",
     };
 
-    if (coupon) {
-      updateItem({ ...coupon, ...productData }); // Si existe un cupon, actualizarlo
+    if (currentItem) {
+      console.log("DATA dentro del if:", data); // Para debug
+      updateItem(currentItem._id, { ...currentItem, ...productData });
     } else {
-      createItem(productData); // Si no existe, crearlo
+      createItem(productData);
     }
 
     handleClose();
@@ -89,6 +89,7 @@ const ModalCouponAddOrEdit = ({
 
       <Modal
         open={open}
+        disableEnforceFocus
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
       >
@@ -108,7 +109,7 @@ const ModalCouponAddOrEdit = ({
           }}
         >
           <form onSubmit={handleSubmit(onSubmit)}>
-            <h1>{coupon ? "Editar Cupon" : "Agregar Cupon"}</h1>
+            <h1>{currentItem ? "Editar Cupon" : "Agregar Cupon"}</h1>
             <Grid container sx={{ width: "100%", padding: 2 }} rowSpacing={3}>
               <Grid item md={6} sm={12}>
                 <TextField
@@ -153,64 +154,81 @@ const ModalCouponAddOrEdit = ({
                 />
               </Grid>
               <Grid item md={6} sm={12}>
-                <FormControl fullWidth>
-                  <InputLabel id="available-label">Disponible</InputLabel>
-                  <Select
-                    labelId="available-label"
-                    label="Disponible"
-                    {...register("available", { required: true })}
-                    defaultValue={currentItem ? currentItem.available : true}
-                  >
-                    <MenuItem value={true}>Sí</MenuItem>
-                    <MenuItem value={false}>No</MenuItem>
-                  </Select>
-                </FormControl>
+                <Controller
+                  name="available"
+                  control={control}
+                  defaultValue={true}
+                  rules={{ required: true }}
+                  render={({ field }) => (
+                    <FormControl fullWidth>
+                      <InputLabel id="available-label">Disponible</InputLabel>
+                      <Select
+                        {...field}
+                        labelId="available-label"
+                        label="Disponible"
+                      >
+                        <MenuItem value={true}>Sí</MenuItem>
+                        <MenuItem value={false}>No</MenuItem>
+                      </Select>
+                    </FormControl>
+                  )}
+                />
               </Grid>
               <Grid item md={6} sm={12}>
-                <FormControl fullWidth>
-                  <InputLabel id="category-label">Categoría</InputLabel>
-                  <Select
-                    labelId="category-label"
-                    label="Categoría"
-                    {...register("categoria_id", { required: true })}
-                    defaultValue={currentItem ? currentItem.categoria_id : ""}
-                  >
-                    {dataCategories ? (
-                      dataCategories.map((category) => (
-                        <MenuItem key={category._id} value={category._id}>
-                          {category.name}
-                        </MenuItem>
-                      ))
-                    ) : (
-                      <MenuItem disabled value="">
-                        No se encontraron categorías
-                      </MenuItem>
-                    )}
-                  </Select>
-                </FormControl>
+                <Controller
+                  name="categoria_id"
+                  control={control}
+                  defaultValue=""
+                  rules={{ required: true }}
+                  render={({ field }) => (
+                    <FormControl fullWidth>
+                      <InputLabel id="category-label">Categoría</InputLabel>
+                      <Select
+                        {...field}
+                        labelId="category-label"
+                        label="Categoría"
+                      >
+                        {dataCategories && dataCategories.length > 0 ? (
+                          dataCategories.map((category) => (
+                            <MenuItem key={category._id} value={category._id}>
+                              {category.name}
+                            </MenuItem>
+                          ))
+                        ) : (
+                          <MenuItem disabled value="">
+                            No hay categorías
+                          </MenuItem>
+                        )}
+                      </Select>
+                    </FormControl>
+                  )}
+                />
               </Grid>
               <Grid item md={12} sm={12}>
-                <FormControl fullWidth>
-                  <InputLabel id="user-label">Bodega</InputLabel>
-                  <Select
-                    labelId="user-label"
-                    label="Bodega"
-                    {...register("user_id", { required: true })}
-                    defaultValue={currentItem ? currentItem.user_id : ""}
-                  >
-                    {dataUsers ? (
-                      dataUsers.map((user) => (
-                        <MenuItem key={user._id} value={user._id}>
-                          {user.username}
-                        </MenuItem>
-                      ))
-                    ) : (
-                      <MenuItem disabled value="">
-                        No se encontraron bodegas
-                      </MenuItem>
-                    )}
-                  </Select>
-                </FormControl>
+                <Controller
+                  name="user_id"
+                  control={control}
+                  defaultValue=""
+                  rules={{ required: true }}
+                  render={({ field }) => (
+                    <FormControl fullWidth>
+                      <InputLabel id="user-label">Bodega</InputLabel>
+                      <Select {...field} labelId="user-label" label="Bodega">
+                        {dataUsers && dataUsers.length > 0 ? (
+                          dataUsers.map((user) => (
+                            <MenuItem key={user._id} value={user._id}>
+                              {user.username}
+                            </MenuItem>
+                          ))
+                        ) : (
+                          <MenuItem disabled value="">
+                            No se encontraron bodegas
+                          </MenuItem>
+                        )}
+                      </Select>
+                    </FormControl>
+                  )}
+                />
               </Grid>
             </Grid>
 
