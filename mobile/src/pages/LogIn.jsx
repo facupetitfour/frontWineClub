@@ -6,15 +6,17 @@ import {
   Alert,
   Grid,
   TextField,
+  CircularProgress,
 } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-const serverhost = "http://localhost:3000/";
+const BACK_URL = import.meta.env.VITE_BACK_URL;
 
 const InicioSesion = () => {
   const [messageError, setMssageError] = useState();
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
   const {
@@ -24,44 +26,34 @@ const InicioSesion = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    await axios
-      .post(serverhost + "authenticate/logIn", data)
-      .then((response) => {
-        localStorage.setItem(
-          "access_token",
-          response.data.userdata.access_token
-        );
-        navigate("/home");
-      })
-      .catch((error) => {
-        console.log("RESPONSE ERRR: ", error.response.data.message);
-        setMssageError(error.response.data.message);
-      });
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        BACK_URL + "authenticate/logIn",
+        data,
+        {
+          withCredentials: true,
+        }
+      );
+      localStorage.setItem("access_token", response.data.userdata.access_token);
+      navigate("/home");
+    } catch (error) {
+      console.log("RESPONSE ERRR: ", error.response.data.message);
+      setMssageError(error.response.data.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <>
       {messageError && (
-        <Box
-          sx={{
-            position: "relative",
-            width: "100%",
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
+        <Box sx={{ position: "relative", width: "100%", display: "flex", justifyContent: "center" }}>
           <Alert
             variant="filled"
             severity="error"
-            onClose={() => {
-              setMssageError(null);
-            }}
-            sx={{
-              position: "absolute",
-              zIndex: 10,
-              maxWidth: "90%",
-              width: "auto",
-            }}
+            onClose={() => setMssageError(null)}
+            sx={{ position: "absolute", zIndex: 10, maxWidth: "90%", width: "auto" }}
           >
             {messageError}
           </Alert>
@@ -69,33 +61,19 @@ const InicioSesion = () => {
       )}
 
       <Grid container sx={{ minHeight: "100vh" }}>
-        <Grid
-          item
-          xs={12}
-          bgcolor={"white"}
-          // boxShadow={"0 2px 50px rgba(0, 0, 0, 1)"}
-          zIndex={2}
-          marginTop={"10%"}
-        >
-          <Grid item xs={12} sx={{ display: "flex", justifyContent: "center"}}>
-            <img style={{height:250}} src="/logotipo.png" />
+        <Grid item xs={12} bgcolor={"white"} zIndex={2} marginTop={"10%"}>
+          <Grid item xs={12} sx={{ display: "flex", justifyContent: "center" }}>
+            <img style={{ height: 250 }} src="/logotipo.png" />
           </Grid>
-          <form className={{ width: "100%" }} onSubmit={handleSubmit(onSubmit)}>
-            <Grid
-              container
-              justifyContent={"center"}
-              width={"100%"}
-              padding={5}
-              rowSpacing={4}
-            >
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Grid container justifyContent={"center"} width={"100%"} padding={5} rowSpacing={4}>
               <Grid item xs={12}>
-                <h1> Inicio de Sesion</h1>
-
+                <h1>Inicio de Sesión</h1>
                 <TextField
                   fullWidth
                   label="Username"
                   {...register("username", { required: true })}
-                  error={!!errors.name}
+                  error={!!errors.username}
                   helperText={errors.username && "El username es requerido"}
                 />
               </Grid>
@@ -118,16 +96,21 @@ const InicioSesion = () => {
                     width: "100%",
                   }}
                 >
-                  <Button
-                    size="medium"
-                    onClick={() => {
-                      navigate("/register");
-                    }}
-                  >
+                  <Button size="medium" onClick={() => navigate("/register")} disabled={loading}>
                     Registrarse
                   </Button>
-                  <Button type="submit" size="medium" variant="contained">
-                    Iniciar
+                  <Button
+                    type="submit"
+                    size="medium"
+                    variant="contained"
+                    disabled={loading}
+                    sx={{ minWidth: 100, height: 36, position: "relative" }}
+                  >
+                    {loading ? (
+                      <CircularProgress size={24} sx={{ color: "white" }} />
+                    ) : (
+                      "Iniciar"
+                    )}
                   </Button>
                 </CardActions>
               </Grid>

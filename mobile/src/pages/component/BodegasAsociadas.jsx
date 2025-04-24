@@ -5,14 +5,17 @@ import {
   Card,
   CardMedia,
   CardContent,
+  Skeleton,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-// Array de bodegas con su imagen y nombre
 
-const BodegasAsociadas = ({ data }) => {
+const BodegasAsociadas = ({ data, loading }) => {
   const navigate = useNavigate();
+
+  const skeletonItems = Array.from({ length: 4 });
+
   return (
-    <Box sx={{ padding: 2, minWidth:"100%"}}>
+    <Box sx={{ padding: 2, minWidth: "100%" }}>
       {/* Título */}
       <Box
         sx={{
@@ -32,9 +35,7 @@ const BodegasAsociadas = ({ data }) => {
         <button
           onClick={() => {
             navigate("/allbodegas", {
-              state: {
-                data: data,
-              },
+              state: { data },
             });
           }}
           style={{
@@ -55,43 +56,50 @@ const BodegasAsociadas = ({ data }) => {
         </button>
       </Box>
 
-      {/* Grid para mostrar las tarjetas */}
+      {/* Grid de tarjetas o Skeletons */}
       <Grid container spacing={2}>
-        {data.map((bodega, index) => (
+        {(loading ? skeletonItems : data).map((bodega, index) => (
           <Grid
             item
             xs={6}
             key={index}
-            onClick={() => {
-              navigate("/bodega", {
-                state: {
-                  data:bodega,
-                },
-              });
-            }}
+            onClick={
+              !loading
+                ? () =>
+                    navigate("/bodega", {
+                      state: { data: bodega },
+                    })
+                : undefined
+            }
           >
-            {/* Card de la bodega */}
             <Card sx={{ borderRadius: 2, overflow: "hidden" }}>
-              {/* Imagen */}
-              <CardMedia
-                component="img"
-                height="140"
-                image={bodega.img || '/bodega1.avif'}
-                alt={bodega.name}
-              />
-              {/* Nombre de la bodega */}
+              {loading ? (
+                <Skeleton variant="rectangular" height={140} />
+              ) : (
+                <CardMedia
+                  component="img"
+                  height="140"
+                  image={bodega.img || "/bodega1.avif"}
+                  alt={bodega.name}
+                />
+              )}
+
               <CardContent>
-                <Typography
-                  variant="body1"
-                  sx={{
-                    fontWeight: "bold",
-                    textAlign: "center",
-                    fontSize: "14px",
-                    overflow: true
-                  }}
-                >
-                  {bodega.profile.name}
-                </Typography>
+                {loading ? (
+                  <Skeleton variant="text" width="80%" sx={{ mx: "auto" }} />
+                ) : (
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      fontWeight: "bold",
+                      textAlign: "center",
+                      fontSize: "14px",
+                      overflow: true,
+                    }}
+                  >
+                    {bodega.profile.name}
+                  </Typography>
+                )}
               </CardContent>
             </Card>
           </Grid>
