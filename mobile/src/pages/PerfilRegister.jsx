@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { jwtDecode } from "jwt-decode";
 
-const serverhost = "http://localhost:3000/";
+const BACK_URL = import.meta.env.VITE_BACK_URL;
 
 const PerfilRegister = () => {
   const [messageError, setMessageError] = useState();
@@ -40,7 +40,7 @@ const PerfilRegister = () => {
         },
       };
 
-        const response = await axios.post(serverhost + `users/${sub}/profile`, formattedData, {
+        const response = await axios.post(BACK_URL + `users/${sub}/profile`, formattedData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

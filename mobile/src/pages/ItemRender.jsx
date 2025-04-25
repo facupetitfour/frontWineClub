@@ -24,7 +24,7 @@ const ItemRender = () => {
   const item = location.state?.data || {};
   const [messageError, setMssageError] = useState();
 
-  const getData = async (item) => {
+  const claimfunction = async (item) => {
     const token = localStorage.getItem("access_token");
     const { sub } = jwtDecode(token);
     if (BACK_URL) {
@@ -76,7 +76,7 @@ const ItemRender = () => {
 
   const canjearFunction = (item) => {
     console.log("canjeado: ", item);
-    getData(item);
+    claimfunction(item);
   };
 
   return (

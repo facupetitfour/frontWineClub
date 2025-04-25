@@ -6,6 +6,7 @@ import {
   CardMedia,
   CardContent,
   CardActions,
+  Skeleton,
 } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -19,6 +20,7 @@ function AllItemsViews_Products_Coupons({ nameRendering, urlRender }) {
   const { data: locationData, nameRender } = location.state || {};
   const [fetchedData, setFetchedData] = useState([]);
   const [nameToRender, setNameToRender] = useState(nameRendering);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (nameRender) {
@@ -30,29 +32,29 @@ function AllItemsViews_Products_Coupons({ nameRendering, urlRender }) {
     const fetchData = async () => {
       const token = localStorage.getItem("access_token");
       if (BACK_URL && urlRender) {
+        setLoading(true);
         try {
           const response = await axios.get(`${BACK_URL}${urlRender}`, {
             headers: { Authorization: `Bearer ${token}` },
           });
-          // console.log("Fetched data:", response.data);
           setFetchedData(response.data);
         } catch (error) {
           console.error("Error fetching data:", error.message);
+        } finally {
+          setLoading(false);
         }
-      } else {
-        console.log("Missing URL or BACK_URL:", BACK_URL);
       }
     };
 
-    // Solo ejecuta fetchData si no hay datos de location
     if (!locationData) {
       fetchData();
       setNameToRender(nameRendering);
     }
   }, [urlRender, locationData, nameRendering]);
 
-  // Determina qué datos renderizar
   const itemsToRender = locationData || fetchedData;
+
+  const skeletonArray = Array.from({ length: 6 });
 
   return (
     <Box sx={{ padding: 2, minHeight: "100vh", minWidth: "100%" }}>
@@ -81,63 +83,95 @@ function AllItemsViews_Products_Coupons({ nameRendering, urlRender }) {
             </Typography>
           </Box>
         </Box>
+
         <Grid container spacing={2}>
-          {itemsToRender && itemsToRender.length > 0 ? (
-            itemsToRender.map((item, index) => (
-              <Grid
-                item
-                xs={6}
-                key={index}
-                onClick={() => {
-                  navigate(`/itemrender`, { state: { data: item } });
-                }}
-              >
-                <Card
-                  sx={{
-                    borderRadius: 2,
-                    overflow: "hidden",
-                    minHeight: "100%",
-                    boxShadow: 2
+          {loading
+            ? skeletonArray.map((_, index) => (
+                <Grid item xs={6} key={index}>
+                  <Card
+                    sx={{
+                      borderRadius: 2,
+                      overflow: "hidden",
+                      minHeight: "100%",
+                      boxShadow: 2,
+                    }}
+                  >
+                    <Skeleton variant="rectangular" height={140} />
+                    <CardContent sx={{ padding: '8px 0' }}>
+                      <Skeleton variant="text" width="60%" />
+                    </CardContent>
+                    <CardActions sx={{ justifyContent: "flex-end", padding: '8px' }}>
+                      <Skeleton variant="text" width="30%" />
+                    </CardActions>
+                  </Card>
+                </Grid>
+              ))
+            : itemsToRender && itemsToRender.length > 0
+            ? itemsToRender.map((item, index) => (
+                <Grid
+                  item
+                  xs={6}
+                  key={index}
+                  onClick={() => {
+                    navigate(`/itemrender`, { state: { data: item } });
                   }}
                 >
-                  <CardMedia
-                    component="img"
-                    // sx={{height:"140"}}
-                    image={item.img || "imagenBaseItems.webp"}
-                    alt={item.name || "Sin nombre"}
-                  />
-                  <CardContent
-                    sx={{textAlign: 'center', padding: '8px 0',minHeight:"50px", maxHeight:"50px"}}
+                  <Card
+                    sx={{
+                      borderRadius: 2,
+                      overflow: "hidden",
+                      minHeight: "100%",
+                      boxShadow: 2,
+                    }}
                   >
-                    <Typography
-                      variant="body1"
+                    <CardMedia
+                      component="img"
+                      image={item.img || "imagenBaseItems.webp"}
+                      alt={item.name || "Sin nombre"}
+                    />
+                    <CardContent
                       sx={{
-                        fontWeight: "bold",
                         textAlign: "center",
-                        fontSize: "14px",
+                        padding: "8px 0",
+                        minHeight: "50px",
+                        maxHeight: "50px",
                       }}
                     >
-                      {item.name}
-                    </Typography>
-                  </CardContent>
-                  <CardActions sx={{minHeight:"20px",minWidth:"100%", justifyContent:"flex-end"}}>
-                    <Typography
-                      variant="body1"
+                      <Typography
+                        variant="body1"
+                        sx={{
+                          fontWeight: "bold",
+                          textAlign: "center",
+                          fontSize: "14px",
+                        }}
+                      >
+                        {item.name}
+                      </Typography>
+                    </CardContent>
+                    <CardActions
                       sx={{
-                        fontWeight: "bold",
-                        textAlign: "center",
-                        fontSize: "18px",
+                        minHeight: "20px",
+                        minWidth: "100%",
+                        justifyContent: "flex-end",
                       }}
                     >
-                      {item.points_required}
-                    </Typography>
-                  </CardActions>
-                </Card>
-              </Grid>
-            ))
-          ) : (
-            <Typography>No hay datos para mostrar</Typography>
-          )}
+                      <Typography
+                        variant="body1"
+                        sx={{
+                          fontWeight: "bold",
+                          textAlign: "center",
+                          fontSize: "18px",
+                        }}
+                      >
+                        {item.points_required}
+                      </Typography>
+                    </CardActions>
+                  </Card>
+                </Grid>
+              ))
+            : (
+              <Typography>No hay datos para mostrar</Typography>
+            )}
         </Grid>
       </Box>
     </Box>
