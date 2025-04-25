@@ -11,11 +11,10 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-const serverhost = "http://localhost:3000/";
+const BACK_URL = import.meta.env.VITE_BACK_URL;
 
 const Register = () => {
   const [messageError, setMessageError] = useState();
-
   const navigate = useNavigate();
   const {
     register,
@@ -25,7 +24,7 @@ const Register = () => {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post(serverhost + "users", data);
+      const response = await axios.post(BACK_URL + "users", data);
       console.log("RESPONSE DATA: ", response);
       navigate("/");
     } catch (error) {
