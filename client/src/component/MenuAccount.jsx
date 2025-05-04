@@ -35,15 +35,23 @@ const MenuAccount = () => {
   };
 
   const handleLogOut = () => {
-    axios
-      .post(serverhost + "authenticate/logOut", {}, { withCredentials: true })
-      .then((response) => {
-        console.log("RESPONSE LOG OUT: ", response);
-        navigate("/");
-      })
-      .catch((error) => {
-        console.error("ERROR AL LOGOUT", error);
-      });
+    // Clear the cookie
+    Cookies.remove("token");
+    // Clear the auth state
+    setAuth(null);
+    // Redirect to the login page
+    navigate("/");
+
+
+    // axios
+    //   .post(serverhost + "authenticate/logOut", {}, { withCredentials: true })
+    //   .then((response) => {
+    //     console.log("RESPONSE LOG OUT: ", response);
+    //     navigate("/");
+    //   })
+    //   .catch((error) => {
+    //     console.error("ERROR AL LOGOUT", error);
+    //   });
   };
 
   return (

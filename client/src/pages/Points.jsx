@@ -40,8 +40,13 @@ const Points = () => {
 
   const onSubmitSearch = async (data) => {
     console.log(data);
+    const token = localStorage.getItem("access_token");
     await axios
-      .post(serverhost + "users/search", data)
+      .post(serverhost + "users/search", data,{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response) => {
         setDataUserFind(response.data);
         console.log(response.data);
@@ -53,8 +58,12 @@ const Points = () => {
   };
 
   const onSubmitPoints = async(data) => {
+    const token = localStorage.getItem("access_token");
     data.username = dataUserFind.username
-    console.log("onSubmitPoints", data);
+    console.log("onSubmitPoints", data,{        
+      headers: {
+      Authorization: `Bearer ${token}`,
+    },});
     await axios
     .post(serverhost + "users/cargaPuntos", data)
     .then((response) => {

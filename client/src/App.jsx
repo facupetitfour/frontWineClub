@@ -11,13 +11,14 @@ import Avaiable from "./pages/Avaiable";
 import SideBar from "./component/SideBar";
 import ProtectedRouteBodega from "./component/ProtectedRouteBodegas";
 import Points from "./pages/Points";
+import SideBarBodega from "./component/SideBarBodega";
 
 function App() {
   return (
     <Router>
       <Routes>
 
-        {/* Rutas separadas unas con sidebar y protegidas, otras no. */} 
+        {/* Rutas separadas unas con sidebar y protegidas, otras no. */}
         <Route path="/" element={<InicioSesion />} />
         <Route path="/register" element={<Register />} />
 
@@ -27,14 +28,17 @@ function App() {
             <Route path="/home" element={<Home />} />
             <Route path="/users" element={<Users />} />
             <Route path="/products" element={<Products />} />
-            <Route path="/coupons" element={<Coupons/>} />
-            <Route path="/avaiable" element={<Avaiable/>} />
+            <Route path="/coupons" element={<Coupons />} />
+            <Route path="/avaiable" element={<Avaiable />} />
           </Route>
         </Route>
 
         {/* Rutas protegidas Bodega*/}
-        <Route element={<ProtectedRouteBodega/>}>
-          <Route path="/points" element={<Points/>}/>
+        <Route element={<ProtectedRouteBodega />}>
+          <Route element={<SideBarBodega />}>
+            <Route path="/points" element={<Points />} />
+          </Route>
+
         </Route>
 
       </Routes>
