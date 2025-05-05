@@ -59,13 +59,17 @@ const Points = () => {
 
   const onSubmitPoints = async(data) => {
     const token = localStorage.getItem("access_token");
-    data.username = dataUserFind.username
+    data.id = dataUserFind._id;
     console.log("onSubmitPoints", data,{        
       headers: {
       Authorization: `Bearer ${token}`,
     },});
     await axios
-    .post(serverhost + "users/cargaPuntos", data)
+    .post(serverhost + "users/cargaPuntos", data,{
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
     .then((response) => {
       console.log(response.data);
       setDataUserFind(response.data.user);
@@ -165,12 +169,12 @@ const Points = () => {
                     </Grid>
                     <Grid item xs={12} sm={6}>
                       <Typography variant="body1">
-                        <strong>Nombre:</strong> {dataUserFind.name}
+                        <strong>Nombre:</strong> {dataUserFind.profile.name}
                       </Typography>
                     </Grid>
                     <Grid item xs={12} sm={6}>
                       <Typography variant="body1">
-                        <strong>Apellido:</strong> {dataUserFind.surname}
+                        <strong>Apellido:</strong> {dataUserFind.profile.surname}
                       </Typography>
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -180,7 +184,7 @@ const Points = () => {
                     </Grid>
                     <Grid item xs={12}>
                       <Typography variant="body1">
-                        <strong>Puntos:</strong> {dataUserFind.points}
+                        <strong>Puntos:</strong> {dataUserFind.profile.points}
                       </Typography>
                     </Grid>
                   </Grid>

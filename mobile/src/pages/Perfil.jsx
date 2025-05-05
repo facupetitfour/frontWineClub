@@ -37,6 +37,7 @@ const Perfil = () => {
           if (!response.data.profile) {
             navigate("/registerPerfil");
           }
+          console.log("PERFIL: ", response.data.profile);
           setPerfil(response.data);
         } catch (error) {
           console.log(error.message);
@@ -142,7 +143,7 @@ const Perfil = () => {
                   <ListItemAvatar>
                     <Avatar
                       sx={{
-                        backgroundColor: "#D90036",
+                        backgroundColor: coupon.action == "charge"? "#82e0aa":"#D90036",
                         width: 40,
                         height: 40,
                       }}
@@ -164,7 +165,7 @@ const Perfil = () => {
                         variant="body2"
                         sx={{ color: "#888", fontSize: 12 }}
                       >
-                        Canjeado el: {coupon.date}
+                        {coupon.action == "charge"? `Cargado el: ${coupon.date}`: `Canjeado el: ${coupon.date}`}
                       </Typography>
                     }
                     sx={{ marginRight: 2 }}

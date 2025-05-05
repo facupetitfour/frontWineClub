@@ -13,10 +13,12 @@ import Perfil from "./pages/Perfil";
 import NotFound from "./pages/NotFound";
 import PerfilRegister from "./pages/PerfilRegister";
 import ClaimView from "./pages/claimView";
+import ScrollToTop from "./pages/component/ScrollToTop";
 
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<InicioSesion />} />
         <Route path="/register" element={<Register />} />
