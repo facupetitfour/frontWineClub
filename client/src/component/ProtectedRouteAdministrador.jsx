@@ -7,7 +7,7 @@ const ProtectedRouteAdministrador = () => {
   if (token) {
     const decodeToken = jwtDecode(token)
     return decodeToken.rol === "administrador" && token 
-    ?  <Outlet /> : decodeToken.rol === "bodega" ? <Navigate to= "/points"/> 
+    ?  <Outlet /> : decodeToken.rol === "bodega" ? <Navigate to= "/bodega/points"/> 
     : <Navigate to="/" />;
 
   }

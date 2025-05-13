@@ -30,9 +30,9 @@ const SideBarBodega = () => {
   const [isClosing, setIsClosing] = React.useState(false);
   const listDrawerItem = {
     home: {link: "/home", text: "Home",icon: <HomeIcon/>  },
-    chargepoints: {link: "/points", text: "Usuarios",icon: <UserIcon/>},
-    products: {link: "/products", text: "Productos",icon: <ProductsIcon/>},
-    coupons: {link: "/coupons", text: "Cupones",icon: <CuponesIcon/>},
+    chargepoints: {link: "/bodega/points", text: "Usuarios",icon: <UserIcon/>},
+    products: {link: "/bodega/products", text: "Productos",icon: <ProductsIcon/>},
+    coupons: {link: "/bodega/coupons", text: "Cupones",icon: <CuponesIcon/>},
   };
   const visibleFields = Object.keys(listDrawerItem);
   const navigate = useNavigate();

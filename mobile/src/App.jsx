@@ -14,6 +14,7 @@ import NotFound from "./pages/NotFound";
 import PerfilRegister from "./pages/PerfilRegister";
 import ClaimView from "./pages/claimView";
 import ScrollToTop from "./pages/component/ScrollToTop";
+import EditProfile from "./pages/EditProfile";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
           <Route path="/claimrender" element={<ClaimView/>}/>
           <Route path="/mycoupons" element={<MisCupones/>}/>
           <Route path="/perfil" element={<Perfil/>}/>
+          <Route path="/myperfil" element={<EditProfile/>}/>
           <Route path="*" element={<NotFound/>}/>
         </Route>
       </Routes>

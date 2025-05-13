@@ -12,6 +12,8 @@ import SideBar from "./component/SideBar";
 import ProtectedRouteBodega from "./component/ProtectedRouteBodegas";
 import Points from "./pages/Points";
 import SideBarBodega from "./component/SideBarBodega";
+import ProductsBodega from "./pages/ProductsBodega";
+import CouponsBodega from "./pages/CouponsBodega";
 
 function App() {
   return (
@@ -36,7 +38,11 @@ function App() {
         {/* Rutas protegidas Bodega*/}
         <Route element={<ProtectedRouteBodega />}>
           <Route element={<SideBarBodega />}>
-            <Route path="/points" element={<Points />} />
+            <Route path="/bodega/points" element={<Points/>} />
+            <Route path="/bodega/products" element={<ProductsBodega />} />
+            <Route path="/bodega/coupons" element={<CouponsBodega />} />
+            {/* <Route path="/bodega/points" element={<Points />} /> */}
+
           </Route>
 
         </Route>

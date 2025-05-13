@@ -59,13 +59,13 @@ const Users = () => {
   }, [navigate]);
   return (
     <>
-      <Box sx={{ bgcolor: "#D9E2DA", width: "fit-content", borderTopLeftRadius:"5px", borderTopRightRadius:"5px"}}>
+      <Box sx={{ display:"flex", bgcolor: "#D9E2DA", width: "fit-content", borderTopLeftRadius:"5px", borderTopRightRadius:"5px", justifyContent:"end", marginBottom:-6}}>
         <Tabs
           value={value}
           onChange={handleChange}
         >
-          <Tab value="cliente" label="Clientes" sx={{"&.Mui-selected": { bgcolor: "#B5CDB9"}}}/>
-          <Tab value="bodega" label="Bodegas" sx={{"&.Mui-selected": { bgcolor: "#B5CDB9",}}}/>
+          <Tab value="cliente" label="Clientes" sx={{bgcolor:"#D9E2DA","&.Mui-selected": { bgcolor: "#B5CDB9"},}}/>
+          <Tab value="bodega" label="Bodegas" sx={{bgcolor:"#D9E2DA","&.Mui-selected": { bgcolor: "#B5CDB9",}}}/>
         </Tabs>
       </Box>
 

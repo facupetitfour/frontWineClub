@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 const MisCupones = () => {
   const navigate = useNavigate();
-  const [perfil, setPerfil] = useState([]);
+  const [profile, setProfile] = useState([]);
   const [tab, setTab] = useState(1);
 
   useEffect(() => {
@@ -25,7 +25,7 @@ const MisCupones = () => {
             })
             .then((response) => {
               console.log(response.data);
-              setPerfil(response.data.profile);
+              setProfile(response.data.profile);
             });
         } catch (error) {
           console.log(error.message);
@@ -63,12 +63,13 @@ const MisCupones = () => {
           }}
         >
           {tab === 1 &&
-            (perfil?.points_history?.some((data) => data.type === "coupon") ? (
-              perfil.points_history?.map(
+            (profile?.points_history?.some((data) => data.type === "coupon") ? (
+              profile.points_history?.map(
                 (data, index) =>
                   data.type === "coupon" && (
                     <Grid
                       key={index}
+                      sx={{ minWidth: "100%" }}
                       onClick={() =>
                         navigate(`/claimrender`, { state: { data: data } })
                       }
@@ -91,14 +92,14 @@ const MisCupones = () => {
             ))}
 
           {tab === 2 &&
-            (perfil?.points_history?.some((data) => data.type === "product") ? (
-              perfil.points_history?.map(
+            (profile?.points_history?.some((data) => data.type === "product") ? (
+              profile.points_history?.map(
                 (data, index) =>
                   data.type === "product" && (
                     <Grid
                       key={index}
                       onClick={() =>
-                        navigate(`/claimrender`, { state: { data: data } })
+                        navigate(`/claimrender`, { state: { data: data, profile: profile } })
                       }
                     >
                       <CouponCard

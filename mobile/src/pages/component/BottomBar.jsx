@@ -52,6 +52,7 @@ const BottomBar = () => {
     { title: "Favoritos", route: "/favorite", icon: <FavoriteBorderIcon /> },
     { title: "Mis Canjes", route: "/mycoupons", icon: <LocalOfferIcon /> },
     { title: "Bodegas", route: "/allbodegas", icon: <WineBarIcon /> },
+    { title: "Mi Perfil", route: "/myperfil", icon: <PersonIcon /> },
     { title: "Soporte", route: "/support", icon: <SupportAgentIcon /> },
   ]
 

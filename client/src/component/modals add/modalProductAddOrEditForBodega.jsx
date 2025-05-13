@@ -12,28 +12,49 @@ import {
   Select,
   CardActions,
 } from "@mui/material";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { Grid } from "@mui/material";
 import { useState, useEffect } from "react";
 import AddIcon from "@mui/icons-material/Add";
+import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+// import jwtDecode from "jwt-decode";
+// import axios from "axios";
+
+const serverhost = "http://localhost:3000/";
 
 const ModalProductAddOrEdit = ({
   state,
+  setState,
+  setSelectedProduct,
   createItem,
   updateItem,
   product,
   dataUsers,
   dataCategories,
 }) => {
-  const [open, setOpen] = useState(state);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleOpen = () => setState(true);
+  const handleClose = () => {
+    setState(false)
+    setSelectedProduct(null)
+    reset({
+      name: "",
+      description: "",
+      points_required: 0,
+      stock: 0,
+      available: true,
+      categoria_id: "",
+    })
+  };
+  const token = localStorage.getItem("access_token");
+  const { sub } = jwtDecode(token)
 
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
-    setValue, // Para cargar valores iniciales en el formulario
+    reset // Para cargar valores iniciales en el formulario
   } = useForm({
     defaultValues: {
       name: "",
@@ -42,33 +63,32 @@ const ModalProductAddOrEdit = ({
       stock: 0,
       available: true,
       categoria_id: "",
-      user_id: "",
     },
   });
 
   useEffect(() => {
     if (product) {
       // Cargar datos de producto en el formulario si se proporciona un producto
-      setValue("name", product.name);
-      setValue("description", product.description);
-      setValue("points_required", product.points_required);
-      setValue("stock", product.stock);
-      setValue("available", product.available);
-      setValue("categoria_id", product.categoria_id);
-      setValue("user_id", product.user_id);
+      reset({
+        name: product.name,
+        description: product.description,
+        points_required: product.points_required,
+        stock: product.stock,
+        available: product.available,
+        categoria_id: product.categoria_id,
+      })
     }
-  }, [product, setValue, state]);
+  }, [product, state]);
 
   const onSubmit = (data) => {
     const selectedCategory = dataCategories.find(
       (category) => category._id === data.categoria_id
     );
-    const selectedUser = dataUsers.find((user) => user._id === data.user_id);
 
     const productData = {
       ...data,
       categoria_name: selectedCategory ? selectedCategory.name : "",
-      user_id: selectedUser ? selectedUser._id : "",
+      user_id: sub,
     };
 
     if (product) {
@@ -92,8 +112,9 @@ const ModalProductAddOrEdit = ({
       </Fab>
 
       <Modal
-        open={open}
-        onClose={handleClose}
+        open={state}
+        // onClose={handleClose}
+        disableEnforceFocus
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
       >
@@ -160,17 +181,24 @@ const ModalProductAddOrEdit = ({
               <Grid item md={6} sm={12}>
                 <FormControl fullWidth>
                   <InputLabel id="available-label">Disponible</InputLabel>
-                  <Select
-                    labelId="available-label"
-                    label="Disponible"
-                    defaultValue={product ? product.available : true}
-                    inputRef={register("available", { required: true })}
-                  >
-                    <MenuItem value={true}>Sí</MenuItem>
-                    <MenuItem value={false}>No</MenuItem>
-                  </Select>
+                  <Controller
+                    name="available"
+                    control={control}
+                    defaultValue={true}
+                    render={({ field }) => (
+                      <Select
+                        labelId="available-label"
+                        label="Disponible"
+                        {...field}
+                      >
+                        <MenuItem value={true}>Sí</MenuItem>
+                        <MenuItem value={false}>No</MenuItem>
+                      </Select>
+                    )}
+                  />
                 </FormControl>
               </Grid>
+
               <Grid item md={6} sm={12}>
                 <FormControl fullWidth>
                   <InputLabel id="category-label">Categoría</InputLabel>
@@ -194,7 +222,7 @@ const ModalProductAddOrEdit = ({
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item md={12} sm={12}>
+              {/* <Grid item md={12} sm={12}>
                 <FormControl fullWidth>
                   <InputLabel id="user-label">Bodega</InputLabel>
                   <Select
@@ -216,7 +244,7 @@ const ModalProductAddOrEdit = ({
                     )}
                   </Select>
                 </FormControl>
-              </Grid>
+              </Grid> */}
             </Grid>
 
             <CardActions sx={{ justifyContent: "flex-end" }}>
