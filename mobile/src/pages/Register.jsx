@@ -24,10 +24,18 @@ const Register = () => {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post(BACK_URL + "users", data);
+      const response = await axios.post(BACK_URL + "authenticate/register", data);
       console.log("RESPONSE DATA: ", response);
-      navigate("/");
+      navigate("/verify-email");
     } catch (error) {
+      if (error.response.status === 403) {
+        navigate("/verify-email",{  
+          state: {
+            userId: error.response.data.userId,
+            email: error.response.data.email,
+          },
+        });
+      }
       console.error("RESPONSE ERROR: ", error.response?.data?.message);
       setMessageError(error.response?.data?.message || "Error inesperado");
     }

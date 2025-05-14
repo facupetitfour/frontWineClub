@@ -15,6 +15,7 @@ import PerfilRegister from "./pages/PerfilRegister";
 import ClaimView from "./pages/claimView";
 import ScrollToTop from "./pages/component/ScrollToTop";
 import EditProfile from "./pages/EditProfile";
+import VerifyEmail from "./pages/VerifyEmail";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/" element={<InicioSesion />} />
         <Route path="/register" element={<Register />} />
         <Route path="/registerPerfil" element={<PerfilRegister/>}/>
+        <Route path="/verify-email" element={<VerifyEmail />} />
         <Route element={<PlantillaMobile />}>
           <Route path="/home" element={<Home />} />
           <Route path="/bodega" element={<Bodega />} />
