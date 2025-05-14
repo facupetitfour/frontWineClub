@@ -35,7 +35,7 @@ const ProductsBodega = () => {
   const createItem = (data) => {
     const token = localStorage.getItem("access_token");
     axios
-      .post(`${serverhost}products`, data, {
+      .post(`${serverhost}api-rest/createProduct`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -93,14 +93,15 @@ const ProductsBodega = () => {
 
   useEffect(() => {
       const token = localStorage.getItem("access_token");
-      const decodeToken = jwtDecode(token)
+      const {sub} = jwtDecode(token)
       const getData = async () => {
         try {
-          const response = await axios.get(serverhost + `users/${decodeToken.sub}/userProfile`, {
+          const response = await axios.get(serverhost + `users/${sub}/userProfile`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
+        console.log("response", response) 
         setProductsData(response.data.products);
       } catch (error) {
         console.error("Error al obtener productos:", error);

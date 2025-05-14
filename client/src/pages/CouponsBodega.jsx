@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import DynamicTable from "../component/DynamicTable";
 import HeaderDynamicTable from "../component/HeaderDynamicTable";
 import axios from "axios";
-import ModalCouponAddOrEdit from "../component/modals add/modalCouponAddOrEdit";
 import { jwtDecode } from "jwt-decode";
+import ModalCouponAddOrEditForBodega from "../component/modals add/modalCouponAddOrEditForBodega";
 
 const serverhost = "http://localhost:3000/";
 
@@ -16,7 +16,7 @@ const CouponsBodega = () => {
   const [actualizador, setActualizador] = useState(0);
   const [dataUsers, setDataUsers] = useState(null);
   const [dataCategories, setDataCategories] = useState(null);
-  const [selectedCoupon, setSelectedCoupon] = useState(null); // Para el producto seleccionado
+  const [selectedCoupon, setSelectedCoupon] = useState(null); // Para el cupon seleccionado
   const [openModal, setOpenModal] = useState(false); // Para el control del modal
 
   const modelSchemaCoupons = {
@@ -36,67 +36,69 @@ const CouponsBodega = () => {
   };
 
   const createItem = (data) => {
-    console.log(data);
+    const token = localStorage.getItem("access_token");
     axios
-      .post(serverhost + "coupon", data,{
-        headers: {
-        Authorization: `Bearer ${token}`,
-      }})
-      .then((response) => {
-        console.log("Cupon creado con éxito: ", response.data);
-        actualizarComponente();
-      })
-      .catch((error) => {
-        console.error("Error al crear el cupon: ", error.response.data.message);
-      });
-  };
-  const updateItem = (id,data) => {
-    console.log(data)
-    setSelectedCoupon(data)
-    setOpenModal(true)
-    console.log(openModal)
-    // axios
-    //   .put(serverhost + `coupons/${id}`, data,{
-    //     headers: {
-    //       Authorization: `Bearer ${token}`,
-    //     },
-    //   })
-    //   .then((response) => {
-    //     console.log("Cupon actualizado con éxito: ", response.data);
-    //   })
-    //   .catch((error) => {
-    //     console.error(
-    //       "Error al actualizar el cupon: ",
-    //       error.response.data.message
-    //     );
-    //   });
-  };
-  const deleteItem = (id) => {
-    axios
-      .delete(serverhost + `coupons/${id}`,{
+      .post(`${serverhost}api-rest/createCoupon`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
       .then((response) => {
-        console.log("Cupon eliminado con éxito: ", response.data);
+        console.log("Cupon creado con éxito:", response.data);
         actualizarComponente();
       })
       .catch((error) => {
-        console.error(
-          "Error al eliminar el cupon: ",
-          error.response.data.message
-        );
+        console.error("Error al crear el cupon:", error.response.data.message);
       });
+  };
+  const updateItem = (id, data) => {
+    const token = localStorage.getItem("access_token");
+    axios
+      .put(`${serverhost}coupon/${id}`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        console.log("Cupon actualizado con éxito:", response.data);
+        actualizarComponente();
+      })
+      .catch((error) => {
+        console.error("Error al actualizar el cupon:", error.response.data.message);
+      });
+  };
+
+  const deleteItem = (id) => {
+    const token = localStorage.getItem("access_token");
+    axios
+      .delete(`${serverhost}coupon/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        console.log("Cupon eliminado con éxito:", response.data);
+        actualizarComponente();
+      })
+      .catch((error) => {
+        console.error("Error al eliminar el cupon:", error.response.data.message);
+      });
+  };
+
+  const handleEdit = (id,coupon) => {
+    console.log("Cupon a editar:", id, coupon);
+    setSelectedCoupon(coupon); // Establece el cupon seleccionado
+    console.log("Cupon seleccionado:", selectedCoupon);
+    setOpenModal(true); // Abre el modal para editar
   };
 
   useEffect(() => {
     const token = localStorage.getItem("access_token");
-    const decodeToken = jwtDecode(token)
-    console.log(decodeToken)
+    const {sub} = jwtDecode(token)
+
     const getData = async () => {
       try {
-        const response = await axios.get(serverhost + `users/${decodeToken.sub}/userProfile`, {
+        const response = await axios.get(serverhost + `users/${sub}/userProfile`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -107,6 +109,17 @@ const CouponsBodega = () => {
         console.error("Error al obtener data", error);
         // navigate("/");
       }
+      try {
+        const categoriesResponse = await axios.get(`${serverhost}categories`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setDataCategories(categoriesResponse.data);
+      } catch (error) {
+        console.error("Error al obtener categorías:", error);
+        return;
+      }
     };
     getData();
   }, [navigate, actualizador]);
@@ -116,15 +129,16 @@ const CouponsBodega = () => {
       {/* Botón flotante */}
       {couponsData && couponsData.length > 0 && modelSchemaCoupons ? ( //
         <>
-          {dataUsers && dataCategories && (
-            <ModalCouponAddOrEdit
+          {(
+            <ModalCouponAddOrEditForBodega
               state={openModal}
               setState={setOpenModal}
+              setSelectedCoupon={setSelectedCoupon} 
               createItem={createItem}
-              updateItem={(couponsData) => updateItem(selectedCoupon._id, couponsData)}
+              updateItem={(data) => updateItem(selectedCoupon._id, data)}
               dataUsers={dataUsers}
               dataCategories={dataCategories}
-              currentItem={selectedCoupon}
+              coupon={selectedCoupon}
               onClose={() => setOpenModal(false)}
             />
           )}
@@ -132,7 +146,7 @@ const CouponsBodega = () => {
             bodyData={couponsData}
             model={modelSchemaCoupons}
             deleteFunction={deleteItem}
-            updateItemFunction={updateItem}
+            updateItemFunction={handleEdit}
           />
         </>
       ) : (
