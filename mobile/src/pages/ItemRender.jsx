@@ -44,7 +44,7 @@ const ItemRender = () => {
               }
             )
             .then((response) => {
-              console.log(response.data);
+              // console.log(response.data);
             });
         }
         if(item.type === "product"){
@@ -62,20 +62,20 @@ const ItemRender = () => {
               }
             )
             .then((response) => {
-              console.log(response.data);
+              // console.log(response.data);
             });
         }
       } catch (error) {
-        console.log(error.response.data);
+        // console.log(error.response.data);
         setMssageError(error.response.data.message);
       }
     } else {
-      console.log(`NO HAY URL: ${BACK_URL}`);
+      // console.log(`NO HAY URL: ${BACK_URL}`);
     }
   };
 
   const canjearFunction = (item) => {
-    console.log("canjeado: ", item);
+    // console.log("canjeado: ", item);
     claimfunction(item);
   };
 

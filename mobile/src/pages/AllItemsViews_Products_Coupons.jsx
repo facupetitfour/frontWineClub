@@ -39,7 +39,7 @@ function AllItemsViews_Products_Coupons({ nameRendering, urlRender }) {
           });
           setFetchedData(response.data);
         } catch (error) {
-          console.error("Error fetching data:", error.message);
+          // console.error("Error fetching data:", error.message);
         } finally {
           setLoading(false);
         }

@@ -30,12 +30,12 @@ function AllBodegas() {
           });
           setFetchedData(response.data);
         } catch (error) {
-          console.error("Error fetching data:", error.message);
+          // console.error("Error fetching data:", error.message);
         } finally {
           setLoading(false);
         }
       } else {
-        console.log("Missing URL or BACK_URL:", BACK_URL);
+        // console.log("Missing URL or BACK_URL:", BACK_URL);
         setLoading(false);
       }
     };

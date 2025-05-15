@@ -45,10 +45,10 @@ const PerfilRegister = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log("RESPONSE DATA: ", response);
+      // console.log("RESPONSE DATA: ", response);
       navigate("/home");
     } catch (error) {
-      console.error("RESPONSE ERROR: ", error.response?.data?.message);
+      // console.error("RESPONSE ERROR: ", error.response?.data?.message);
       setMessageError(error.response?.data?.message || "Error inesperado");
     }
   };

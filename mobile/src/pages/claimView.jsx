@@ -39,7 +39,7 @@ const ClaimView = () => {
       date: new Date(),
       description: data.description,
     };
-    console.log(comment)
+    // console.log(comment)
     setComments(comment);
     console.log("FLAG DATA SEND", {
       id: sub,
@@ -68,7 +68,7 @@ const ClaimView = () => {
     }).then(() => reset()).catch((err) => console.error("Error al enviar comentario", err));
   };
   useEffect(() => {
-    console.log("Comment updated:", comment);
+    // console.log("Comment updated:", comment);
   }, [comment]);
   return (
     <>

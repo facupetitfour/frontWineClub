@@ -37,7 +37,7 @@ const Perfil = () => {
           if (!response.data.profile) {
             navigate("/registerPerfil");
           }
-          console.log("PERFIL: ", response.data.profile);
+          // console.log("PERFIL: ", response.data.profile);
           setPerfil(response.data);
         } catch (error) {
           console.log(error.message);
@@ -45,7 +45,7 @@ const Perfil = () => {
           setLoading(false);
         }
       } else {
-        console.log(`NO HAY URL: ${BACK_URL}`);
+        // console.log(`NO HAY URL: ${BACK_URL}`);
         setLoading(false);
       }
     };

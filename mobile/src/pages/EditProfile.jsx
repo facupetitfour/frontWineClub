@@ -26,7 +26,7 @@ const EditProfile = () => {
         const decoded = token ? jwtDecode(token) : {};
         userId = decoded.sub;
     } catch (err) {
-        console.error("Invalid token", err);
+        // console.error("Invalid token", err);
     }
 
     const navigate = useNavigate();
@@ -79,7 +79,7 @@ const EditProfile = () => {
 
                 });
             } catch (error) {
-                console.error("Error fetching user data:", error);
+                // console.error("Error fetching user data:", error);
                 setMessageError(
                     error.response?.data?.message || "No se pudo cargar el perfil"
                 );

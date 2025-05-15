@@ -24,14 +24,14 @@ const MisCupones = () => {
               },
             })
             .then((response) => {
-              console.log(response.data);
+              // console.log(response.data);
               setProfile(response.data.profile);
             });
         } catch (error) {
-          console.log(error.message);
+          // console.log(error.message);
         }
       } else {
-        console.log(`NO HAY URL: ${BACK_URL}`);
+        // console.log(`NO HAY URL: ${BACK_URL}`);
       }
     };
     getData();

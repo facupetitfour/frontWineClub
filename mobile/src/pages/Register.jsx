@@ -26,7 +26,7 @@ const Register = () => {
   const onSubmit = async (data) => {
     try {
       const response = await axios.post(BACK_URL + "authenticate/register", data);
-      console.log("RESPONSE DATA: ", response);
+      // console.log("RESPONSE DATA: ", response);
       navigate("/verify-email");
     } catch (error) {
       if (error.response.status === 403) {
@@ -37,7 +37,7 @@ const Register = () => {
           },
         });
       }
-      console.error("RESPONSE ERROR: ", error.response?.data?.message);
+      // console.error("RESPONSE ERROR: ", error.response?.data?.message);
       setMessageError(error.response?.data?.message || "Error inesperado");
     }
   };

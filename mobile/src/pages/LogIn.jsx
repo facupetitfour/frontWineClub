@@ -38,7 +38,7 @@ const InicioSesion = () => {
       localStorage.setItem("access_token", response.data.userdata.access_token);
       navigate("/home");
     } catch (error) {
-      console.log("RESPONSE ERRR: ", error);
+      // console.log("RESPONSE ERRR: ", error);
       if (error.response.status === 403) {
         navigate("/verify-email",{
           state: {
@@ -47,7 +47,7 @@ const InicioSesion = () => {
           },
         })
       }
-      console.log("RESPONSE ERRR: ", error.response.data.message);
+      // console.log("RESPONSE ERRR: ", error.response.data.message);
       setMssageError(error.response.data.message);
     } finally {
       setLoading(false);
