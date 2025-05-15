@@ -48,7 +48,7 @@ export default defineConfig({
         short_name: 'WineClub',
         description: 'Wine Club PWA App',
         background_color: "#ffffff",
-        theme_color: '#ffffff',
+        theme_color: '#B90036',
         icons: [
           {
             src: "icons/icon-192x192.png",

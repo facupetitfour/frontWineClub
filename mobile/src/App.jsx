@@ -16,11 +16,13 @@ import ClaimView from "./pages/claimView";
 import ScrollToTop from "./pages/component/ScrollToTop";
 import EditProfile from "./pages/EditProfile";
 import VerifyEmail from "./pages/VerifyEmail";
+import InstallPWAButton from "./pages/component/InstallPWAButton";
 
 function App() {
   return (
     <Router>
       <ScrollToTop />
+      <InstallPWAButton/>
       <Routes>
         <Route path="/" element={<InicioSesion />} />
         <Route path="/register" element={<Register />} />

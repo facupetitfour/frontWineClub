@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const BACK_URL = import.meta.env.VITE_BACK_URL;
 
@@ -53,6 +53,13 @@ const InicioSesion = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+    if (token) {
+      navigate("/home");
+    }
+  },[])
 
   return (
     <>

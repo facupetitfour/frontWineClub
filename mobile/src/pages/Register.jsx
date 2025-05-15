@@ -20,6 +20,7 @@ const Register = () => {
     register,
     handleSubmit,
     formState: { errors },
+    setValue
   } = useForm();
 
   const onSubmit = async (data) => {
@@ -92,7 +93,7 @@ const Register = () => {
 
                 <TextField
                   fullWidth
-                  label="Username"
+                  label="Usuario"
                   {...register("username", {
                     required: "El username es requerido",
                     maxLength: {
@@ -103,6 +104,14 @@ const Register = () => {
                       value: 6,
                       message: "Mínimo 6 caracteres",
                     },
+                    pattern: {
+                      value: /^[^\s]+$/,
+                      message: "No se permiten espacios",
+                    },
+                    onBlur: (e) => {
+                      const trimmed = e.target.value.trim();
+                      setValue("username", trimmed, { shouldValidate: true });
+                    }
                   })}
                   error={!!errors.username}
                   helperText={errors.username?.message}
@@ -118,6 +127,10 @@ const Register = () => {
                       value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/i,
                       message: "Debe ser un email válido",
                     },
+                    onBlur: (e) => {
+                      const trimmed = e.target.value.trim();
+                      setValue("email", trimmed, { shouldValidate: true });
+                    }
                   })}
                   error={!!errors.email}
                   helperText={errors.email?.message}
