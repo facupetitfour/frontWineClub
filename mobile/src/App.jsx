@@ -26,7 +26,6 @@ function App() {
       <Routes>
         <Route path="/" element={<InicioSesion />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/registerPerfil" element={<PerfilRegister/>}/>
         <Route path="/verify-email" element={<VerifyEmail />} />
         <Route element={<PlantillaMobile />}>
           <Route path="/home" element={<Home />} />
@@ -40,6 +39,7 @@ function App() {
           <Route path="/mycoupons" element={<MisCupones/>}/>
           <Route path="/perfil" element={<Perfil/>}/>
           <Route path="/myperfil" element={<EditProfile/>}/>
+          <Route path="/registerPerfil" element={<PerfilRegister/>}/>
           <Route path="*" element={<NotFound/>}/>
         </Route>
       </Routes>

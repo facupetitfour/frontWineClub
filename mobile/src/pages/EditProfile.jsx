@@ -177,11 +177,10 @@ const EditProfile = () => {
                     </Grid>
 
                     {[
-                        { name: "city", label: "Ciudad" },
-                        { name: "postal_code", label: "Código Postal" },
                         { name: "country", label: "País" },
-                        { name: "neighborhood", label: "Barrio" },
                         { name: "province", label: "Provincia" },
+                        { name: "postal_code", label: "Código Postal" },
+
                     ].map((field) => (
                         <Grid item xs={12} key={field.name}>
                             <TextField
@@ -195,6 +194,20 @@ const EditProfile = () => {
                             />
                         </Grid>
                     ))}
+                    
+                    {[
+                        { name: "city", label: "Ciudad" },
+                        { name: "neighborhood", label: "Barrio" },
+
+                    ].map((field) => (
+                        <Grid item xs={12} key={field.name}>
+                            <TextField
+                                fullWidth
+                                label={field.label}
+                                {...register(field.name)}
+                            />
+                        </Grid>
+                    ))}
 
                     <Grid item xs={12}>
                         <TextField
@@ -202,11 +215,7 @@ const EditProfile = () => {
                             multiline
                             rows={4}
                             label="Descripción"
-                            {...register("description", {
-                                required: "La descripción es requerida",
-                            })}
-                            error={!!errors.description}
-                            helperText={errors.description?.message}
+                            {...register("description")}
                         />
                     </Grid>
 

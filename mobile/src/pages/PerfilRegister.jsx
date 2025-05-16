@@ -6,6 +6,7 @@ import {
   Alert,
   Grid,
   TextField,
+  Typography,
 } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -17,12 +18,13 @@ const BACK_URL = import.meta.env.VITE_BACK_URL;
 const PerfilRegister = () => {
   const [messageError, setMessageError] = useState();
   const token = localStorage.getItem("access_token");
+
   const { sub } = jwtDecode(token);
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm();
 
   const onSubmit = async (data) => {
@@ -40,15 +42,13 @@ const PerfilRegister = () => {
         },
       };
 
-        const response = await axios.post(BACK_URL + `users/${sub}/profile`, formattedData, {
+      const response = await axios.post(BACK_URL + `users/${sub}/profile`, formattedData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      // console.log("RESPONSE DATA: ", response);
       navigate("/home");
     } catch (error) {
-      // console.error("RESPONSE ERROR: ", error.response?.data?.message);
       setMessageError(error.response?.data?.message || "Error inesperado");
     }
   };
@@ -80,139 +80,103 @@ const PerfilRegister = () => {
         </Box>
       )}
 
-      <Grid container sx={{ minHeight: "100vh" }}>
-        <Grid
-          item
-          xs={12}
-          bgcolor={"white"}
-          zIndex={2}
-          // marginTop={"10%"}
-        >
-          {/* <Grid item xs={12} sx={{ display: "flex", justifyContent: "center" }}>
-            <img style={{ height: 250 }} src="/logotipo.png" />
-          </Grid> */}
-          <form className={{ width: "100%" }} onSubmit={handleSubmit(onSubmit)}>
-            <Grid
-              container
-              justifyContent={"center"}
-              width={"100%"}
-              padding={5}
-              rowSpacing={4}
-            >
-              <Grid item xs={12}>
-                <h1>Registro</h1>
+      <Box p={3} maxWidth={600} mx="auto">
+        <Typography variant="h4" align="center" gutterBottom>
+          Registrar Perfil
+        </Typography>
 
-                <TextField
-                  fullWidth
-                  label="Nombre"
-                  {...register("name", {
-                    required: "El nombre es requerido",
-                  })}
-                  error={!!errors.name}
-                  helperText={errors.name?.message}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Apellido"
-                  {...register("surname", {
-                    required: "El apellido es requerido",
-                  })}
-                  error={!!errors.surname}
-                  helperText={errors.surname?.message}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Ciudad"
-                  {...register("city", {
-                    required: "La ciudad es requerida",
-                  })}
-                  error={!!errors.city}
-                  helperText={errors.city?.message}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Código Postal"
-                  {...register("postal_code", {
-                    required: "El código postal es requerido",
-                  })}
-                  error={!!errors.postal_code}
-                  helperText={errors.postal_code?.message}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="País"
-                  {...register("country", {
-                    required: "El país es requerido",
-                  })}
-                  error={!!errors.country}
-                  helperText={errors.country?.message}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Barrio"
-                  {...register("neighborhood", {
-                    required: "El barrio es requerido",
-                  })}
-                  error={!!errors.neighborhood}
-                  helperText={errors.neighborhood?.message}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Provincia"
-                  {...register("province", {
-                    required: "La provincia es requerida",
-                  })}
-                  error={!!errors.province}
-                  helperText={errors.province?.message}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Descripción"
-                  {...register("description", {
-                    required: "La descripción es requerida",
-                  })}
-                  error={!!errors.description}
-                  helperText={errors.description?.message}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <CardActions
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    width: "100%",
-                  }}
-                >
-                  <Button
-                    size="medium"
-                    onClick={() => navigate("/")}
-                  >
-                    Volver
-                  </Button>
-                  <Button type="submit" size="medium" variant="contained">
-                    Registrarse
-                  </Button>
-                </CardActions>
-              </Grid>
+        {messageError && (
+          <Box mb={2} position="relative">
+            <Alert
+              variant="filled"
+              severity="error"
+              onClose={() => setMessageError(null)}
+            >
+              {messageError}
+            </Alert>
+          </Box>
+        )}
+
+        <form onSubmit={handleSubmit(onSubmit)} noValidate>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Nombre"
+                {...register("name", { required: "El nombre es requerido" })}
+                error={!!errors.name}
+                helperText={errors.name?.message}
+              />
             </Grid>
-          </form>
-        </Grid>
-      </Grid>
+
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Apellido"
+                {...register("surname", { required: "El apellido es requerido" })}
+                error={!!errors.surname}
+                helperText={errors.surname?.message}
+              />
+            </Grid>
+
+            {[
+              { name: "country", label: "País" },
+              { name: "province", label: "Provincia" },
+              { name: "postal_code", label: "Código Postal" },
+
+            ].map((field) => (
+              <Grid item xs={12} key={field.name}>
+                <TextField
+                  fullWidth
+                  label={field.label}
+                  {...register(field.name, {
+                    required: `${field.label} es requerido`,
+                  })}
+                  error={!!errors[field.name]}
+                  helperText={errors[field.name]?.message}
+                />
+              </Grid>
+            ))}
+
+            {[
+              { name: "city", label: "Ciudad" },
+              { name: "neighborhood", label: "Barrio" },
+
+            ].map((field) => (
+              <Grid item xs={12} key={field.name}>
+                <TextField
+                  fullWidth
+                  label={field.label}
+                  {...register(field.name)}
+                />
+              </Grid>
+            ))}
+
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                multiline
+                rows={4}
+                label="Descripción"
+                {...register("description")}
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <CardActions sx={{ justifyContent: "space-between" }}>
+                <Button onClick={() => navigate(-1)}>Volver</Button>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Guardando..." : "Guardar"}
+                </Button>
+              </CardActions>
+            </Grid>
+          </Grid>
+        </form>
+      </Box>
     </>
   );
 };

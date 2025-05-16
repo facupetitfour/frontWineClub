@@ -73,7 +73,7 @@ const BottomBar = () => {
       {/* Encabezado del Sidebar */}
       <Box
         sx={{
-          backgroundColor: "#4A154B",
+          backgroundColor: "#4E1F5A",
           color: "#FFF",
           padding: 2.5,
           textAlign: "center",
@@ -92,7 +92,7 @@ const BottomBar = () => {
             width: 56,
             height: 56,
             backgroundColor: "#FFFFFF",
-            color: "#4A154B",
+            color: "#4E1F5A",
           }}
         >
           <WineBarIcon sx={{ fontSize: 28 }} />

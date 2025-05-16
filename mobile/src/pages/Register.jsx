@@ -148,11 +148,9 @@ const Register = () => {
                       message: "Mínimo 8 caracteres",
                     },
                     pattern: {
-                      value:
-                        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-                      message:
-                        "Debe incluir mayúscula, número y carácter especial",
-                    },
+                      value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/,
+                      message: "Debe contener al menos una letra, un número y tener mínimo 8 caracteres.",
+                    }
                   })}
                   error={!!errors.password}
                   helperText={errors.password?.message}
