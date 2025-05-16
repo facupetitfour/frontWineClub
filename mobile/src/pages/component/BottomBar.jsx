@@ -21,6 +21,7 @@ import StorefrontIcon from "@mui/icons-material/Storefront"
 import SupportAgentIcon from "@mui/icons-material/SupportAgent"
 import WineBarIcon from "@mui/icons-material/WineBar"
 import ExitToAppIcon from "@mui/icons-material/ExitToApp"
+import { jwtDecode } from "jwt-decode";
 
 const BottomBar = () => {
   const [selectedTab, setSelectedTab] = useState("home")
@@ -28,6 +29,8 @@ const BottomBar = () => {
   const navigate = useNavigate()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
+  const token = localStorage.getItem("access_token")
+  const {name, surname} = jwtDecode(token)
 
   const handleTabClick = (tab, route) => {
     setSelectedTab(tab)
@@ -95,7 +98,7 @@ const BottomBar = () => {
           <WineBarIcon sx={{ fontSize: 28 }} />
         </Avatar>
         <Typography variant="h6" sx={{ fontWeight: 500 }}>
-          Facundo Petitfour
+          {name && surname ? `${name} ${surname}` : ""}
         </Typography>
       </Box>
 
