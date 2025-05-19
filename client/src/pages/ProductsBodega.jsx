@@ -6,7 +6,7 @@ import axios from "axios";
 import ModalProductAddOrEditForBodega from "../component/modals add/modalProductAddOrEditForBodega";
 import { jwtDecode } from "jwt-decode";
 
-const serverhost = "http://localhost:3000/";
+const serverhost = import.meta.env.VITE_BACK_URL;
 
 const ProductsBodega = () => {
   const navigate = useNavigate();

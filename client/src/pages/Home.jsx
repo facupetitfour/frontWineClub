@@ -1,5 +1,4 @@
 const Home = () => {
-  console.log('SE RENDERIA HOME')
   return (
     <>
     </>

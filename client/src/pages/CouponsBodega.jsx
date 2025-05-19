@@ -6,7 +6,7 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import ModalCouponAddOrEditForBodega from "../component/modals add/modalCouponAddOrEditForBodega";
 
-const serverhost = "http://localhost:3000/";
+const serverhost = import.meta.env.VITE_BACK_URL;
 
 const CouponsBodega = () => {
   const token = localStorage.getItem("access_token");

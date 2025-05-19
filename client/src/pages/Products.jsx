@@ -5,7 +5,7 @@ import HeaderDynamicTable from "../component/HeaderDynamicTable";
 import axios from "axios";
 import ModalProductAddOrEdit from "../component/modals add/modalProductAddOrEdit";
 
-const serverhost = "http://localhost:3000/";
+const serverhost = import.meta.env.VITE_BACK_URL;
 
 const Products = () => {
   const navigate = useNavigate();

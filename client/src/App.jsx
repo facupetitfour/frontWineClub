@@ -14,6 +14,7 @@ import Points from "./pages/Points";
 import SideBarBodega from "./component/SideBarBodega";
 import ProductsBodega from "./pages/ProductsBodega";
 import CouponsBodega from "./pages/CouponsBodega";
+import VerifyEmail from "./pages/VerifyEmail";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         {/* Rutas separadas unas con sidebar y protegidas, otras no. */}
         <Route path="/" element={<InicioSesion />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/verify-email" element={<VerifyEmail />} />
 
         Rutas protegidas y sidebar  administrador
         <Route element={<ProtectedRouteAdministrador />}>

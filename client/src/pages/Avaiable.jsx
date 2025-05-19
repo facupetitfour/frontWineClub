@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import DynamicTable from "../component/DynamicTable";
 import HeaderDynamicTable from "../component/HeaderDynamicTable";
 import axios from "axios";
-const serverhost = "http://localhost:3000/";
+
+const serverhost = import.meta.env.VITE_BACK_URL;
 
 const Avaiable = () => {
   const navigate = useNavigate();

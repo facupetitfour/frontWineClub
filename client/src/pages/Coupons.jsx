@@ -5,7 +5,7 @@ import HeaderDynamicTable from "../component/HeaderDynamicTable";
 import axios from "axios";
 import ModalCouponAddOrEdit from "../component/modals add/modalCouponAddOrEdit";
 
-const serverhost = "http://localhost:3000/";
+const serverhost = import.meta.env.VITE_BACK_URL;
 
 const Coupons = () => {
   const token = localStorage.getItem("access_token");
@@ -22,8 +22,8 @@ const Coupons = () => {
     _id: { type: "string", header: "ID" },
     name: { type: "string", header: "Nombre" },
     description: { type: "string", header: "Descripcion" },
-    points_required: { type: "boolean", header: "Costo puntos" },
-    stock: { type: "date", header: " Fecha alta" },
+    points_required: { type: "number", header: "Costo puntos" },
+    stock: { type: "number", header: " Stock" },
     createdAt: { type: "date", header: "Fecha Creacion" },
     img: { type: "img", header: "imagen" },
     avaiable: { type: "boolean", header: "disponible" },

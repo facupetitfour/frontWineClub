@@ -11,7 +11,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-const serverhost = "http://localhost:3000/";
+const serverhost = import.meta.env.VITE_BACK_URL;
 
 const InicioSesion = () => {
   const [messageError, setMssageError] = useState();
@@ -35,7 +35,15 @@ const InicioSesion = () => {
         navigate("/home");
       })
       .catch((error) => {
-        console.log("RESPONSE ERRR: ", error.response.data.message);
+        if (error.response.status === 403) {
+          navigate("/verify-email", {
+            state: {
+              userId: error.response.data.userId,
+              email: error.response.data.email,
+            },
+          })
+        }
+        // console.log("RESPONSE ERRR: ", error.response.data.message);
         setMssageError(error.response.data.message);
       });
   };

@@ -13,7 +13,7 @@ import {
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const serverhost = "http://localhost:3000/";
+const serverhost = import.meta.env.VITE_BACK_URL;
 
 const Register = () => {
   const navigate = useNavigate();

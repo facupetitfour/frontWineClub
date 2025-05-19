@@ -15,7 +15,7 @@ import axios from "axios";
 
 import SearchIcon from "@mui/icons-material/Search";
 
-const serverhost = "http://localhost:3000/";
+const serverhost = import.meta.env.VITE_BACK_URL;
 
 const drawerheight = 100;
 

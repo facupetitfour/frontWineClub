@@ -12,7 +12,7 @@ import Logout from "@mui/icons-material/Logout";
 import Tooltip from '@mui/material/Tooltip';
 import ListItemIcon from '@mui/material/ListItemIcon';
 
-const serverhost = "http://localhost:3000/";
+const serverhost = import.meta.env.VITE_BACK_URL;
 
 const MenuAccount = () => {
   const navigate = useNavigate();
