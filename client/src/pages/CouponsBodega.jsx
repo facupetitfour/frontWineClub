@@ -53,6 +53,9 @@ const CouponsBodega = () => {
   };
   const updateItem = (id, data) => {
     const token = localStorage.getItem("access_token");
+    data.forEach((valor, clave) => {
+      console.log(`${clave}: ${valor}`);
+    });
     axios
       .put(`${serverhost}coupon/${id}`, data, {
         headers: {

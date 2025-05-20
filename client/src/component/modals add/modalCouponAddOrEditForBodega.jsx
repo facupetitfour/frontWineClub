@@ -64,6 +64,7 @@ const ModalCouponAddOrEditForBodega = ({
 
   const [images, setImages] = useState([])
   const [previewImages, setPreviewImages] = useState([])
+  const [imagesEliminatedPublicId,setImagesEliminatedPublicId] = useState([])
 
 
   const {
@@ -103,6 +104,7 @@ const ModalCouponAddOrEditForBodega = ({
             url: img.url || img,
             isExisting: true,
             id: img._id || img.id || Math.random().toString(36).substring(7),
+            public_id: img.public_id
           })),
         )
       }
@@ -125,9 +127,12 @@ const ModalCouponAddOrEditForBodega = ({
 
   const handleRemoveImage = (id) => {
     // Filtrar la imagen eliminada de las vistas previas
-    const updatedPreviews = previewImages.filter((img) => img.id !== id)
-    setPreviewImages(updatedPreviews)
+    let imgdeletdIdpublic_id = previewImages.find((img) => img.id === id).public_id
+    setImagesEliminatedPublicId((prev) => [...prev, imgdeletdIdpublic_id])
 
+    const updatedPreviews = previewImages.filter((img) => img.id !== id)
+
+    setPreviewImages(updatedPreviews)
     // Si no es una imagen existente, también eliminarla del array de archivos
     const imageToRemove = previewImages.find((img) => img.id === id)
     if (!imageToRemove.isExisting) {
@@ -161,13 +166,15 @@ const ModalCouponAddOrEditForBodega = ({
     })
 
     // Añadir referencias a imágenes existentes que se mantienen
-    const existingImages = previewImages.filter((img) => img.isExisting).map((img) => img.url)
+    const existingImages = previewImages.filter((img) => img.isExisting).map((img) => {return {url: img.url, public_id: img.public_id}})
 
     formData.append("existingImages", JSON.stringify(existingImages))
+    formData.append("eliminateImages", JSON.stringify(imagesEliminatedPublicId))
+    
     if (coupon) {
-      updateItem({ formData, ...couponData }); // Si existe un cupon, actualizarlo
+      updateItem(formData); // Si existe un cupon, actualizarlo
     } else {
-      createItem(couponData); // Si no existe, crearlo
+      createItem(formData); // Si no existe, crearlo
     }
     setImages([])
     setPreviewImages([])

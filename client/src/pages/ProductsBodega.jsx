@@ -51,6 +51,9 @@ const ProductsBodega = () => {
 
   const updateItem = (id, data) => {
     const token = localStorage.getItem("access_token");
+    data.forEach((valor, clave) => {
+      console.log(`${clave}: ${valor}`);
+    });
     axios
       .put(`${serverhost}products/${id}`, data, {
         headers: {

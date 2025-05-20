@@ -66,7 +66,7 @@ const ModalProductAddOrEdit = ({
 
   const [images, setImages] = useState([])
   const [previewImages, setPreviewImages] = useState([])
-
+  const [imagesEliminatedPublicId,setImagesEliminatedPublicId] = useState([])
   const {
     register,
     handleSubmit,
@@ -81,7 +81,7 @@ const ModalProductAddOrEdit = ({
       stock: 0,
       available: true,
       categoria_id: "",
-      img:[]
+      img: []
     },
   })
 
@@ -104,6 +104,7 @@ const ModalProductAddOrEdit = ({
             url: img.url || img,
             isExisting: true,
             id: img._id || img.id || Math.random().toString(36).substring(7),
+            public_id: img.public_id
           })),
         )
       }
@@ -126,7 +127,11 @@ const ModalProductAddOrEdit = ({
 
   const handleRemoveImage = (id) => {
     // Filtrar la imagen eliminada de las vistas previas
+    let imgdeletdIdpublic_id = previewImages.find((img) => img.id === id).public_id
+    setImagesEliminatedPublicId((prev) => [...prev, imgdeletdIdpublic_id])
+
     const updatedPreviews = previewImages.filter((img) => img.id !== id)
+
     setPreviewImages(updatedPreviews)
 
     // Si no es una imagen existente, también eliminarla del array de archivos
@@ -143,7 +148,7 @@ const ModalProductAddOrEdit = ({
     const selectedCategory = dataCategories.find((category) => category._id === data.categoria_id)
     // Crear un FormData para enviar archivos
     const formData = new FormData()
-    
+
     // Añadir los datos del producto
     Object.keys(data).forEach((key) => {
       formData.append(key, data[key])
@@ -159,6 +164,12 @@ const ModalProductAddOrEdit = ({
       formData.append("img", image)
     })
 
+    // Añadir referencias a imágenes existentes que se mantienen
+    const existingImages = previewImages.filter((img) => img.isExisting).map((img) => {return {url: img.url, public_id: img.public_id}})
+
+    formData.append("existingImages", JSON.stringify(existingImages))
+    formData.append("eliminateImages", JSON.stringify(imagesEliminatedPublicId))
+    
     if (product) {
       updateItem(formData) // Si existe un producto, actualizarlo
       // console.log("Actualizar un producto", formData)
