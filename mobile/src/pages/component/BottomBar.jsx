@@ -62,7 +62,7 @@ const BottomBar = () => {
   const DrawerList = (
     <Box
       sx={{
-        width: isMobile ? 250 : 280,
+        width: isMobile ? 240 : 280,
         height: "100%",
         display: "flex",
         flexDirection: "column",
@@ -172,10 +172,10 @@ const BottomBar = () => {
         position="fixed"
         sx={{
           top: "auto",
-          bottom: 0,
+          bottom: -1,
           backgroundColor: "#FFFFFF",
           height: "64px",
-          width: "100%",
+          width: "100hw",
           boxShadow: "0px -1px 5px rgba(0, 0, 0, 0.1)",
         }}
       >

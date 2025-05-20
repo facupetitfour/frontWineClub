@@ -3,11 +3,11 @@ import { Card, CardContent, CardMedia, Typography, Box } from '@mui/material';
 function CouponCard({ img, name, description, points }) {
   return (
     <>
-    <Card sx={{ maxWidth: '100%', borderRadius: 2, boxShadow: 3 }}>
+    <Card sx={{ minWidth:'100%', maxWidth: '100%', borderRadius: 2, boxShadow: 3 }}>
       <CardMedia
         component="img"
         height="200"
-        image={img}
+        image={img.url? img.url : img}
         alt={name}
         sx={{ objectFit: 'cover', borderRadius: '8px 8px 0 0' }}
       />

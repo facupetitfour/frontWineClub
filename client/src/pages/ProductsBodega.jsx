@@ -22,7 +22,7 @@ const ProductsBodega = () => {
     name: { type: "string", header: "Nombre" },
     description: { type: "string", header: "Descripcion" },
     points_required: { type: "boolean", header: "Costo puntos" },
-    stock: { type: "date", header: "Fecha alta" },
+    stock: { type: "date", header: "Stock" },
     createdAt: { type: "date", header: "Fecha Creacion" },
     img: { type: "img", header: "Imagen" },
     available: { type: "boolean", header: "Disponible" },
@@ -51,7 +51,6 @@ const ProductsBodega = () => {
 
   const updateItem = (id, data) => {
     const token = localStorage.getItem("access_token");
-    console.log("Datos a actualizar:", id,data);
     axios
       .put(`${serverhost}products/${id}`, data, {
         headers: {
@@ -87,7 +86,6 @@ const ProductsBodega = () => {
   const handleEdit = (id,product) => {
     console.log("Producto a editar:", id, product);
     setSelectedProduct(product); // Establece el producto seleccionado
-    console.log("Producto seleccionado:", selectedProduct);
     setOpenModal(true); // Abre el modal para editar
   };
 
@@ -101,7 +99,6 @@ const ProductsBodega = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log("response", response) 
         setProductsData(response.data.products);
       } catch (error) {
         console.error("Error al obtener productos:", error);

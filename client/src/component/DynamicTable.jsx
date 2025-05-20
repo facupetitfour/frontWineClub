@@ -96,9 +96,9 @@ const PointsHistory = ({ history }) => {
 // Nuevo componente para formatear el perfil
 const ProfileDetails = ({ profile }) => {
   return (
-    <Box sx={{ py: 1}}>
+    <Box sx={{ py: 1 }}>
       {profile.name && profile.surname && (
-        <Typography variant="subtitle1" sx={{ display:"flex", fontWeight: "bold" }}>
+        <Typography variant="subtitle1" sx={{ display: "flex", fontWeight: "bold" }}>
           {profile.name} {profile.surname}
         </Typography>
       )}
@@ -113,7 +113,7 @@ const ProfileDetails = ({ profile }) => {
       )}
 
       {profile.address && (
-        <Box sx={{ display:"flex", mt: 0.5 }}>
+        <Box sx={{ display: "flex", mt: 0.5 }}>
           <Typography variant="body2">
             {profile.address.city && profile.address.country
               ? `${profile.address.city}, ${profile.address.country}`
@@ -262,33 +262,33 @@ const DynamicTable = (props) => { // prop a pasar en dinamic table; bodyData={da
   return (
     <>
       <StyledTableContainer component={Paper}>
-      <Box sx={{ display: "flex", justifyContent: "end", alignItems: "center", backgroundColor: "#414141"}}>
-      <TextField
-          size="small"
-          variant="filled"
-          label="Buscar"
-          type="search"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          InputProps={{
-            disableUnderline: true,
-          }}
-          sx={{
-            width: 250, backgroundColor:"#B5CDB9",
-            '& .MuiFilledInput-root': {
-              backgroundColor: 'transparent', // Elimina el fondo gris claro
-            },
-            '& .MuiFilledInput-root:hover': {
-              backgroundColor: 'transparent', // También lo quita al hacer hover
-            },
-            '& .MuiFilledInput-root.Mui-focused': {
-              backgroundColor: 'transparent', // También lo quita al hacer focus
-            },
-          }}
-        />
-      </Box>
-        <Table sx={{ minWidth: "100%"}}>
-        <StyledTableHead>
+        <Box sx={{ display: "flex", justifyContent: "end", alignItems: "center", backgroundColor: "#414141" }}>
+          <TextField
+            size="small"
+            variant="filled"
+            label="Buscar"
+            type="search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            InputProps={{
+              disableUnderline: true,
+            }}
+            sx={{
+              width: 250, backgroundColor: "#B5CDB9",
+              '& .MuiFilledInput-root': {
+                backgroundColor: 'transparent', // Elimina el fondo gris claro
+              },
+              '& .MuiFilledInput-root:hover': {
+                backgroundColor: 'transparent', // También lo quita al hacer hover
+              },
+              '& .MuiFilledInput-root.Mui-focused': {
+                backgroundColor: 'transparent', // También lo quita al hacer focus
+              },
+            }}
+          />
+        </Box>
+        <Table sx={{ minWidth: "100%" }}>
+          <StyledTableHead>
             <TableRow>
               {visibleFields.map((field) => (
                 <TableCell align="center" key={field} onClick={() => handleSort(field)} sx={{ cursor: "pointer" }}>
@@ -333,6 +333,16 @@ const DynamicTable = (props) => { // prop a pasar en dinamic table; bodyData={da
                           color={body[field] ? "success" : "default"}
                           size="small"
                         />
+                      ) : field === "img" ? (
+                        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                          {body[field]?.map((item, index) => (
+                            item ? (
+                              <a key={index} href={item.url} target="_blank" rel="noopener noreferrer">
+                                {"Imagen " + (index + 1)}
+                              </a>
+                            ) : null
+                          ))}
+                        </Box>
                       ) : body[field] === null ? (
                         "-"
                       ) : (

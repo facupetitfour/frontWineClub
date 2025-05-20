@@ -11,6 +11,7 @@ const PlantillaMobile = () => {
         sx={{
           display: "flex",
           justifyContent: "center",  // Alinea en el eje horizontal
+          flexDirection: "column",   // Cambia la dirección a columna
           alignItems: "center",       // Alinea en el eje vertical
           // minHeight: "calc(100vh)",
           minWidth: "100vw",

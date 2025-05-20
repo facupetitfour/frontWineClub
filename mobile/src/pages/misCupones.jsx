@@ -24,7 +24,7 @@ const MisCupones = () => {
               },
             })
             .then((response) => {
-              // console.log(response.data);
+              console.log(response.data);
               setProfile(response.data.profile);
             });
         } catch (error) {
@@ -57,6 +57,7 @@ const MisCupones = () => {
           sx={{
             display: "flex",
             flexDirection: "column",
+            minWidth: "100%",
             gap: 5,
             justifyContent: "center",
             alignItems: "center",
@@ -69,13 +70,13 @@ const MisCupones = () => {
                   data.type === "coupon" && (
                     <Grid
                       key={index}
-                      sx={{ minWidth: "100%" }}
+                      sx={{minWidth: "100%" }}
                       onClick={() =>
-                        navigate(`/claimrender`, { state: { data: data } })
+                        navigate(`/claimrender`, { state: { data: data, profile: profile } })
                       }
                     >
                       <CouponCard
-                        img={data.img || "/vinocarrusel.webp"}
+                        img={data?.img?.url ? data.img.url : "/vinocarrusel.webp"}
                         name={data.name}
                         description={data.description}
                         points={data.points}
@@ -98,12 +99,13 @@ const MisCupones = () => {
                   data.type === "product" && (
                     <Grid
                       key={index}
+                      sx={{ minWidth: "100%" }}
                       onClick={() =>
                         navigate(`/claimrender`, { state: { data: data, profile: profile } })
                       }
                     >
                       <CouponCard
-                        img={data.img || "/vinocarrusel.webp"}
+                        img={data?.img?.url ? data.img.url : "/vinocarrusel.webp"}
                         name={data.name}
                         description={data.description}
                         points={data.points}

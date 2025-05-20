@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 // Array de imagenBaseItemss con su imagen y nombre
 
 const ItemsViews = ({ nombre, icon, data }) => {
+  console.log("data", data);
   const navigate = useNavigate();
   return (
     <Box sx={{ padding: 0, position: "relative", width: "calc(100% - 20px)" }}>
@@ -85,7 +86,7 @@ const ItemsViews = ({ nombre, icon, data }) => {
               <CardMedia
                 component="img"
                 height="140"
-                image={item.img || "/imagenBaseItems.webp"}
+                image={item?.img?.length>0 ? item.img[0].url  : "/imagenBaseItems.webp"}
                 alt={item.name}
                 sx={{
                   position: "relative",

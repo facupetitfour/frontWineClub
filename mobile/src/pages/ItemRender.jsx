@@ -18,11 +18,13 @@ import axios from "axios";
 const BACK_URL = import.meta.env.VITE_BACK_URL;
 import { jwtDecode } from "jwt-decode";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const ItemRender = () => {
   const location = useLocation();
   const item = location.state?.data || {};
   const [messageError, setMssageError] = useState();
+  const navigate = useNavigate();
 
   const claimfunction = async (item) => {
     const token = localStorage.getItem("access_token");
@@ -44,10 +46,10 @@ const ItemRender = () => {
               }
             )
             .then((response) => {
-              // console.log(response.data);
+              navigate('/mycoupons')
             });
         }
-        if(item.type === "product"){
+        if (item.type === "product") {
           await axios
             .post(
               `${BACK_URL}users/claimProduct`,
@@ -62,6 +64,7 @@ const ItemRender = () => {
               }
             )
             .then((response) => {
+              navigate('/mycoupons')
               // console.log(response.data);
             });
         }
@@ -157,59 +160,62 @@ const ItemRender = () => {
             </CardActions>
           </Card>
 
-          <Box
-            sx={{
-              backgroundColor: "#fff",
-              borderRadius: 3,
-              boxShadow: 2,
-              padding: 2,
-            }}
-          >
-            <List disablePadding>
-              {/* Reviews Section */}
-              {item.opinions?.map((opinion, index) => (
-                <ListItem
-                  key={index}
-                  sx={{
-                    borderBottom:
-                      index !== item.opinions.length - 1
-                        ? "1px dashed #db2c6f"
-                        : "none",
-                    padding: "12px 0",
-                    flexDirection: "column",
-                  }}
-                >
-                  <Box sx={{ minWidth: "100%" }}>
-                    <Box
-                      sx={{ display: "flex", justifyContent: "space-between" }}
-                    >
-                      <Typography
-                        variant="subtitle2"
-                        color="text.primary"
-                        fontWeight="bold"
+          {item.opinions?.length > 0 ? (
+            <Box
+              sx={{
+                backgroundColor: "#fff",
+                borderRadius: 3,
+                boxShadow: 2,
+                padding: 2,
+              }}
+            >
+              <List disablePadding>
+                {/* Reviews Section */}
+                {item.opinions?.map((opinion, index) => (
+                  <ListItem
+                    key={index}
+                    sx={{
+                      borderBottom:
+                        index !== item.opinions.length - 1
+                          ? "1px dashed #db2c6f"
+                          : "none",
+                      padding: "12px 0",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <Box sx={{ minWidth: "100%" }}>
+                      <Box
+                        sx={{ display: "flex", justifyContent: "space-between" }}
                       >
-                        {opinion.username}
-                      </Typography>
-                      <Box display="flex" alignItems="center">
-                        {[...Array(opinion.valorate)].map((_, index) => (
-                          <StarIcon
-                            key={index}
-                            fontSize="small"
-                            sx={{ color: "#FFD700" }}
-                          />
-                        ))}
+                        <Typography
+                          variant="subtitle2"
+                          color="text.primary"
+                          fontWeight="bold"
+                        >
+                          {opinion.username}
+                        </Typography>
+                        <Box display="flex" alignItems="center">
+                          {[...Array(opinion.valorate)].map((_, index) => (
+                            <StarIcon
+                              key={index}
+                              fontSize="small"
+                              sx={{ color: "#FFD700" }}
+                            />
+                          ))}
+                        </Box>
+                      </Box>
+                      <Box>
+                        <Typography variant="body2" color="text.secondary">
+                          {opinion.description}
+                        </Typography>
                       </Box>
                     </Box>
-                    <Box>
-                      <Typography variant="body2" color="text.secondary">
-                        {opinion.description}
-                      </Typography>
-                    </Box>
-                  </Box>
-                </ListItem>
-              ))}
-            </List>
-          </Box>
+                  </ListItem>
+                ))}
+              </List>
+            </Box>
+          ) : null}
+
         </Box>
       ) : (
         null

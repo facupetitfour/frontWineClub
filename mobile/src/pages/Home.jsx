@@ -36,19 +36,19 @@ const Home = () => {
   }, []);
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        width: "100%",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
+    <
+      // sx={{
+      //   display: "flex",
+      //   flexDirection: "column",
+      //   minWidth: "100%",
+      //   justifyContent: "center",
+      //   alignItems: "center",
+      // }}>
     >
       <Carrusel />
       <FloatingNavBar />
       <BodegasAsociadas data={data} loading={loading} />
-    </Box>
+    </>
   );
 };
 

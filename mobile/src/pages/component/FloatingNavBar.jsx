@@ -27,13 +27,13 @@ const FloatingNavBar = () => {
     {
       title: "Promocionados",
       route: "/promotions",
-      icon: <PercentIcon sx={{ fontSize: "24px", color: "#404040" }} />,
+      icon: <PercentIcon sx={{ fontSize: "24px", color: "#808080" }} />,
       disable: true,
     },
     {
       title: "Favoritos",
       route: "/myfavorite",
-      icon: <FavoriteBorderIcon sx={{ fontSize: "24px", color: "#404040" }} />,
+      icon: <FavoriteBorderIcon sx={{ fontSize: "24px", color: "#808080" }} />,
       disable: true,
     },
   ];

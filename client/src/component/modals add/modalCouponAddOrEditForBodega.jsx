@@ -12,16 +12,29 @@ import {
   Select,
   CardActions,
 } from "@mui/material";
-import { useForm, Controller } from "react-hook-form";
-import { Grid } from "@mui/material";
-import { useState, useEffect } from "react";
-import AddIcon from "@mui/icons-material/Add";
-import { useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
+import { useForm, Controller } from "react-hook-form"
+import { Grid } from "@mui/material"
+import { useState, useEffect } from "react"
+import AddIcon from "@mui/icons-material/Add"
+import { jwtDecode } from "jwt-decode"
+import CloudUploadIcon from "@mui/icons-material/CloudUpload"
+import DeleteIcon from "@mui/icons-material/Delete"
+import { styled } from "@mui/material/styles"
+import { CardMedia, IconButton, Stack, Typography } from "@mui/material"
 // import jwtDecode from "jwt-decode";
 // import axios from "axios";
 
-const serverhost = "http://localhost:3000/";
+const VisuallyHiddenInput = styled("input")({
+  clip: "rect(0 0 0 0)",
+  clipPath: "inset(50%)",
+  height: 1,
+  overflow: "hidden",
+  position: "absolute",
+  bottom: 0,
+  left: 0,
+  whiteSpace: "nowrap",
+  width: 1,
+})
 
 const ModalCouponAddOrEditForBodega = ({
   state,
@@ -49,6 +62,10 @@ const ModalCouponAddOrEditForBodega = ({
   const token = localStorage.getItem("access_token");
   const { sub } = jwtDecode(token)
 
+  const [images, setImages] = useState([])
+  const [previewImages, setPreviewImages] = useState([])
+
+
   const {
     register,
     handleSubmit,
@@ -63,6 +80,7 @@ const ModalCouponAddOrEditForBodega = ({
       stock: 0,
       available: true,
       categoria_id: "",
+      img: []
     },
   });
 
@@ -76,28 +94,84 @@ const ModalCouponAddOrEditForBodega = ({
         stock: coupon.stock,
         available: coupon.available,
         categoria_id: coupon.categoria_id,
+        img: coupon.img ? coupon.img : [],
       })
+      // Si el coupon tiene imágenes, cargarlas
+      if (coupon.img && coupon.img.length > 0) {
+        setPreviewImages(
+          coupon.img.map((img) => ({
+            url: img.url || img,
+            isExisting: true,
+            id: img._id || img.id || Math.random().toString(36).substring(7),
+          })),
+        )
+      }
     }
   }, [coupon, state]);
+
+  const handleImageChange = (e) => {
+    const selectedFiles = Array.from(e.target.files)
+
+    // Crear URLs de vista previa para los archivos seleccionados
+    const newPreviewImages = selectedFiles.map((file) => ({
+      url: URL.createObjectURL(file),
+      isExisting: false,
+      id: Math.random().toString(36).substring(7),
+    }))
+
+    setImages([...images, ...selectedFiles])
+    setPreviewImages([...previewImages, ...newPreviewImages])
+  }
+
+  const handleRemoveImage = (id) => {
+    // Filtrar la imagen eliminada de las vistas previas
+    const updatedPreviews = previewImages.filter((img) => img.id !== id)
+    setPreviewImages(updatedPreviews)
+
+    // Si no es una imagen existente, también eliminarla del array de archivos
+    const imageToRemove = previewImages.find((img) => img.id === id)
+    if (!imageToRemove.isExisting) {
+      const imageIndex = previewImages.findIndex((img) => img.id === id)
+      const newImages = [...images]
+      newImages.splice(imageIndex, 1)
+      setImages(newImages)
+    }
+  }
 
   const onSubmit = (data) => {
     const selectedCategory = dataCategories.find(
       (category) => category._id === data.categoria_id
     );
 
-    const couponData = {
-      ...data,
-      categoria_name: selectedCategory ? selectedCategory.name : "",
-      user_id: sub,
-    };
+    // Crear un FormData para enviar archivos
+    const formData = new FormData()
 
+    // Añadir los datos del producto
+    Object.keys(data).forEach((key) => {
+      formData.append(key, data[key])
+    })
+
+    // Añadir la categoría y el usuario
+    formData.append("categoria_name", selectedCategory ? selectedCategory.name : "")
+    formData.append("user_id", sub)
+
+    // Añadir las imágenes nuevas
+    images.forEach((image) => {
+      formData.append("img", image)
+    })
+
+    // Añadir referencias a imágenes existentes que se mantienen
+    const existingImages = previewImages.filter((img) => img.isExisting).map((img) => img.url)
+
+    formData.append("existingImages", JSON.stringify(existingImages))
     if (coupon) {
-      updateItem({ ...coupon, ...couponData }); // Si existe un cupon, actualizarlo
+      updateItem({ formData, ...couponData }); // Si existe un cupon, actualizarlo
     } else {
       createItem(couponData); // Si no existe, crearlo
     }
-
-    handleClose();
+    setImages([])
+    setPreviewImages([])
+    handleClose()
   };
 
   return (
@@ -245,6 +319,56 @@ const ModalCouponAddOrEditForBodega = ({
                   </Select>
                 </FormControl>
               </Grid> */}
+              <Grid item xs={12}>
+                <Typography variant="subtitle1" gutterBottom>
+                  Imágenes del Cupon
+                </Typography>
+                <Button component="label" variant="contained" startIcon={<CloudUploadIcon />} sx={{ mb: 2 }}>
+                  Subir imágenes
+                  <VisuallyHiddenInput type="file" multiple accept="image/*" onChange={handleImageChange} />
+                </Button>
+
+                {previewImages.length > 0 && (
+                  <Stack direction="row" spacing={2} sx={{ mt: 2, flexWrap: "wrap", gap: 2 }}>
+                    {previewImages.map((img, index) => (
+                      <Box
+                        key={img.id}
+                        sx={{
+                          position: "relative",
+                          width: 100,
+                          height: 100,
+                          border: "1px solid #ddd",
+                          borderRadius: 1,
+                        }}
+                      >
+                        <CardMedia
+                          component="img"
+                          image={img.url}
+                          alt={`Preview ${index}`}
+                          sx={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                          }}
+                        />
+                        <IconButton
+                          size="small"
+                          sx={{
+                            position: "absolute",
+                            top: -10,
+                            right: -10,
+                            bgcolor: "background.paper",
+                            "&:hover": { bgcolor: "error.light", color: "white" },
+                          }}
+                          onClick={() => handleRemoveImage(img.id)}
+                        >
+                          <DeleteIcon fontSize="small" />
+                        </IconButton>
+                      </Box>
+                    ))}
+                  </Stack>
+                )}
+              </Grid>
             </Grid>
 
             <CardActions sx={{ justifyContent: "flex-end" }}>
