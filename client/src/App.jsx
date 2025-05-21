@@ -15,6 +15,7 @@ import SideBarBodega from "./component/SideBarBodega";
 import ProductsBodega from "./pages/ProductsBodega";
 import CouponsBodega from "./pages/CouponsBodega";
 import VerifyEmail from "./pages/VerifyEmail";
+import EditBodegaProfile from "./pages/EditProfileBodega";
 
 function App() {
   return (
@@ -40,6 +41,9 @@ function App() {
         {/* Rutas protegidas Bodega*/}
         <Route element={<ProtectedRouteBodega />}>
           <Route element={<SideBarBodega />}>
+            <Route path="/bodega/home" element={<Home />} />
+            <Route path="/bodega/avaiable" element={<Avaiable />} />
+            <Route path="/bodega/myprofile" element={<EditBodegaProfile/>} />
             <Route path="/bodega/points" element={<Points/>} />
             <Route path="/bodega/products" element={<ProductsBodega />} />
             <Route path="/bodega/coupons" element={<CouponsBodega />} />

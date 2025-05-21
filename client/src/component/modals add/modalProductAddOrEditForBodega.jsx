@@ -171,10 +171,14 @@ const ModalProductAddOrEdit = ({
     formData.append("eliminateImages", JSON.stringify(imagesEliminatedPublicId))
     
     if (product) {
+      setImages([])
+      setPreviewImages([])
       updateItem(formData) // Si existe un producto, actualizarlo
       // console.log("Actualizar un producto", formData)
 
     } else {
+      setImages([])
+      setPreviewImages([])
       // console.log("Crear nuevo producto", formData)
       createItem(formData) // Si no existe, crearlo
     }

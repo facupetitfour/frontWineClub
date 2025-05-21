@@ -29,8 +29,8 @@ const SideBarBodega = () => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
   const listDrawerItem = {
-    home: {link: "/home", text: "Home",icon: <HomeIcon/>  },
-    chargepoints: {link: "/bodega/points", text: "Usuarios",icon: <UserIcon/>},
+    home: {link: "/bodega/points", text: "Carga Puntos",icon: <HomeIcon/>  },
+    chargepoints: {link: "/bodega/myprofile", text: "Mi Perfil",icon: <UserIcon/>},
     products: {link: "/bodega/products", text: "Productos",icon: <ProductsIcon/>},
     coupons: {link: "/bodega/coupons", text: "Cupones",icon: <CuponesIcon/>},
   };
