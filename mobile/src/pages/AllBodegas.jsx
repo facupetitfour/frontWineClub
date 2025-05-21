@@ -89,9 +89,9 @@ function AllBodegas() {
               onClick={
                 !loading
                   ? () =>
-                      navigate("/bodega", {
-                        state: { data: bodega },
-                      })
+                    navigate("/bodega", {
+                      state: { data: bodega },
+                    })
                   : undefined
               }
             >
@@ -100,9 +100,13 @@ function AllBodegas() {
                   <Skeleton variant="rectangular" height={140} />
                 ) : (
                   <CardMedia
+                    sx={{
+                      height: 140,
+                      width: "100%",
+                      objectFit: "cover",
+                    }}
                     component="img"
-                    height="140"
-                    image={bodega.profile.img || "bodega1.avif"}
+                    image={bodega.profile?.img[0]?.url || "bodega1.avif"}
                     alt={bodega.profile.name}
                   />
                 )}

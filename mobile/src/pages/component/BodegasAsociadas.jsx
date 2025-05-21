@@ -13,7 +13,7 @@ const BodegasAsociadas = ({ data, loading }) => {
   const navigate = useNavigate();
 
   const skeletonItems = Array.from({ length: 4 });
-
+  console.log("data", data);
   return (
     <Box sx={{ padding: 2, minWidth: "100%" }}>
       {/* Título */}
@@ -66,9 +66,9 @@ const BodegasAsociadas = ({ data, loading }) => {
             onClick={
               !loading
                 ? () =>
-                    navigate("/bodega", {
-                      state: { data: bodega },
-                    })
+                  navigate("/bodega", {
+                    state: { data: bodega },
+                  })
                 : undefined
             }
           >
@@ -77,9 +77,13 @@ const BodegasAsociadas = ({ data, loading }) => {
                 <Skeleton variant="rectangular" height={140} />
               ) : (
                 <CardMedia
+                  sx={{
+                    height: 140,
+                    width: "100%",
+                    objectFit: "cover",
+                  }}
                   component="img"
-                  height="140"
-                  image={bodega.img || "/bodega1.avif"}
+                  image={bodega.profile?.img[0]?.url || "/bodega1.avif"}
                   alt={bodega.name}
                 />
               )}
@@ -94,10 +98,14 @@ const BodegasAsociadas = ({ data, loading }) => {
                       fontWeight: "bold",
                       textAlign: "center",
                       fontSize: "14px",
-                      overflow: true,
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      display: '-webkit-box',
+                      WebkitLineClamp: 1, // número de líneas visibles
+                      WebkitBoxOrient: 'vertical',
                     }}
                   >
-                    {bodega.profile.name}
+                    {bodega.profile.name + ' ' + bodega.profile.surname}
                   </Typography>
                 )}
               </CardContent>

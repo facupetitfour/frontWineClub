@@ -112,6 +112,7 @@ function AllItemsViews_Products_Coupons({ nameRendering, urlRender }) {
                   item
                   xs={6}
                   key={index}
+                  sx={{minHeight: "100%"}}
                   onClick={() => {
                     navigate(`/itemrender`, { state: { data: item } });
                   }}
@@ -125,8 +126,13 @@ function AllItemsViews_Products_Coupons({ nameRendering, urlRender }) {
                     }}
                   >
                     <CardMedia
+                      sx={{
+                        height: 140,
+                        width: "100%",
+                        objectFit: "cover",
+                      }}
                       component="img"
-                      image={item.img || "imagenBaseItems.webp"}
+                      image={item?.img?.length>0 ? item.img[0].url  : "/imagenBaseItems.webp"}
                       alt={item.name || "Sin nombre"}
                     />
                     <CardContent
