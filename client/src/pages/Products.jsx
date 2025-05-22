@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import DynamicTable from "../component/DynamicTable";
 import HeaderDynamicTable from "../component/HeaderDynamicTable";
 import axios from "axios";
-import ModalProductAddOrEdit from "../component/modals add/modalProductAddOrEdit";
+import ModalProductAddOrEdit from "../component/modalsAdd/modalProductAddOrEdit";
 
 const serverhost = import.meta.env.VITE_BACK_URL;
 

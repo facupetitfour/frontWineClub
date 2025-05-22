@@ -4,7 +4,7 @@ import DynamicTable from "../component/DynamicTable";
 import HeaderDynamicTable from "../component/HeaderDynamicTable";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-import ModalCouponAddOrEditForBodega from "../component/modals add/modalCouponAddOrEditForBodega";
+import ModalCouponAddOrEditForBodega from "../component/modalsAdd/modalCouponAddOrEditForBodega";
 
 const serverhost = import.meta.env.VITE_BACK_URL;
 

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import DynamicTable from "../component/DynamicTable";
 import HeaderDynamicTable from "../component/HeaderDynamicTable";
 import axios from "axios";
-import ModalProductAddOrEditForBodega from "../component/modals add/modalProductAddOrEditForBodega";
+import ModalProductAddOrEditForBodega from "../component/modalsAdd/modalProductAddOrEditForBodega";
 import { jwtDecode } from "jwt-decode";
 
 const serverhost = import.meta.env.VITE_BACK_URL;

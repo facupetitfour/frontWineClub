@@ -80,7 +80,7 @@ const InicioSesion = () => {
         <Grid item md={8} sx={{ display: { xs: "none", sm:"none",md:"block"} }}>
           <Box
             component="img"
-            src="./public/img/imglogin.png"
+            src="/imgLogin.png"
             alt="Imagenlogin"
             sx={{
               display: "block",
