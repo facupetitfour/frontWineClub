@@ -148,7 +148,22 @@ const ProductsBodega = () => {
           />
         </>
       ) : (
+        <>
+        {(
+          <ModalProductAddOrEditForBodega
+            state={openModal}
+            setState={setOpenModal}
+            setSelectedProduct={setSelectedProduct} 
+            createItem={createItem}
+            updateItem={(data) => updateItem(selectedProduct._id, data)}
+            dataUsers={dataUsers}
+            dataCategories={dataCategories}
+            product={selectedProduct}
+            onClose={() => setOpenModal(false)}
+          />
+        )}
         <HeaderDynamicTable model={modelSchemaProducts} />
+        </>
       )}
     </>
   );

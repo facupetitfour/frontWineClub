@@ -88,7 +88,7 @@ const CouponsBodega = () => {
       });
   };
 
-  const handleEdit = (id,coupon) => {
+  const handleEdit = (id, coupon) => {
     console.log("Cupon a editar:", id, coupon);
     setSelectedCoupon(coupon); // Establece el cupon seleccionado
     console.log("Cupon seleccionado:", selectedCoupon);
@@ -97,7 +97,7 @@ const CouponsBodega = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("access_token");
-    const {sub} = jwtDecode(token)
+    const { sub } = jwtDecode(token)
 
     const getData = async () => {
       try {
@@ -126,7 +126,7 @@ const CouponsBodega = () => {
     };
     getData();
   }, [navigate, actualizador]);
-  
+
   return (
     <>
       {/* Botón flotante */}
@@ -136,7 +136,7 @@ const CouponsBodega = () => {
             <ModalCouponAddOrEditForBodega
               state={openModal}
               setState={setOpenModal}
-              setSelectedCoupon={setSelectedCoupon} 
+              setSelectedCoupon={setSelectedCoupon}
               createItem={createItem}
               updateItem={(data) => updateItem(selectedCoupon._id, data)}
               dataUsers={dataUsers}
@@ -153,7 +153,20 @@ const CouponsBodega = () => {
           />
         </>
       ) : (
-        <HeaderDynamicTable model={modelSchemaCoupons} />
+        <>
+          <ModalCouponAddOrEditForBodega
+            state={openModal}
+            setState={setOpenModal}
+            setSelectedCoupon={setSelectedCoupon}
+            createItem={createItem}
+            updateItem={(data) => updateItem(selectedCoupon._id, data)}
+            dataUsers={dataUsers}
+            dataCategories={dataCategories}
+            coupon={selectedCoupon}
+            onClose={() => setOpenModal(false)}
+          />
+          <HeaderDynamicTable model={modelSchemaCoupons} />
+        </>
       )}
     </>
   );
