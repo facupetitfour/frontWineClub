@@ -5,6 +5,8 @@ import HeaderDynamicTable from "../component/HeaderDynamicTable";
 import axios from "axios";
 import ModalProductAddOrEditForBodega from "../component/modalsAdd/modalProductAddOrEditForBodega";
 import { jwtDecode } from "jwt-decode";
+import Skeleton from "@mui/material/Skeleton";
+import Box from "@mui/material/Box";
 
 const serverhost = import.meta.env.VITE_BACK_URL;
 
@@ -14,8 +16,9 @@ const ProductsBodega = () => {
   const [actualizador, setActualizador] = useState(0);
   const [dataUsers, setDataUsers] = useState(null);
   const [dataCategories, setDataCategories] = useState(null);
-  const [selectedProduct, setSelectedProduct] = useState(null); // Para el producto seleccionado
-  const [openModal, setOpenModal] = useState(false); // Para el control del modal
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); // ⚠️ Bandera de carga
 
   const modelSchemaProducts = {
     _id: { type: "string", header: "ID" },
@@ -41,7 +44,6 @@ const ProductsBodega = () => {
         },
       })
       .then((response) => {
-        console.log("Producto creado con éxito:", response.data);
         actualizarComponente();
       })
       .catch((error) => {
@@ -51,9 +53,6 @@ const ProductsBodega = () => {
 
   const updateItem = (id, data) => {
     const token = localStorage.getItem("access_token");
-    data.forEach((valor, clave) => {
-      console.log(`${clave}: ${valor}`);
-    });
     axios
       .put(`${serverhost}products/${id}`, data, {
         headers: {
@@ -61,7 +60,6 @@ const ProductsBodega = () => {
         },
       })
       .then((response) => {
-        console.log("Producto actualizado con éxito:", response.data);
         actualizarComponente();
       })
       .catch((error) => {
@@ -78,7 +76,6 @@ const ProductsBodega = () => {
         },
       })
       .then((response) => {
-        console.log("Producto eliminado con éxito:", response.data);
         actualizarComponente();
       })
       .catch((error) => {
@@ -86,37 +83,32 @@ const ProductsBodega = () => {
       });
   };
 
-  const handleEdit = (id,product) => {
-    console.log("Producto a editar:", id, product);
-    setSelectedProduct(product); // Establece el producto seleccionado
-    setOpenModal(true); // Abre el modal para editar
+  const handleEdit = (id, product) => {
+    setSelectedProduct(product);
+    setOpenModal(true);
   };
 
   useEffect(() => {
-      const token = localStorage.getItem("access_token");
-      const {sub} = jwtDecode(token)
-      const getData = async () => {
-        try {
-          const response = await axios.get(serverhost + `users/${sub}/userProfile`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setProductsData(response.data.products);
-      } catch (error) {
-        console.error("Error al obtener productos:", error);
-        // navigate("/");
-      }
+    const token = localStorage.getItem("access_token");
+    const { sub } = jwtDecode(token);
+
+    const getData = async () => {
       try {
-        const categoriesResponse = await axios.get(`${serverhost}categories`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setDataCategories(categoriesResponse.data);
+        setIsLoading(true); // 🟣 Empieza la carga
+        const [userRes, categoriesRes] = await Promise.all([
+          axios.get(`${serverhost}users/${sub}/userProfile`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          axios.get(`${serverhost}categories`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+        ]);
+        setProductsData(userRes.data.products);
+        setDataCategories(categoriesRes.data);
       } catch (error) {
-        console.error("Error al obtener categorías:", error);
-        return;
+        console.error("Error al obtener datos:", error);
+      } finally {
+        setIsLoading(false); // 🟢 Finaliza la carga
       }
     };
 
@@ -125,45 +117,32 @@ const ProductsBodega = () => {
 
   return (
     <>
-      {productsData && productsData.length > 0 && modelSchemaProducts ? (
-        <>
-          {(
-            <ModalProductAddOrEditForBodega
-              state={openModal}
-              setState={setOpenModal}
-              setSelectedProduct={setSelectedProduct} 
-              createItem={createItem}
-              updateItem={(data) => updateItem(selectedProduct._id, data)}
-              dataUsers={dataUsers}
-              dataCategories={dataCategories}
-              product={selectedProduct}
-              onClose={() => setOpenModal(false)}
-            />
-          )}
-          <DynamicTable
-            bodyData={productsData}
-            model={modelSchemaProducts}
-            deleteFunction={deleteItem}
-            updateItemFunction={handleEdit} 
-          />
-        </>
+      <ModalProductAddOrEditForBodega
+        state={openModal}
+        setState={setOpenModal}
+        setSelectedProduct={setSelectedProduct}
+        createItem={createItem}
+        updateItem={(data) => updateItem(selectedProduct?._id, data)}
+        dataUsers={dataUsers}
+        dataCategories={dataCategories}
+        product={selectedProduct}
+        onClose={() => setOpenModal(false)}
+      />
+
+      {isLoading ? (
+        <Box sx={{ px: 2, py: 4 }}>
+          <Skeleton height={50} />
+          <Skeleton height={50} />
+          <Skeleton height={50} />
+          <Skeleton height={50} />
+        </Box>
       ) : (
-        <>
-        {(
-          <ModalProductAddOrEditForBodega
-            state={openModal}
-            setState={setOpenModal}
-            setSelectedProduct={setSelectedProduct} 
-            createItem={createItem}
-            updateItem={(data) => updateItem(selectedProduct._id, data)}
-            dataUsers={dataUsers}
-            dataCategories={dataCategories}
-            product={selectedProduct}
-            onClose={() => setOpenModal(false)}
-          />
-        )}
-        <HeaderDynamicTable model={modelSchemaProducts} />
-        </>
+        <DynamicTable
+          bodyData={productsData}
+          model={modelSchemaProducts}
+          deleteFunction={deleteItem}
+          updateItemFunction={handleEdit}
+        />
       )}
     </>
   );

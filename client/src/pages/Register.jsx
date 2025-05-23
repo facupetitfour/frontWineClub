@@ -1,136 +1,198 @@
 import { useForm } from "react-hook-form";
 import {
-  FormGroup,
-  Input,
-  FormLabel,
   Button,
-  CardContent,
   CardActions,
-  Card,
-  CardHeader,
   Box,
+  Alert,
+  Grid,
+  TextField,
 } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const serverhost = import.meta.env.VITE_BACK_URL;
 
 const Register = () => {
+  const [messageError, setMessageError] = useState(null);
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => {
-    console.log("ONSUBMIT DATA: ", data);
-    axios
-      .post(serverhost + "users", data)
-      .then((response) => {
-        console.log("RESPONSE DATA: ", response);
-        navigate("/");
-      })
-      .catch((error) => {
-        console.log("RESPONSE ERRR: ", error.response.data.message);
-      });
+
+  const onSubmit = async (data) => {
+    data.roles = 'bodega'
+    try {
+      const response = await axios.post(`${serverhost}authenticate/register`, data);
+      console.log("Registro exitoso:", response.data);
+      navigate("/");
+    } catch (error) {
+      if (error.response.status === 403) {
+        navigate("/verify-email",{  
+          state: {
+            userId: error.response.data.userId,
+            email: error.response.data.email,
+          },
+        });
+      }
+      console.log("Error de registro:", error.response?.data?.message);
+      setMessageError(error.response?.data?.message || "Error desconocido");
+    }
   };
+
   return (
     <>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-          position: "relative",
-        }}
-      >
-        <Box sx={{ maxWidth: "80%", width: "500px" }}>
-          <Card
+      {messageError && (
+        <Box
+          sx={{
+            position: "relative",
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <Alert
+            variant="filled"
+            severity="error"
+            onClose={() => setMessageError(null)}
             sx={{
-              bgcolor: "rgb(240, 255, 255)",
-              boxShadow: "0px 0px 100px rgba(0, 40, 90, 60)",
+              position: "absolute",
+              zIndex: 10,
+              maxWidth: "90%",
+              width: "auto",
             }}
           >
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <CardHeader title="Registrase" />
-              <CardContent
-                sx={{
-                  display: "flex",
-                  flexWrap: "50px",
-                  flexDirection: "column",
-                  "& > *": { mb: 3 },
-                }}
-              >
-                <FormGroup>
-                  <FormLabel>Username</FormLabel>
-                  <Input
-                    {...register("username", {
-                      required: true,
-                      maxLength: 15,
-                      minLength: 6,
-                    })}
-                  />
-                  {errors.username?.type === "required" && (
-                    <p>El campo es requerido</p>
-                  )}
-                  {errors.username?.type === "maxLength" && (
-                    <p>El nombre tiene que tener maximo 15 caracteres</p>
-                  )}
-                  {errors.username?.type === "minLength" && (
-                    <p>El nombre tiene que tener minimo seis caracteres</p>
-                  )}
-                </FormGroup>
-                <FormGroup>
-                  <FormLabel>Email</FormLabel>
-                  <Input
-                    {...register("email", {
-                      required: true,
-                      pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/i,
-                    })}
-                  />
-                  {errors.email?.type === "required" && (
-                    <span>Este campo es requerido</span>
-                  )}
-                  {errors.email?.type === "pattern" && (
-                    <span>Debe ser un email</span>
-                  )}
-                </FormGroup>
-                <FormGroup>
-                  <FormLabel>Password</FormLabel>
-                  <Input
-                    type="password"
-                    {...register("password", {
-                      required: true,
-                      minLength: 8,
-                      pattern:
-                        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-                    })}
-                  />
-                  {errors.password?.type === "required" && (
-                    <span>Este campo es requerido</span>
-                  )}
-                  {errors.password?.type === "minLength" && (
-                    <span>Debe tener al menos 8 caracteres</span>
-                  )}
-                  {errors.password?.type === "pattern" && (
-                    <span>
-                      Debe contener al menos una letra mayúscula, un número y un carácter especial
-                    </span>
-                  )}
-                </FormGroup>
-              </CardContent>
-              <CardActions
-                sx={{ display: "flex", flexDirection: "row-reverse" }}
-              >
-                <Button type="submit" size="medium">
-                  Registrarse
-                </Button>
-              </CardActions>
-            </form>
-          </Card>
+            {messageError}
+          </Alert>
         </Box>
-      </Box>
+      )}
+      <Grid container height={"100vh"}>
+        <Grid item md={8} sx={{ display: { xs: "none", sm: "none", md: "block" } }}>
+          <Box
+            component="img"
+            src="/imgLogin.png"
+            alt="Imagen registro"
+            sx={{
+              display: "block",
+              filter: "brightness(0.5)",
+              width: "100%",
+              height: "100vh",
+              objectFit: "cover",
+              objectPosition: "0% 80%",
+              zIndex: 1,
+            }}
+          />
+        </Grid>
+        <Grid
+          item
+          md={4}
+          xs={12}
+          bgcolor={"white"}
+          alignContent={"center"}
+          height={"100vh"}
+          boxShadow={"0 2px 50px rgba(0, 0, 0, 1)"}
+          zIndex={2}
+        >
+          <form className={{ width: "100%" }} onSubmit={handleSubmit(onSubmit)}>
+            <Grid
+              container
+              justifyContent={"center"}
+              width={"100%"}
+              padding={5}
+              rowSpacing={4}
+            >
+              <h1>Registrarse</h1>
+
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label="Username"
+                  {...register("username", {
+                    required: true,
+                    maxLength: 15,
+                    minLength: 6,
+                  })}
+                  error={!!errors.username}
+                  helperText={
+                    errors.username?.type === "required"
+                      ? "El username es requerido"
+                      : errors.username?.type === "maxLength"
+                      ? "Máximo 15 caracteres"
+                      : errors.username?.type === "minLength"
+                      ? "Mínimo 6 caracteres"
+                      : ""
+                  }
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label="Email"
+                  {...register("email", {
+                    required: true,
+                    pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/i,
+                  })}
+                  error={!!errors.email}
+                  helperText={
+                    errors.email?.type === "required"
+                      ? "El email es requerido"
+                      : errors.email?.type === "pattern"
+                      ? "Debe ser un email válido"
+                      : ""
+                  }
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <TextField
+                  type="password"
+                  fullWidth
+                  label="Password"
+                  {...register("password", {
+                    required: true,
+                    minLength: 8,
+                    pattern:
+                      /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/,
+                  })}
+                  error={!!errors.password}
+                  helperText={
+                    errors.password?.type === "required"
+                      ? "La contraseña es requerida"
+                      : errors.password?.type === "minLength"
+                      ? "Mínimo 8 caracteres"
+                      : errors.password?.type === "pattern"
+                      ? "Debe contener una mayúscula, un número y un carácter especial"
+                      : ""
+                  }
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <CardActions
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    width: "100%",
+                  }}
+                >
+                  <Button
+                    size="medium"
+                    onClick={() => navigate("/")}
+                  >
+                    Volver
+                  </Button>
+                  <Button type="submit" variant="contained">
+                    Registrarse
+                  </Button>
+                </CardActions>
+              </Grid>
+            </Grid>
+          </form>
+        </Grid>
+      </Grid>
     </>
   );
 };

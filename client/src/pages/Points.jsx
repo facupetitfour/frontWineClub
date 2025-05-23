@@ -20,7 +20,6 @@ const serverhost = import.meta.env.VITE_BACK_URL;
 const drawerheight = 100;
 
 const Points = () => {
-  console.log("SE RENDERIA POINTS");
   const [messageError, setMssageError] = useState("");
   const [dataUserFind, setDataUserFind] = useState();
 

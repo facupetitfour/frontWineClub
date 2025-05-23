@@ -4,6 +4,7 @@ import DynamicTable from "../component/DynamicTable";
 import HeaderDynamicTable from "../component/HeaderDynamicTable";
 import axios from "axios";
 import ModalProductAddOrEdit from "../component/modalsAdd/modalProductAddOrEdit";
+import { Skeleton, Box, Stack } from "@mui/material";
 
 const serverhost = import.meta.env.VITE_BACK_URL;
 
@@ -13,8 +14,9 @@ const Products = () => {
   const [actualizador, setActualizador] = useState(0);
   const [dataUsers, setDataUsers] = useState(null);
   const [dataCategories, setDataCategories] = useState(null);
-  const [selectedProduct, setSelectedProduct] = useState(null); // Para el producto seleccionado
-  const [openModal, setOpenModal] = useState(false); // Para el control del modal
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); // 🆕 Indicador de carga
 
   const modelSchemaProducts = {
     _id: { type: "string", header: "ID" },
@@ -35,16 +37,14 @@ const Products = () => {
     const token = localStorage.getItem("access_token");
     axios
       .post(`${serverhost}products`, data, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       })
-      .then((response) => {
-        console.log("Producto creado con éxito:", response.data);
+      .then((res) => {
+        console.log("Producto creado:", res.data);
         actualizarComponente();
       })
-      .catch((error) => {
-        console.error("Error al crear el producto:", error.response.data.message);
+      .catch((err) => {
+        console.error("Error al crear producto:", err.response.data.message);
       });
   };
 
@@ -52,16 +52,14 @@ const Products = () => {
     const token = localStorage.getItem("access_token");
     axios
       .put(`${serverhost}products/${id}`, data, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       })
-      .then((response) => {
-        console.log("Producto actualizado con éxito:", response.data);
+      .then((res) => {
+        console.log("Producto actualizado:", res.data);
         actualizarComponente();
       })
-      .catch((error) => {
-        console.error("Error al actualizar el producto:", error.response.data.message);
+      .catch((err) => {
+        console.error("Error al actualizar producto:", err.response.data.message);
       });
   };
 
@@ -69,63 +67,42 @@ const Products = () => {
     const token = localStorage.getItem("access_token");
     axios
       .delete(`${serverhost}products/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       })
-      .then((response) => {
-        console.log("Producto eliminado con éxito:", response.data);
+      .then((res) => {
+        console.log("Producto eliminado:", res.data);
         actualizarComponente();
       })
-      .catch((error) => {
-        console.error("Error al eliminar el producto:", error.response.data.message);
+      .catch((err) => {
+        console.error("Error al eliminar producto:", err.response.data.message);
       });
   };
 
   const handleEdit = (product) => {
-    setSelectedProduct(product); // Establece el producto seleccionado
-    setOpenModal(true); // Abre el modal para editar
+    setSelectedProduct(product);
+    setOpenModal(true);
   };
 
   useEffect(() => {
     const getData = async () => {
       const token = localStorage.getItem("access_token");
+      setIsLoading(true); // 🆕 Iniciar loading
 
       try {
-        const productsResponse = await axios.get(`${serverhost}products`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setProductsData(productsResponse.data);
+        const [productsRes, usersRes, categoriesRes] = await Promise.all([
+          axios.get(`${serverhost}products`, { headers: { Authorization: `Bearer ${token}` } }),
+          axios.get(`${serverhost}users`, { headers: { Authorization: `Bearer ${token}` } }),
+          axios.get(`${serverhost}categories`, { headers: { Authorization: `Bearer ${token}` } }),
+        ]);
+
+        setProductsData(productsRes.data);
+        setDataUsers(usersRes.data);
+        setDataCategories(categoriesRes.data);
       } catch (error) {
-        console.error("Error al obtener productos:", error);
+        console.error("Error al cargar datos:", error);
         navigate("/");
-        return;
-      }
-
-      try {
-        const usersResponse = await axios.get(`${serverhost}users`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setDataUsers(usersResponse.data);
-      } catch (error) {
-        console.error("Error al obtener usuarios:", error);
-        return;
-      }
-
-      try {
-        const categoriesResponse = await axios.get(`${serverhost}categories`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setDataCategories(categoriesResponse.data);
-      } catch (error) {
-        console.error("Error al obtener categorías:", error);
-        return;
+      } finally {
+        setIsLoading(false); // 🆕 Finalizar loading
       }
     };
 
@@ -134,7 +111,15 @@ const Products = () => {
 
   return (
     <>
-      {productsData && productsData.length > 0 && modelSchemaProducts ? (
+      {isLoading ? (
+        // 🦴 Esqueleto de carga
+        <Stack spacing={2} p={2}>
+          <Skeleton variant="rectangular" height={40} width={200} />
+          <Skeleton variant="rectangular" height={60} />
+          <Skeleton variant="rectangular" height={60} />
+          <Skeleton variant="rectangular" height={60} />
+        </Stack>
+      ) : productsData && productsData.length > 0 && modelSchemaProducts ? (
         <>
           {dataUsers && dataCategories && (
             <ModalProductAddOrEdit
@@ -151,7 +136,7 @@ const Products = () => {
             bodyData={productsData}
             model={modelSchemaProducts}
             deleteFunction={deleteItem}
-            updateItemFunction={handleEdit} 
+            updateItemFunction={handleEdit}
           />
         </>
       ) : (

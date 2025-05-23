@@ -40,24 +40,26 @@ const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
 }))
 
 const StyledTableHead = styled(TableHead)(({ theme }) => ({
-  backgroundColor: "#B5CDB9",
+  backgroundColor: "#7C4A8E", // tono más claro del principal
   "& .MuiTableCell-head": {
     fontWeight: "bold",
-    color: "#2E4033",
+    color: "#F8F3FA", // texto claro con contraste
   },
 }))
+
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
-    backgroundColor: "#F5F8F5",
+    backgroundColor: "#FAF4FB", // fondo muy claro con tinte púrpura
   },
   "&:nth-of-type(even)": {
-    backgroundColor: "#E8F0E9",
+    backgroundColor: "#F1E6F5", // un poco más oscuro que el anterior
   },
   "&:hover": {
-    backgroundColor: "#D9E2DA",
+    backgroundColor: "#DFC8E7", // resaltado en hover
     transition: "background-color 0.2s ease",
   },
 }))
+
 
 const StyledAccordion = styled(Accordion)(({ theme }) => ({
   boxShadow: "none",
@@ -97,13 +99,13 @@ const PointsHistory = ({ history }) => {
 const ProfileDetails = ({ profile }) => {
   return (
     <Box sx={{ py: 1 }}>
-      {profile.name && profile.surname && (
+      {profile?.name && profile?.surname &&(
         <Typography variant="subtitle1" sx={{ display: "flex", fontWeight: "bold" }}>
           {profile.name} {profile.surname}
         </Typography>
       )}
 
-      {profile.points !== undefined && (
+      {profile?.points !== undefined && (
         <Box sx={{ display: "flex", alignItems: "center", mt: 0.5 }}>
           <Typography variant="body2" sx={{ mr: 1 }}>
             Puntos:
@@ -112,7 +114,7 @@ const ProfileDetails = ({ profile }) => {
         </Box>
       )}
 
-      {profile.address && (
+      {profile?.address && (
         <Box sx={{ display: "flex", mt: 0.5 }}>
           <Typography variant="body2">
             {profile.address.city && profile.address.country
@@ -129,7 +131,7 @@ const ProfileDetails = ({ profile }) => {
           </Typography>
         </AccordionSummary>
         <AccordionDetails sx={{ p: 0, pt: 1 }}>
-          <PointsHistory history={profile.points_history} />
+          <PointsHistory history={profile?.points_history} />
         </AccordionDetails>
       </StyledAccordion>
     </Box>
@@ -274,7 +276,7 @@ const DynamicTable = (props) => { // prop a pasar en dinamic table; bodyData={da
               disableUnderline: true,
             }}
             sx={{
-              width: 250, backgroundColor: "#B5CDB9",
+              width: 250, backgroundColor: "#7C4A8E",
               '& .MuiFilledInput-root': {
                 backgroundColor: 'transparent', // Elimina el fondo gris claro
               },
