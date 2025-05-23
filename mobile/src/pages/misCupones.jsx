@@ -76,7 +76,7 @@ const MisCupones = () => {
                       }
                     >
                       <CouponCard
-                        img={data?.img?.url ? data.img.url : "/vinocarrusel.webp"}
+                        img={data?.img[0]?.url ? data.img[0].url : "/vinocarrusel.webp"}
                         name={data.name}
                         description={data.description}
                         points={data.points}
@@ -105,7 +105,7 @@ const MisCupones = () => {
                       }
                     >
                       <CouponCard
-                        img={data?.img?.url ? data.img.url : "/vinocarrusel.webp"}
+                        img={data?.img[0]?.url ? data.img[0].url : "/vinocarrusel.webp"}
                         name={data.name}
                         description={data.description}
                         points={data.points}
